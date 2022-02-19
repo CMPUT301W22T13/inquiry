@@ -1,6 +1,6 @@
-plugins {
-    id 'com.android.application'
-}
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+
 
 android {
     compileSdk 32
@@ -31,7 +31,8 @@ android {
 }
 
 dependencies {
-
+    implementation 'com.budiyev.android:code-scanner:2.1.0'
+    implementation platform('com.google.firebase:firebase-bom:29.1.0')
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
