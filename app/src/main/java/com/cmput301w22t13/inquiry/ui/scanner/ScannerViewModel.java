@@ -1,17 +1,15 @@
-package com.cmput301w22t13.inquiry.ui.notifications;
+package com.cmput301w22t13.inquiry.ui.scanner;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class NotificationsViewModel extends ViewModel {
-
+public class ScannerViewModel extends ViewModel {
     private MutableLiveData<String> mText;
 
-    public NotificationsViewModel() {
+    public ScannerViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is notifications fragment");
-
+        mText.setValue("This is Scanner fragment");
     }
 
     public LiveData<String> getText() {
