@@ -1,9 +1,9 @@
-package com.cmput301w22t13.inquiry;
+package com.cmput301w22t13.inquiry.classes;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
+import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.auth.Auth;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -14,7 +14,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.cmput301w22t13.inquiry.databinding.ActivityMainBinding;
-import com.google.firebase.auth.FirebaseUser;
 
 
 public class MainActivity extends AppCompatActivity {

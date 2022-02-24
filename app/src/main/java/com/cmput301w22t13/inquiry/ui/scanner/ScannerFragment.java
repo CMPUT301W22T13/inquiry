@@ -30,6 +30,7 @@ public class ScannerFragment extends Fragment {
         binding = ScannerFragmentBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+
         final TextView textView = binding.textScanner;
         scannerViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override

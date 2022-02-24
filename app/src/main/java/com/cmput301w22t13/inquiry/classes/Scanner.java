@@ -1,4 +1,4 @@
-package com.cmput301w22t13.inquiry;
+package com.cmput301w22t13.inquiry.classes;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -19,10 +19,9 @@ import android.widget.Toast;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
+import com.cmput301w22t13.inquiry.R;
 
 import org.jetbrains.annotations.NotNull;
-
-import javax.xml.transform.Result;
 
 public class Scanner extends AppCompatActivity {
 
