@@ -1,10 +1,11 @@
-package com.cmput301w22t13.inquiry.classes;
+package com.cmput301w22t13.inquiry.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.auth.Auth;
+import com.cmput301w22t13.inquiry.classes.Scanner;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,8 +37,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
-        Intent intent = new Intent(this, Scanner.class);
-        startActivity(intent);
 
 
         Auth.init();

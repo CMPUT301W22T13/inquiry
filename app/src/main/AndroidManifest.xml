@@ -13,13 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.InQuiRy">
         <activity
-            android:name=".ScanActivity"
+            android:name=".activities.ScanActivity"
             android:exported="false" />
         <activity
             android:name=".classes.Scanner"
             android:exported="false" />
         <activity
-            android:name=".classes.MainActivity"
+            android:name=".activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
