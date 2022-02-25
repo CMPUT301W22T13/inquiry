@@ -54,6 +54,8 @@ public class ScannerFragment extends Fragment {
                 mCodeScanner.startPreview();
             }
         });
+        Intent intent = new Intent(getActivity(), ScanActivity.class);
+        startActivity(intent);
         return root;
     }
 
