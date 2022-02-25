@@ -3,6 +3,7 @@ package com.cmput301w22t13.inquiry.ui.scanner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,10 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.cmput301w22t13.inquiry.R;
-import com.cmput301w22t13.inquiry.databinding.FragmentHomeBinding;
+import com.cmput301w22t13.inquiry.activities.ScanActivity;
 import com.cmput301w22t13.inquiry.databinding.ScannerFragmentBinding;
-import com.cmput301w22t13.inquiry.ui.home.HomeViewModel;
 
 public class ScannerFragment extends Fragment {
 
@@ -30,7 +29,6 @@ public class ScannerFragment extends Fragment {
         binding = ScannerFragmentBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-
         final TextView textView = binding.textScanner;
         scannerViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
@@ -38,6 +36,8 @@ public class ScannerFragment extends Fragment {
                 textView.setText(s);
             }
         });
+        Intent intent = new Intent(getActivity(), ScanActivity.class);
+        startActivity(intent);
         return root;
     }
 
