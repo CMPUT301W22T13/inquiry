@@ -1,10 +1,6 @@
 package com.cmput301w22t13.inquiry.ui.scanner;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,15 +10,12 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.cmput301w22t13.inquiry.R;
-import com.cmput301w22t13.inquiry.activities.ScanActivity;
-import com.cmput301w22t13.inquiry.databinding.ScannerFragmentBinding;
 import com.google.zxing.Result;
 
 public class ScannerFragment extends Fragment {
@@ -54,8 +47,6 @@ public class ScannerFragment extends Fragment {
                 mCodeScanner.startPreview();
             }
         });
-        Intent intent = new Intent(getActivity(), ScanActivity.class);
-        startActivity(intent);
         return root;
     }
 
