@@ -4,6 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/rajan/AndroidStudioProjects/inQuiRy/app/src/main/res/layout/activity_main.xml" value="0.335" />
+        <entry key="..\:/Users/socce/OneDrive - ualberta.ca/Winter2022/CMPUT-301/inquiry/app/src/main/res/layout/activity_main.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/socce/OneDrive - ualberta.ca/Winter2022/CMPUT-301/inquiry/app/src/main/res/layout/activity_profile_view.xml" value="0.33" />
+        <entry key="..\:/Users/socce/OneDrive - ualberta.ca/Winter2022/CMPUT-301/inquiry/app/src/main/res/layout/fragment_dashboard.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/socce/OneDrive - ualberta.ca/Winter2022/CMPUT-301/inquiry/app/src/main/res/layout/fragment_notifications.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/socce/OneDrive - ualberta.ca/Winter2022/CMPUT-301/inquiry/app/src/main/res/layout/profile_view_list_item.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.41309255079006774" />
         <entry key="app/src/main/res/layout/activity_scanner.xml" value="0.3658155289213132" />
         <entry key="app/src/main/res/layout/scanner_fragment.xml" value="0.4136933461909354" />
