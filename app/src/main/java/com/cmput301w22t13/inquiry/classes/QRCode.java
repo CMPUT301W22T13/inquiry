@@ -13,7 +13,26 @@ public class QRCode {
         this.hash = Hashing.sha256()
                 .hashString(text, StandardCharsets.UTF_8)
                 .toString();
-        
+        this.score = createScore(this.hash);
+    }
+    public int createScore(String str){
+        int currentScore = 0;
+        char prevChar = 'z';
+        for(int i=0;i<str.length();i++){
+            int tempScore = 0;
+            char c = str.charAt(i);
+            if(tempScore==0 && c == prevChar){
+                tempScore += 1;
+            }else if(c==prevChar){
+                tempScore *= (int) c;
+            }else{
+                currentScore += tempScore;
+                tempScore = 0;
+            }
+            prevChar = c;
+
+        }
+        return currentScore;
     }
     public void Save(){
         /*
