@@ -15,4 +15,8 @@ public class Player {
         // get Players QRCodes
         return null;
     }
+
+    public String getUserName() {
+        return userName;
+    }
 }
