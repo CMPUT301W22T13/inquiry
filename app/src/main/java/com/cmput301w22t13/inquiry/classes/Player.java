@@ -19,4 +19,30 @@ public class Player {
     public String getUserName() {
         return userName;
     }
+
+    public int getRank(){
+        // returns Rank of player
+        return 0;
+    }
+    public int getTotalScore(){
+        // returns total score of QRCodes from database
+        return 0;
+    }
+
+    public int getHighestScore(){
+        // returns highest score QRCode from database
+        return 0;
+    }
+
+    public int getLowestScore(){
+        // returns highest score QRCode from database
+        return 0;
+    }
+
+    public int getQRCodeCount(){
+        // returns amount of QRCodes scanned by player from database
+        return 0;
+    }
+
+    
 }

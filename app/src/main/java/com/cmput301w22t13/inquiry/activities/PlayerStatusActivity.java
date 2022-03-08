@@ -25,9 +25,9 @@ public class PlayerStatusActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstances) {
         super.onCreate(savedInstances);
-        setContentView(R.layout.activity_Player_Status);
+        setContentView(R.layout.activity_player_status);
 
-        player = (Player) getIntent().getSerializableExtra("game");
+        player = (Player) getIntent().getSerializableExtra("player");
 
         qrCodeListView = findViewById(R.id.playerQrCodesListView);
         qrCodeArrayList = player.getQRCodes(); //not sure what final function will be
@@ -46,8 +46,6 @@ public class PlayerStatusActivity extends AppCompatActivity {
 
         // back button ends the activity and returns to caller
         Button backButton = findViewById(R.id.profileViewBackButton);
-        backButton.setOnClickListener(view ->{
-            finish();
-        });
+        backButton.setOnClickListener(view -> finish());
     }
 }
