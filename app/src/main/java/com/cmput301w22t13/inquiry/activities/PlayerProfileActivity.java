@@ -9,8 +9,6 @@ import android.widget.TextView;
 import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.classes.Player;
 
-import java.util.ArrayList;
-
 public class PlayerProfileActivity extends AppCompatActivity {
 
 
@@ -22,25 +20,31 @@ public class PlayerProfileActivity extends AppCompatActivity {
 
         TextView userNameView = findViewById(R.id.playerProfileUserNameTextView);
         userNameView.setText(player.getUserName());
+
         TextView lowestScoreView = findViewById(R.id.playerProfileLowestScoreTextView);
-        lowestScoreView.setText(player.getLowestScore());
+        String lowestScoreString = "Lowest Score: " + player.getLowestScore();
+        lowestScoreView.setText(lowestScoreString);
+
         TextView highestScoreView = findViewById(R.id.playerProfileHighestScoreTextView);
-        highestScoreView.setText(player.getHighestScore());
+        String highestScoreString = "Highest Score: " + player.getHighestScore();
+        highestScoreView.setText(highestScoreString);
+
         TextView totalScoreView = findViewById(R.id.playerProfileTotalScoreTextView);
-        totalScoreView.setText(player.getTotalScore());
+        String totalScoreString = "Total Score: " + player.getTotalScore();
+        totalScoreView.setText(totalScoreString);
+
         TextView rankView = findViewById(R.id.playerProfileRankingTextView);
-        rankView.setText(player.getRank());
+        String rankString = "Rank: " + player.getRank();
+        rankView.setText(rankString);
+
         TextView QRCodeCountView = findViewById(R.id.playerProfileQRCodeCountTextView);
-        QRCodeCountView.setText(player.getQRCodeCount());
+        String QRCodeCountString = player.getQRCodeCount() + " QR Codes";
+        QRCodeCountView.setText(QRCodeCountString);
 
 
         // ends activity
         Button backButton = findViewById(R.id.playerProfileBackButton);
         backButton.setOnClickListener(view -> finish());
-
-
-
-
 
     }
 }
