@@ -54,4 +54,5 @@ dependencies {
 
     implementation 'com.github.yuriy-budiyev:code-scanner:2.1.2'
 
+    implementation 'com.github.javafaker:javafaker:1.0.2'
 }
