@@ -38,9 +38,9 @@ public class Auth {
 
                         Map<String, Object> newUser = new HashMap<>();
                         String uid = Objects.requireNonNull(Objects.requireNonNull(task.getResult()).getUser()).getUid();
-                        newUser.put("uid", uid);
+                        newUser.put("id", uid);
                         newUser.put("username", username);
-                        db.put("users", newUser);
+                        db.set("users", uid, newUser);
                     }
                 }
             });
