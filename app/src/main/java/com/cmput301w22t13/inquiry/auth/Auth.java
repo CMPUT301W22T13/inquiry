@@ -2,11 +2,17 @@ package com.cmput301w22t13.inquiry.auth;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
+
+import com.cmput301w22t13.inquiry.db.Database;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class Auth {
     private static FirebaseAuth firebaseAuth;
@@ -15,6 +21,7 @@ public class Auth {
         // initialize Firebase Auth instance
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        Database db = new Database();
 
         // check if user is signed in
         if(currentUser == null) {
@@ -22,7 +29,10 @@ public class Auth {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()) {
-                        Log.i("AUTH", "Successfully Authenticated");
+                        Map<String, Object> newUser = new HashMap<>();
+                        String uid = Objects.requireNonNull(Objects.requireNonNull(task.getResult()).getUser()).getUid();
+                        newUser.put("uid", uid);
+                        db.put("users", newUser);
                     }
                 }
             });
