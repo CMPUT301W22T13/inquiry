@@ -8,6 +8,7 @@ public class Player {
     public Player(String userName){
         this.userName = userName;
     }
+
     public void addQRCode(String hash) {
         // add to database
     }
@@ -26,22 +27,56 @@ public class Player {
     }
     public int getTotalScore(){
         // returns total score of QRCodes from database
-        return 0;
+
+
+        ArrayList<QRCode> QrList = getQRCodes();
+
+        int totalScore = 0;
+        for (int i = 0;i<QrList.size();i++){
+            QRCode code = QrList.get(i);
+            totalScore = totalScore + code.getScore();
+        }
+        return totalScore;
     }
 
     public int getHighestScore(){
         // returns highest score QRCode from database
+        ArrayList<QRCode> QrList = getQRCodes();
+
+        int maxScore = 0;
+        for (int i = 0;i<QrList.size();i++){
+            QRCode code = QrList.get(i);
+            int score = code.getScore();
+            if (score > maxScore){
+                maxScore = score;
+            }
+        }
+
         return 0;
     }
 
-    public int getLowestScore(){
+    public int getLowestScore() {
         // returns highest score QRCode from database
-        return 0;
+        ArrayList<QRCode> QrList = getQRCodes();
+
+        int minScore = QrList.get(0).getScore();
+        for (int i = 1; i < QrList.size(); i++) {
+            QRCode code = QrList.get(i);
+            int score = code.getScore();
+            if (score < minScore) {
+                minScore = score;
+            }
+        }
+        return minScore;
     }
 
     public int getQRCodeCount(){
         // returns amount of QRCodes scanned by player from database
-        return 0;
+
+        ArrayList<QRCode> QrList = getQRCodes();
+
+
+        return QrList.size();
     }
 
 
