@@ -15,17 +15,30 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.lang.reflect.Method;
 import java.util.Objects;
+import java.util.function.Function;
 
 public class ProfileViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    private final MutableLiveData<String> mText;
 
     FirebaseUser currentUser = Auth.getCurrentUser();
     Database db = new Database();
 
     public ProfileViewModel() {
         mText = new MutableLiveData<>();
+
+            mText.setValue("This is profile fragment");
+
+    }
+
+    /**
+     * get the username from the user document (using a callback)
+     *
+     * @param  onSuccess callback function that gets called when the username is available
+     */
+    public void getUsername(onProfileDataListener onSuccess) {
         if(currentUser!= null) {
             String id = currentUser.getUid();
             db.getById("users", id).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -34,19 +47,17 @@ public class ProfileViewModel extends ViewModel {
                     if(task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document != null && document.exists()) {
-                            Log.i("GETPROFILE", "successful");
-                            Log.d("GETPROFILE", "DocumentSnapshot data: " + document.getData());
-
                             String username = (String) document.get("username");
-                            mText.setValue("Hi, " + username + "!");
+                            if(username != null) {
+                                onSuccess.getUsername(username);
+                            }
+                            else {
+                                onSuccess.getUsername("guest");
+                            }
                         }
-
                     }
                 }
             });
-        }
-        else {
-            mText.setValue("This is profile fragment");
         }
     }
 
