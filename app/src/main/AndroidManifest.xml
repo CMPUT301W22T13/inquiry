@@ -13,9 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.InQuiRy">
         <activity
-            android:name=".activities.EditProfile"
-            android:exported="false" />
-        <activity
             android:name=".classes.Scanner"
             android:exported="false" />
         <activity
