@@ -12,5 +12,13 @@ public class EditProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+
+        //Implement edittext here and change in firebase
+        //assert its an alphabet? no maybe
+        //assert total number of characters
+
+        //tests
+        //on confirm change username
+        //show message(fragment) that name has been changed
     }
 }
