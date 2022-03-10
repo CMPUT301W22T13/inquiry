@@ -14,27 +14,39 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.databinding.FragmentHomeBinding;
+import com.cmput301w22t13.inquiry.databinding.FragmentProfileBinding;
 
 public class ProfileFragment extends Fragment {
 
-    private ProfileViewModel profileViewModel;
-    private FragmentHomeBinding binding;
+    private @NonNull FragmentProfileBinding binding;
+
+    public ProfileFragment() {
+        binding = null;
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        profileViewModel =
-                new ViewModelProvider(this).get(ProfileViewModel.class);
+        ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textHome;
-        profileViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+//        final TextView textView = binding.text;
+//        profileViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+//            @Override
+//            public void onChanged(@Nullable String s) {
+//                textView.setText(s);
+//            }
+//        });
+
+        final TextView usernameText = root.findViewById(R.id.username);
+        profileViewModel.getUsername(new onProfileDataListener() {
             @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
+            public void getUsername(String username) {
+                usernameText.setText(username);
             }
         });
+
         return root;
     }
 
