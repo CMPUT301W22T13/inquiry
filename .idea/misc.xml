@@ -7,10 +7,15 @@
         <entry key="..\:/DOCUMENTS/c301/inquiry/app/src/main/res/layout/fragment_dashboard.xml" value="0.12708333333333333" />
         <entry key="..\:/DOCUMENTS/c301/inquiry/app/src/main/res/layout/fragment_profile.xml" value="0.12708333333333333" />
         <entry key="..\:/Users/rajan/AndroidStudioProjects/inQuiRy/app/src/main/res/layout/activity_main.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_edit_profile.xml" value="0.2357142857142857" />
         <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.32222222222222224" />
-        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.4116912841796875" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.2963157095560213" />
+        <entry key="app/src/main/res/menu-v26/top_profile_menu.xml" value="0.41781390154803244" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.32222222222222224" />
+        <entry key="app/src/main/res/menu/top_edit_profile_menu.xml" value="0.2946014404296875" />
+        <entry key="app/src/main/res/menu/top_profile_menu.xml" value="0.39388275146484375" />
       </map>
     </option>
   </component>

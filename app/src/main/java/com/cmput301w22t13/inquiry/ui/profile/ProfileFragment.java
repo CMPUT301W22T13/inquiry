@@ -1,20 +1,31 @@
 package com.cmput301w22t13.inquiry.ui.profile;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.databinding.FragmentProfileBinding;
+
+import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
 
@@ -27,11 +38,14 @@ public class ProfileFragment extends Fragment {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        setHasOptionsMenu(true);
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle("Profile");
+
         final TextView usernameText = root.findViewById(R.id.username);
         profileViewModel.getUsername(new onProfileDataListener() {
             @Override
             public void getUsername(String username) {
-                usernameText.setText(username);
+                usernameText.setText(String.format(getResources().getString(R.string.profile_greeting), username));
             }
         });
 
@@ -44,21 +58,34 @@ public class ProfileFragment extends Fragment {
         binding = null;
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        View root = binding.getRoot();
-        Button button = root.findViewById(R.id.edit_profile_button);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(getActivity(), EditProfile.class);
-                startActivity(intent);
-                ((Activity) getActivity()).overridePendingTransition(0, 0);
-            }
-        });
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater menuInflater) {
+        menuInflater.inflate(R.menu.top_profile_menu, menu);
+        super.onCreateOptionsMenu(menu, menuInflater);
     }
+
+
+    @SuppressLint({"NonConstantResourceId"})
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_edit_profile) {
+            Fragment newFragment = new EditProfileFragment();
+            FragmentTransaction ft = this.getParentFragmentManager().beginTransaction();
+
+            ft.replace(R.id.nav_host_fragment_activity_main, newFragment, "PROFILE");
+            ft.addToBackStack("PROFILE");
+            ft.setReorderingAllowed(true);
+            ft.commit();
+
+//            transaction.replace(R.id.nav_host_fragment_activity_main, newFragment);
+//
+//            transaction.commit();
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }
