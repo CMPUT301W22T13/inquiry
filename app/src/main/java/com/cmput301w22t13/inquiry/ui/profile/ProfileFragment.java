@@ -31,6 +31,12 @@ public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
 
+    private String username;
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
@@ -44,8 +50,9 @@ public class ProfileFragment extends Fragment {
         final TextView usernameText = root.findViewById(R.id.username);
         profileViewModel.getUsername(new onProfileDataListener() {
             @Override
-            public void getUsername(String username) {
-                usernameText.setText(String.format(getResources().getString(R.string.profile_greeting), username));
+            public void getUsername(String usernameString) {
+                setUsername(usernameString);
+                usernameText.setText(String.format(getResources().getString(R.string.profile_greeting), usernameString));
             }
         });
 
@@ -70,9 +77,13 @@ public class ProfileFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_edit_profile) {
-            Fragment newFragment = new EditProfileFragment();
+            Fragment newFragment = new EditProfileFragment(username);
             FragmentTransaction ft = this.getParentFragmentManager().beginTransaction();
 
+            Bundle bundle = new Bundle();
+            bundle.putString("username", "PROFILE");
+
+            newFragment.setArguments(bundle);
             ft.replace(R.id.nav_host_fragment_activity_main, newFragment, "PROFILE");
             ft.addToBackStack("PROFILE");
             ft.setReorderingAllowed(true);
