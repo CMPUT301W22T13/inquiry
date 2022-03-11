@@ -13,4 +13,6 @@
     <string name="text_cancel">Cancel</string>
     <string name="profile_greeting">Hi, %1$s!</string>
     <string name="input_edit_username">Edit username...</string>
+    <string name="title_myqrs">My QRs</string>
+    <string name="title_leaderboard">Leaderboard</string>
 </resources>
