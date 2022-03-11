@@ -11,6 +11,7 @@ public class Player {
 
     public void addQRCode(String hash) {
         // add to database
+
     }
     public ArrayList<QRCode> getQRCodes(){
         // get Players QRCodes
