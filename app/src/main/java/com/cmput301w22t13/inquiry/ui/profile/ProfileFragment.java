@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -47,7 +48,10 @@ public class ProfileFragment extends Fragment {
         setHasOptionsMenu(true);
         ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle("Profile");
 
-        final TextView usernameText = root.findViewById(R.id.username);
+        final TextView usernameText = root.findViewById(R.id.username_text);
+        final TextView emailText = root.findViewById(R.id.user_email_text);
+        final ProgressBar spinner = root.findViewById(R.id.profile_progress_spinner);
+
         profileViewModel.getData(new onProfileDataListener() {
             @Override
             public void getProfileData(Map<String, Object> data) {
@@ -60,10 +64,13 @@ public class ProfileFragment extends Fragment {
                 }
                 if(emailString != null) {
                     setEmail(emailString);
+                    emailText.setText(emailString);
                 }
                 setUid(uidString);
 
                 usernameText.setText(String.format(getResources().getString(R.string.profile_greeting), usernameString));
+
+                spinner.setVisibility(View.GONE);
             }
         });
 

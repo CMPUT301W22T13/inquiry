@@ -8,14 +8,26 @@
     android:paddingRight="16dp">
 
     <TextView
-        android:id="@+id/username"
+        android:id="@+id/username_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
 
-        android:text="Loading..."
         android:textColor="@color/text_primary"
         android:textSize="24sp"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/user_email_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="18dp" />
+
+    <ProgressBar
+        android:id="@+id/profile_progress_spinner"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
