@@ -1,8 +1,6 @@
 package com.cmput301w22t13.inquiry.ui.profile;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,32 +8,34 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.databinding.FragmentProfileBinding;
 
-import java.util.Objects;
+import java.util.Map;
 
 public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
 
     private String username;
+    private String email;
+    private String uid;
 
     public void setUsername(String username) {
         this.username = username;
     }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public void setUid(String uid) { this.uid = uid; }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -48,10 +48,21 @@ public class ProfileFragment extends Fragment {
         ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle("Profile");
 
         final TextView usernameText = root.findViewById(R.id.username);
-        profileViewModel.getUsername(new onProfileDataListener() {
+        profileViewModel.getData(new onProfileDataListener() {
             @Override
-            public void getUsername(String usernameString) {
-                setUsername(usernameString);
+            public void getProfileData(Map<String, Object> data) {
+                String usernameString = (String) data.get("username");
+                String emailString = (String) data.get("email");
+                String uidString = (String) data.get("uid");
+
+                if(usernameString != null) {
+                    setUsername(usernameString);
+                }
+                if(emailString != null) {
+                    setEmail(emailString);
+                }
+                setUid(uidString);
+
                 usernameText.setText(String.format(getResources().getString(R.string.profile_greeting), usernameString));
             }
         });
@@ -77,11 +88,13 @@ public class ProfileFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_edit_profile) {
-            Fragment newFragment = new EditProfileFragment(username);
+            Fragment newFragment = new EditProfileFragment(uid, username, email);
             FragmentTransaction ft = this.getParentFragmentManager().beginTransaction();
 
             Bundle bundle = new Bundle();
-            bundle.putString("username", "PROFILE");
+            bundle.putString("username", username);
+            bundle.putString("email", email);
+            bundle.putString("uid", uid);
 
             newFragment.setArguments(bundle);
             ft.replace(R.id.nav_host_fragment_activity_main, newFragment, "PROFILE");

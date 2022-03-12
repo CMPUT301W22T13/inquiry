@@ -12,6 +12,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ProfileViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
@@ -25,11 +28,11 @@ public class ProfileViewModel extends ViewModel {
     }
 
     /**
-     * get the username from the user document (using a callback)
+     * get the user's data from firestore (using a callback)
      *
      * @param  onSuccess callback function that gets called when the username is available
      */
-    public void getUsername(onProfileDataListener onSuccess) {
+    public void getData(onProfileDataListener onSuccess) {
         if(currentUser!= null) {
             String id = currentUser.getUid();
             db.getById("users", id).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -39,12 +42,21 @@ public class ProfileViewModel extends ViewModel {
                         DocumentSnapshot document = task.getResult();
                         if (document != null && document.exists()) {
                             String username = (String) document.get("username");
+                            String email = (String) document.get("email");
+                            String uid = (String) document.get("id");
+
+                            Map<String, Object> userData = new HashMap<>();
+
+                            userData.put("username", username);
+                            userData.put("email", email);
+                            userData.put("uid", uid);
+
                             if(username != null) {
-                                onSuccess.getUsername(username);
+                                onSuccess.getProfileData(userData);
                             }
-                            else {
-                                onSuccess.getUsername("guest");
-                            }
+//                            else {
+//                                onSuccess.getProfileData("guest");
+//                            }
                         }
                     }
                 }
