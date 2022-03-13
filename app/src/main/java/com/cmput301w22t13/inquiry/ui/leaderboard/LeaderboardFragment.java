@@ -1,4 +1,4 @@
-package com.cmput301w22t13.inquiry.ui.dashboard;
+package com.cmput301w22t13.inquiry.ui.leaderboard;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,23 +13,24 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.cmput301w22t13.inquiry.R;
-import com.cmput301w22t13.inquiry.databinding.FragmentDashboardBinding;
+import com.cmput301w22t13.inquiry.databinding.FragmentLeaderboardBinding;
 
-public class DashboardFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
-    private FragmentDashboardBinding binding;
+public class LeaderboardFragment extends Fragment {
+
+    private LeaderboardViewModel leaderboardViewModel;
+    private FragmentLeaderboardBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                new ViewModelProvider(this).get(DashboardViewModel.class);
+        leaderboardViewModel =
+                new ViewModelProvider(this).get(LeaderboardViewModel.class);
 
-        binding = FragmentDashboardBinding.inflate(inflater, container, false);
+        binding = FragmentLeaderboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textDashboard;
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        final TextView textView = binding.textLeaderboard;
+        leaderboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
