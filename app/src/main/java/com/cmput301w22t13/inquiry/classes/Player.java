@@ -1,10 +1,14 @@
 package com.cmput301w22t13.inquiry.classes;
 
+import com.cmput301w22t13.inquiry.db.Database;
+
 import java.util.ArrayList;
 
 public class Player {
     private String userName;
     private int pId;
+
+    Database db = new Database();
     public Player(String userName){
         this.userName = userName;
     }
@@ -12,8 +16,8 @@ public class Player {
     public void addQRCode(String hash) {
         // add to database
     }
+
     public ArrayList<QRCode> getQRCodes(){
-        // get Players QRCodes
         return null;
     }
 

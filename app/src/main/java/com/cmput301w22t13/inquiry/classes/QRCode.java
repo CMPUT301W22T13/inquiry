@@ -25,7 +25,7 @@ public class QRCode {
         Map<String, Object> qrCode = new HashMap<>();
         qrCode.put("hash", this.hash);
         db.put("qr_codes", qrCode);
-        db.update("users", this.uid, "qr_codes");
+//        db.update("users", this.uid, "qr_codes");
     }
 
     public int getScore(){
