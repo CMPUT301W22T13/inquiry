@@ -73,6 +73,8 @@ public class ProfileFragment extends Fragment {
                 usernameText.setText(String.format(getResources().getString(R.string.profile_greeting), usernameString));
 
                 spinner.setVisibility(View.GONE);
+                usernameText.setVisibility(View.VISIBLE);
+                emailText.setVisibility(View.VISIBLE);
             }
         });
 
