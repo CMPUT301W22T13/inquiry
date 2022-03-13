@@ -12,10 +12,10 @@
         tools:layout="@layout/fragment_maps" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.cmput301w22t13.inquiry.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_myqrs"
+        android:name="com.cmput301w22t13.inquiry.ui.myQRs.MyQRsFragment"
+        android:label="@string/title_myqrs"
+        tools:layout="@layout/fragment_myqrs" />
     <fragment
         android:id="@+id/navigation_scanner"
         android:name="com.cmput301w22t13.inquiry.ui.scanner.ScannerFragment"
@@ -23,10 +23,10 @@
         tools:layout="@layout/scanner_fragment" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.cmput301w22t13.inquiry.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_leaderboard"
+        android:name="com.cmput301w22t13.inquiry.ui.leaderboard.LeaderboardFragment"
+        android:label="@string/title_leaderboard"
+        tools:layout="@layout/fragment_leaderboard" />
 
     <fragment
         android:id="@+id/navigation_profile"

@@ -32,6 +32,12 @@
             android:value="@string/google_maps_key" />
 
         <activity
+            android:name=".activities.PlayerProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.PlayerStatusActivity"
+            android:exported="false" />
+        <activity
             android:name=".classes.Scanner"
             android:exported="false" />
         <activity
