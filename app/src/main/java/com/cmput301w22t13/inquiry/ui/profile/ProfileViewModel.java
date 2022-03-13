@@ -35,6 +35,8 @@ public class ProfileViewModel extends ViewModel {
     public void getData(onProfileDataListener onSuccess) {
         if(currentUser!= null) {
             String id = currentUser.getUid();
+
+            // get the user's data from firestore
             db.getById("users", id).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -45,18 +47,16 @@ public class ProfileViewModel extends ViewModel {
                             String email = (String) document.get("email");
                             String uid = (String) document.get("id");
 
+                            // create a map of the user's data to pass to the success callback
                             Map<String, Object> userData = new HashMap<>();
 
                             userData.put("username", username);
                             userData.put("email", email);
                             userData.put("uid", uid);
 
-                            if(username != null) {
+                            if(username != null && uid != null) {
                                 onSuccess.getProfileData(userData);
                             }
-//                            else {
-//                                onSuccess.getProfileData("guest");
-//                            }
                         }
                     }
                 }

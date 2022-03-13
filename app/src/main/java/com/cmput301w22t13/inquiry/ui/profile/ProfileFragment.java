@@ -53,6 +53,8 @@ public class ProfileFragment extends Fragment {
         final ProgressBar spinner = root.findViewById(R.id.profile_progress_spinner);
 
         profileViewModel.getData(new onProfileDataListener() {
+            // get data from success listener and display it
+            // TODO: Handle error
             @Override
             public void getProfileData(Map<String, Object> data) {
                 String usernameString = (String) data.get("username");
@@ -95,6 +97,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_edit_profile) {
+            // navigate to edit profile fragment and pass user data to it
             Fragment newFragment = new EditProfileFragment(uid, username, email);
             FragmentTransaction ft = this.getParentFragmentManager().beginTransaction();
 
@@ -105,13 +108,11 @@ public class ProfileFragment extends Fragment {
 
             newFragment.setArguments(bundle);
             ft.replace(R.id.nav_host_fragment_activity_main, newFragment, "PROFILE");
+
+            // configure navigation options
             ft.addToBackStack("PROFILE");
             ft.setReorderingAllowed(true);
             ft.commit();
-
-//            transaction.replace(R.id.nav_host_fragment_activity_main, newFragment);
-//
-//            transaction.commit();
 
             return true;
         }
