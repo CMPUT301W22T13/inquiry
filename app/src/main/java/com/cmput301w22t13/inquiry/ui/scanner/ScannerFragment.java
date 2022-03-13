@@ -16,12 +16,15 @@ import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.cmput301w22t13.inquiry.R;
+import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.classes.QRCode;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.zxing.Result;
 
 public class ScannerFragment extends Fragment {
 
     private CodeScanner mCodeScanner;
+    FirebaseUser currentUser = Auth.getCurrentUser();
 
     @Nullable
     @Override
@@ -38,7 +41,7 @@ public class ScannerFragment extends Fragment {
                     @Override
                     public void run() {
                         Toast.makeText(activity, result.getText(), Toast.LENGTH_SHORT).show();
-                        QRCode QR = new QRCode(result.getText());
+                        QRCode QR = new QRCode(result.getText(), currentUser.getUid());
 
                     }
                 });

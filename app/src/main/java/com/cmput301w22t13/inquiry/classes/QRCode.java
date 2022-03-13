@@ -5,25 +5,29 @@ import com.google.common.hash.Hashing;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Map;
 
 public class QRCode {
-    private String hash;
+    private final String hash;
+    private final String uid;
     private int score;
-    public QRCode(String text){
+
+    Database db = new Database();
+
+    public QRCode(String text, String uid){
         this.hash = Hashing.sha256()
                 .hashString(text, StandardCharsets.UTF_8)
                 .toString();
-        
+
+        this.uid = uid;
     }
-    public void Save(){
-        /*
-        HashMap code = new HashMap<String, Object>();
-        code.put("hash", this.hash);
-        Database db = new Database();
-        db.put("QRCodes", this);
-        */
-        // if someone could work on this and get the QRCode to save, that would be appreciated
+    public void save(){
+        Map<String, Object> qrCode = new HashMap<>();
+        qrCode.put("hash", this.hash);
+        db.put("qr_codes", qrCode);
+        db.update("users", this.uid, "qr_codes");
     }
+
     public int getScore(){
         return this.score;
     }
