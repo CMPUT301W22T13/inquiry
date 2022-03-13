@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cmput301w22t13.inquiry.R;
+import com.cmput301w22t13.inquiry.databinding.FragmentMapsBinding;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapFragment extends Fragment {
 
+    private FragmentMapsBinding binding;
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
         /**
@@ -43,7 +45,11 @@ public class MapFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_maps, container, false);
+        binding = FragmentMapsBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+
+        return root;
+
     }
 
     @Override

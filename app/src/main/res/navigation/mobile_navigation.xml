@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/navigation_maps"
         android:name="com.cmput301w22t13.inquiry.ui.map.MapFragment"
-        android:label="@string/title_home"
+        android:label="@string/title_map"
         tools:layout="@layout/fragment_maps" />
 
     <fragment
