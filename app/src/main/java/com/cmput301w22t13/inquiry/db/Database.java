@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +68,7 @@ public class Database {
      */
     public void set(String collection, String id, Map<String, Object> data) {
         this.db.collection(collection)
-                .document(id).set(data)
+                .document(id).set(data, SetOptions.merge())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
@@ -92,5 +93,27 @@ public class Database {
 
         return db.collection(collection).document(id).get();
 
+    }
+
+
+    /**
+     * update a document in a specified collection using its ID
+     */
+    public void update(String collection, String id, Map<String, Object> data) {
+        this.db.collection(collection)
+                .document(id)
+                .update(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
     }
 }
