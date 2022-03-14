@@ -29,6 +29,8 @@ import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.databinding.FragmentProfileBinding;
 import com.cmput301w22t13.inquiry.db.onProfileDataListener;
 
+import org.w3c.dom.Text;
+
 import java.util.Map;
 
 public class ProfileFragment extends Fragment {
@@ -50,6 +52,10 @@ public class ProfileFragment extends Fragment {
         final TextView usernameText = root.findViewById(R.id.username_text);
         final TextView emailText = root.findViewById(R.id.user_email_text);
         final ProgressBar spinner = root.findViewById(R.id.profile_progress_spinner);
+        final TextView totalScoreText = root.findViewById(R.id.total_score);
+        final TextView totalQrsText = root.findViewById(R.id.total_qrs);
+        final TextView lowestScoreText = root.findViewById(R.id.lowest_score);
+        final TextView highestScoreText = root.findViewById(R.id.highest_score);
 
         profileViewModel.getData(new onProfileDataListener() {
             // get data from success listener and display it
@@ -61,12 +67,24 @@ public class ProfileFragment extends Fragment {
                 String uidString = (String) data.get("uid");
 
                 if(usernameString != null) {
-                    user = new Player(usernameString, uidString);
+                    user = new Player(usernameString, uidString, true);
+                    user.fetchQRCodes(qrCodes -> {
+                        String lowestScoreString = "Lowest Score: " + user.getLowestScore();
+                        lowestScoreText.setText(lowestScoreString);
+                        String highestScoreString = "Highest Score: " + user.getHighestScore();
+                        highestScoreText.setText(highestScoreString);
+                        String totalScoreString = "Total Score: " + user.getTotalScore();
+                        totalScoreText.setText(totalScoreString);
+                        String QRCodeCountString = user.getQRCodeCount() + " QR Codes";
+                        totalQrsText.setText(QRCodeCountString);
+                    });
                 }
                 if(emailString != null) {
                     user.setEmail(emailString);
                     emailText.setText(emailString);
                 }
+
+
 
                 usernameText.setText(usernameString);
 
