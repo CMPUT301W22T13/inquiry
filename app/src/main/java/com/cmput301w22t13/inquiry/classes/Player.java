@@ -77,7 +77,6 @@ public class Player {
     public void fetchQRCodes(onQrDataListener onSuccess) {
         ArrayList<QRCode> QrList = new ArrayList<>();
 
-
         db.getById("users", this.uid).addOnCompleteListener(userTask -> {
             if (userTask.isSuccessful()) {
                 // loop through qr_codes field array and add to QrList ArrayList
@@ -90,7 +89,6 @@ public class Player {
                             if (qrTask.isSuccessful()) {
                                 DocumentSnapshot qr = qrTask.getResult();
                                 QRCode qrCode = new QRCode(qr.getString("hash"), qr.getLong("score").intValue());
-                                Log.d("QRCode", qrCode.getHash());
                                 QrList.add(qrCode);
 
                                 if (finalI == qrRefs.size() - 1) {
