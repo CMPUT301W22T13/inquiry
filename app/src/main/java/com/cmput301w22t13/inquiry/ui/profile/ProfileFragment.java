@@ -1,4 +1,10 @@
 package com.cmput301w22t13.inquiry.ui.profile;
+/**
+ * Handles user navigation for fragment_profile.xml
+ * Populates views with user data
+ * Navigates to EditProfileFragment and pass user data to that fragment
+ * Create the options menu when the user opens the menu for the first time
+ */
 
 import android.annotation.SuppressLint;
 import android.content.Intent;

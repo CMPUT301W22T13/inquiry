@@ -4,9 +4,10 @@ import java.util.ArrayList;
 
 public class Player {
     private String userName;
-    private int pId;
-    public Player(String userName){
+    private String pid;
+    public Player(String userName, String pid){
         this.userName = userName;
+        this.pid = pid;
     }
 
     public void addQRCode(String hash) {

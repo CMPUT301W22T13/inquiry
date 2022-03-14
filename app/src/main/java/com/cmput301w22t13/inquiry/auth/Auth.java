@@ -1,4 +1,10 @@
 package com.cmput301w22t13.inquiry.auth;
+/**
+ * Handles user sign-in and log-in
+ * Gets called in MainActivity to authenticate user
+ * If user does not exist in database, this class is responsible for
+ * authenticating the user and saving the user in the firestore database
+ */
 
 import android.util.Log;
 
@@ -17,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
 
 public class Auth {
     private static FirebaseAuth firebaseAuth;
