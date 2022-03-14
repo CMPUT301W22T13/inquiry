@@ -1,18 +1,23 @@
 package com.cmput301w22t13.inquiry.classes;
 
-import java.util.ArrayList;
+import com.cmput301w22t13.inquiry.db.Database;
 
+import java.util.ArrayList;
 public class Player {
-    private String userName;
-    private String pid;
-    public Player(String userName, String pid){
+
+    private final String uid;
+    private final String userName;
+
+    // constructor
+    public Player(String userName, String uid) {
         this.userName = userName;
-        this.pid = pid;
+        this.uid = uid;
     }
 
     public void addQRCode(String hash) {
         // add to database
     }
+
     public ArrayList<QRCode> getQRCodes(){
         // get Players QRCodes
         
