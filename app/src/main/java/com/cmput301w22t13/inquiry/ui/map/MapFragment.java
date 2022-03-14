@@ -114,12 +114,14 @@ public class MapFragment extends Fragment {
                     // Answer: https://stackoverflow.com/a/16492921
                     // Author: https://stackoverflow.com/users/2296798/nick
 
-                    CameraPosition cameraPosition = new CameraPosition.Builder()
-                            .target(new LatLng(lastKnownLocation.getLatitude(),
-                                    lastKnownLocation.getLongitude())).zoom(DEFAULT_ZOOM).build();
-                    CameraUpdate cameraUpdate = CameraUpdateFactory
-                            .newCameraPosition(cameraPosition);
-                    map.moveCamera(cameraUpdate);
+                    if (lastKnownLocation != null) {
+                        CameraPosition cameraPosition = new CameraPosition.Builder()
+                                .target(new LatLng(lastKnownLocation.getLatitude(),
+                                        lastKnownLocation.getLongitude())).zoom(DEFAULT_ZOOM).build();
+                        CameraUpdate cameraUpdate = CameraUpdateFactory
+                                .newCameraPosition(cameraPosition);
+                        map.moveCamera(cameraUpdate);
+                    }
 
                 } else {
                     map.setMyLocationEnabled(false);
