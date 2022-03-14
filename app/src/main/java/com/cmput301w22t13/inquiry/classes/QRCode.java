@@ -11,6 +11,7 @@ import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.db.Database;
 import com.google.common.hash.Hashing;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 
 import java.nio.charset.StandardCharsets;
@@ -84,11 +85,14 @@ public class QRCode {
                 if (task.isSuccessful()) {
 //                    Log.i("QRCode", "QRCode saved successfully");
 
-                    // append the qr code's id to the user's qr_codes array
-                    // see: stackoverflow.com/a/51983589/12955797
+                    // get document reference from the qr code's id
                     String qrDocumentId = task.getResult().getId();
+                    DocumentReference qrRef = db.getDocReference("qr_codes/" + qrDocumentId);
+
+                    // append the qr code's reference to the user's qr_codes array
+                    // see: stackoverflow.com/a/51983589/12955797
                     Map<String, Object> userQrCode = new HashMap<>();
-                    userQrCode.put("qr_codes", FieldValue.arrayUnion(qrDocumentId));
+                    userQrCode.put("qr_codes", FieldValue.arrayUnion(qrRef));
                     db.update("users", id, userQrCode);
                 }
             });

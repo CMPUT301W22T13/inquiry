@@ -134,6 +134,16 @@ public class Database {
     }
 
     /**
+     * get a reference to a document
+     *
+     * @param docPath the path to the document, e.g. "users/12345"
+     */
+    public DocumentReference getDocReference(String docPath) {
+        return db.document(docPath);
+    }
+
+
+    /**
      * query a collection for documents matching a specified field
      *
      * @param collection the name of the collection, e.g. "users"
