@@ -7,7 +7,6 @@ package com.cmput301w22t13.inquiry.ui.profile;
  */
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -26,8 +24,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.cmput301w22t13.inquiry.R;
+import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.databinding.FragmentProfileBinding;
+import com.cmput301w22t13.inquiry.db.onProfileDataListener;
 
 import java.util.Map;
 
@@ -35,7 +35,7 @@ public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
 
-    private Player user;
+    private Player user = Auth.getPlayer();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -68,7 +68,7 @@ public class ProfileFragment extends Fragment {
                     emailText.setText(emailString);
                 }
 
-                usernameText.setText(String.format(getResources().getString(R.string.profile_greeting), usernameString));
+                usernameText.setText(usernameString);
 
                 spinner.setVisibility(View.GONE);
                 usernameText.setVisibility(View.VISIBLE);

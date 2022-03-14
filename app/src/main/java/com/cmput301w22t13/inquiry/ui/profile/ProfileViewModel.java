@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.db.Database;
+import com.cmput301w22t13.inquiry.db.onProfileDataListener;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 

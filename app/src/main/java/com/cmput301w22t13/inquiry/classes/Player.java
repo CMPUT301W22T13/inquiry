@@ -1,15 +1,22 @@
 package com.cmput301w22t13.inquiry.classes;
 
+import android.util.Log;
+
 import com.cmput301w22t13.inquiry.db.Database;
+import com.cmput301w22t13.inquiry.db.onQrDataListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 
 public class Player {
 
     private String uid;
     private String userName;
     private String email;
+    private ArrayList<QRCode> qrCodes;
 
     Database db = new Database();
 
@@ -22,28 +29,82 @@ public class Player {
     public Player(String userName, String uid, String email) {
         this.userName = userName;
         this.uid = uid;
-        this.email = email;
+        if (email != null) {
+            this.email = email;
+        }
+    }
+
+    public Player(String userName, String uid, Boolean getQrCodes) {
+        this.userName = userName;
+        this.uid = uid;
+        if (getQrCodes) {
+            fetchQRCodes(qrCodes1 -> {
+                this.qrCodes = qrCodes1;
+            });
+        }
+    }
+
+    public void fetchQRCodes(onQrDataListener onSuccess) {
+        ArrayList<QRCode> QrList = new ArrayList<>();
+
+
+        db.getById("users", this.uid).addOnCompleteListener(userTask -> {
+            if (userTask.isSuccessful()) {
+                // loop through qr_codes field array and add to QrList ArrayList
+                DocumentSnapshot user = userTask.getResult();
+                ArrayList<DocumentReference> qrRefs = (ArrayList<DocumentReference>) user.get("qr_codes");
+                if (qrRefs != null) {
+                    for (int i = 0; i < qrRefs.size(); i++) {
+                        int finalI = i;
+                        qrRefs.get(i).get().addOnCompleteListener(qrTask -> {
+                            if (qrTask.isSuccessful()) {
+                                DocumentSnapshot qr = qrTask.getResult();
+                                QRCode qrCode = new QRCode(qr.getString("hash"), qr.getLong("score").intValue());
+                                Log.d("QRCode", qrCode.getHash());
+                                QrList.add(qrCode);
+
+                                if (finalI == qrRefs.size() - 1) {
+                                    onSuccess.getQrData(QrList);
+                                    this.qrCodes = QrList;
+                                }
+                            }
+                        });
+                    }
+                }
+                else {
+                    // TODO: error handling
+                }
+            }
+        });
     }
 
     public ArrayList<QRCode> getQRCodes() {
-        // get Players QRCodes
-
-        return null;
+        return this.qrCodes;
     }
 
     public String getUsername() {
         return userName;
     }
+
     public String getUid() {
         return uid;
     }
+
     public String getEmail() {
         return email;
     }
 
-    public void setUid(String uid) { this.uid = uid; }
-    public void setUserName(String userName) { this.userName = userName; }
-    public void setEmail(String email) { this.email = email; }
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public int getRank() {
         // returns Rank of player

@@ -23,8 +23,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.cmput301w22t13.inquiry.R;
+import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.db.Database;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -95,6 +98,8 @@ public class EditProfileFragment extends Fragment {
 
         Button saveChangesButton = root.findViewById(R.id.save_edit_profile_button);
 
+        FirebaseUser currentUser = Auth.getCurrentUser();
+
         saveChangesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,13 +115,18 @@ public class EditProfileFragment extends Fragment {
 
                 String userId = user.getUid();
 
-                if(!usernameToSave.isEmpty() && userId != null) {
+                if(!usernameToSave.isEmpty() && userId != null && currentUser != null) {
                     // update user document in database
                     userData.put("username", usernameToSave);
                     userData.put("email", emailToSave);
 
+                    // update FirebaseUser info
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(usernameToSave).build();
+                    currentUser.updateProfile(profileUpdates);
+                    currentUser.updateEmail(emailToSave);
+
                     user.updateUser(userData);
-//                    db.update("users", userId, userData);
 
                     // hide the keyboard and go back to the profile
                     final InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);

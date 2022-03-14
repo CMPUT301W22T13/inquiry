@@ -5,10 +5,14 @@ package com.cmput301w22t13.inquiry.classes;
  */
 
 
+import android.util.Log;
+
 import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.db.Database;
 import com.google.common.hash.Hashing;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 
 import java.nio.charset.StandardCharsets;
 
@@ -30,6 +34,11 @@ public class QRCode {
     public QRCode(String text) {
         this.hash = QRName.getHash(text);
         this.score = createScore(this.hash);
+    }
+
+    public QRCode(String hash, int score) {
+        this.hash = hash;
+        this.score = score;
     }
 
     public int createScore(String str) {
@@ -62,16 +71,32 @@ public class QRCode {
      * Saves the given hash into a collection owned by user
      */
     public void save() {
+        // create a map of the data to be saved
         Map<String, Object> qrCode = new HashMap<>();
         qrCode.put("hash", this.hash);
+        qrCode.put("score", this.score);
 
         FirebaseUser currentUser = Auth.getCurrentUser();
         if (currentUser != null) {
             String id = currentUser.getUid();
-            db.addToCollection("users", "hashes", id, qrCode);
 
+            // save the QR code to the qr_codes collection, then save a reference to it in the user's document
+            db.put("qr_codes", qrCode).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+//                    Log.i("QRCode", "QRCode saved successfully");
+
+                    // get document reference from the qr code's id
+                    String qrDocumentId = task.getResult().getId();
+                    DocumentReference qrRef = db.getDocReference("qr_codes/" + qrDocumentId);
+
+                    // append the qr code's reference to the user's qr_codes array
+                    // see: stackoverflow.com/a/51983589/12955797
+                    Map<String, Object> userQrCode = new HashMap<>();
+                    userQrCode.put("qr_codes", FieldValue.arrayUnion(qrRef));
+                    db.update("users", id, userQrCode);
+                }
+            });
         }
-//        db.update("users", this.uid, "qr_codes");
     }
 
     /**
