@@ -44,6 +44,8 @@ public class LeaderboardFragment extends Fragment {
         final EditText searchEditText = root.findViewById(R.id.leaderBoardEditTextSearch);
         final Button searchButton = root.findViewById(R.id.leaderBoardSearchButton);
         final TextView errorTextView = root.findViewById(R.id.leaderBoardSearchErrorTextView);
+
+        //when search button is clicked gets the id from the database and starts the playerProfile activity if successful
         searchButton.setOnClickListener(view -> {
             String searchString = searchEditText.getText().toString();
             if (searchString.isEmpty()) {

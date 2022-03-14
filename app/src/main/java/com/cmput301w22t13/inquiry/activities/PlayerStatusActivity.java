@@ -33,6 +33,7 @@ public class PlayerStatusActivity extends AppCompatActivity {
         super.onCreate(savedInstances);
         setContentView(R.layout.activity_player_status);
 
+        // gets player data from database to be displayed
         String uid = getIntent().getStringExtra("uid");
         db.getById("users", uid).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
