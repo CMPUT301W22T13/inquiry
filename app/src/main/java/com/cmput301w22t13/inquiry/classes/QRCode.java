@@ -31,4 +31,10 @@ public class QRCode {
     public int getScore(){
         return this.score;
     }
+
+
+    //for testing
+    public void setScore(int num){
+        this.score = num;
+    }
 }

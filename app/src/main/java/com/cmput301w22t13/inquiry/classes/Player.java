@@ -9,7 +9,7 @@ public class Player {
         this.userName = userName;
     }
 
-    public void addQRCode(String hash) {
+    public void addQRCode(QRCode code) {
         // add to database
     }
     public ArrayList<QRCode> getQRCodes(){
