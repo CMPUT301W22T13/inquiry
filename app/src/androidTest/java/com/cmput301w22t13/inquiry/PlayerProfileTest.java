@@ -63,7 +63,7 @@ public class PlayerProfileTest {
                 assertTrue(document != null && document.exists());
                 String id = (String) document.get("id");
                 Player player = new Player((String) document.get("username"), id);
-                assertEquals(player.getUserName(), "Unjustodin");
+                assertEquals(player.getUsername(), "Unjustodin");
                 assertEquals(id, "3JZriGLblWMN9IEMXvWzy90VDPg2");
             });
         });

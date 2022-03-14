@@ -17,7 +17,7 @@ public class Player {
     private String email;
     private ArrayList<QRCode> qrCodes;
 
-    Database db = new Database();
+    Database db;
 
     public Player(String userName, String uid) {
         this.userName = userName;
@@ -45,6 +45,7 @@ public class Player {
 
     public void fetchQRCodes(onQrDataListener onSuccess) {
         ArrayList<QRCode> QrList = new ArrayList<>();
+        db = new Database();
 
 
         db.getById("users", this.uid).addOnCompleteListener(userTask -> {
