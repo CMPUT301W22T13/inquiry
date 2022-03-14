@@ -4,12 +4,18 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowInsets;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.databinding.ActivityOnboardingBinding;
+import com.cmput301w22t13.inquiry.ui.profile.ProfileViewModel;
+import com.cmput301w22t13.inquiry.ui.profile.onProfileDataListener;
+
+import java.util.Map;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -26,7 +32,16 @@ public class OnboardingActivity extends AppCompatActivity {
         ActivityOnboardingBinding binding = ActivityOnboardingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        TextView message = findViewById(R.id.onboarding_message);
+
+        message.setText(String.format(getString(R.string.onboarding_message), "user"));
         mContentView = binding.fullscreenContent;
+        ProfileViewModel profile = new ProfileViewModel();
+        profile.getData(data -> {
+            Object user = data.get("username");
+            if (user != null) message.setText(String.format(getString(R.string.onboarding_message), user));
+        });
+
         hide();
 
     }
