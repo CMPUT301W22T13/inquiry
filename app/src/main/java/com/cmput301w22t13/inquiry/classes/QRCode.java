@@ -1,7 +1,9 @@
 package com.cmput301w22t13.inquiry.classes;
 
+import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.db.Database;
 import com.google.common.hash.Hashing;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -24,7 +26,13 @@ public class QRCode {
     public void save(){
         Map<String, Object> qrCode = new HashMap<>();
         qrCode.put("hash", this.hash);
-        db.put("qr_codes", qrCode);
+
+        FirebaseUser currentUser = Auth.getCurrentUser();
+        if( currentUser != null){
+            String id = currentUser.getUid();
+            db.addToCollection("users","hashes" , id,qrCode);
+
+        }
 //        db.update("users", this.uid, "qr_codes");
     }
 

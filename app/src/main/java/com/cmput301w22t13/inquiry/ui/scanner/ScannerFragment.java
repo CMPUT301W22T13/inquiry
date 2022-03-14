@@ -42,7 +42,7 @@ public class ScannerFragment extends Fragment {
                     public void run() {
                         Toast.makeText(activity, result.getText(), Toast.LENGTH_SHORT).show();
                         QRCode QR = new QRCode(result.getText(), currentUser.getUid());
-
+                        QR.save();
                     }
                 });
             }

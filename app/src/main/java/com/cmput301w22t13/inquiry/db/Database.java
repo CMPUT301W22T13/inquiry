@@ -1,5 +1,7 @@
 package com.cmput301w22t13.inquiry.db;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -66,6 +68,41 @@ public class Database {
      * @param  id custom id to assign to the document, ensure this is a unique ID otherwise data loss can occur
      * @param  data the document to create in the collection, must be of type Map<String, Object>
      */
+    public void addToCollection(String collection, String collection2 ,String id, Map<String, Object> data) {
+        Log.d("CREATION", "running add to collection");
+        this.db.collection(collection)
+                .document(id).collection(collection2).add(data)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("CREATION", "helo");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Log.w(TAG, "Error adding document", e);
+                    }
+                });
+    }
+
+    /**
+     * Put a new document in a specified collection with a specified ID
+     * If a non-unique ID is passed in, the old document will get overwritten
+     *
+     * Example usage:
+     *     Map<String, Object> user = new HashMap<>();
+     *     user.put("first", "Ada");
+     *     user.put("last", "Lovelace");
+     *     user.put("born", 1815);
+     *
+     *     Database db = new Database();
+     *     db.put("users", "12345", user); // specify a unique document ID
+     *
+     * @param  collection  the name of the collection, e.g. "users"
+     * @param  id custom id to assign to the document, ensure this is a unique ID otherwise data loss can occur
+     * @param  data the document to create in the collection, must be of type Map<String, Object>
+     */
     public void set(String collection, String id, Map<String, Object> data) {
         this.db.collection(collection)
                 .document(id).set(data, SetOptions.merge())
@@ -94,7 +131,6 @@ public class Database {
         return db.collection(collection).document(id).get();
 
     }
-
 
     /**
      * update a document in a specified collection using its ID
