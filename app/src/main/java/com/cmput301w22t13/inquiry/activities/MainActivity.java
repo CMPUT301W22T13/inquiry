@@ -67,12 +67,13 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
         // NOTE: FOR TESTING ONLY, THIS CLEARS ALL PREFERENCES BEFORE RUNNING
-//        prefs.edit().clear().commit();
+        prefs.edit().clear().commit();
         boolean previouslyStarted = prefs.getBoolean(PREV_STARTED, false);
         if (!previouslyStarted) {
-            SharedPreferences.Editor edit = prefs.edit();
-            edit.putBoolean(PREV_STARTED, Boolean.TRUE);
-            edit.apply();
+            prefs
+                    .edit()
+                    .putBoolean(PREV_STARTED, Boolean.TRUE)
+                    .apply();
             showHelp();
         }
     }
