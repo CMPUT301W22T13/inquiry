@@ -19,10 +19,12 @@
         <entry key="..\:/Users/Sarah/Documents/GitHub/inquiry/app/src/main/res/menu/top_edit_profile_menu.xml" value="0.1" />
         <entry key="..\:/Users/Sarah/Documents/GitHub/inquiry/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1805" />
         <entry key="..\:/Users/rajan/AndroidStudioProjects/inQuiRy/app/src/main/res/layout/activity_main.xml" value="0.335" />
-        <entry key="app/src/main/res/drawable/circle.xml" value="0.2125" />
-        <entry key="app/src/main/res/drawable/rounded_textview.xml" value="0.2125" />
         <entry key="..\:/Users/rajan/Documents/GitHub/inquiry/app/src/main/res/layout/activity_onboarding.xml" value="0.25" />
         <entry key="..\:/Users/rajan/Documents/GitHub/inquiry/app/src/main/res/layout/fragment_home.xml" value="0.23645833333333333" />
+        <entry key="app/src/main/res/drawable/circle.xml" value="0.2125" />
+        <entry key="app/src/main/res/drawable/rounded_textview.xml" value="0.2125" />
+        <entry key="app/src/main/res/layout/activity_player_profile.xml" value="0.3296875" />
+        <entry key="app/src/main/res/layout/activity_scanner_result.xml" value="0.3932846069335937" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_edit_profile.xml" value="0.31712646484375" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.23154387297453702" />
@@ -32,7 +34,7 @@
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1660561644000771" />
         <entry key="app/src/main/res/layout/myqrs_list_item.xml" value="0.36256256103515627" />
         <entry key="app/src/main/res/layout/profile_view_list_item.xml" value="0.3296875" />
-        <entry key="app/src/main/res/layout/scanner_fragment.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/scanner_fragment.xml" value="0.21556243896484378" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.32222222222222224" />
       </map>
     </option>
