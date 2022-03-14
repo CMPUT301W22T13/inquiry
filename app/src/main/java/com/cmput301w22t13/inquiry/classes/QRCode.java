@@ -26,10 +26,7 @@ public class QRCode {
      * @param uid input for the users id which created the QRCode
      */
     public QRCode(String text, String uid){
-        this.hash = Hashing.sha256()
-                .hashString(text, StandardCharsets.UTF_8)
-                .toString();
-
+        this.hash = QRName.getHash(text);
         this.uid = uid;
     }
 
@@ -56,4 +53,6 @@ public class QRCode {
     public int getScore(){
         return this.score;
     }
+
+    public String getName() { return QRName.fromHash(this.hash); }
 }
