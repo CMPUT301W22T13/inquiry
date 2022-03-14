@@ -22,12 +22,38 @@ public class PlayerProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player_profile);
 
         String uid = getIntent().getStringExtra("uid");
-        DocumentSnapshot document = db.getById("users", uid).getResult();
-        Player player = new Player((String) document.get("username"), (String) document.get("id"));
+        db.getById("users", uid).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document != null && document.exists()) {
+                    Player player = new Player((String) document.get("username"), (String) document.get("id"));
+                    setTexts(player);
+                } else finish();
+            } else finish();
+        });
 
+
+
+
+        Button gameStatusButton = findViewById(R.id.playerProfileGameStatusButton);
+
+        gameStatusButton.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), PlayerStatusActivity.class);
+            intent.putExtra("uid", uid);
+            startActivity(intent);
+        });
+
+        // ends activity
+        Button backButton = findViewById(R.id.playerProfileBackButton);
+        backButton.setOnClickListener(view -> finish());
+
+    }
+
+    private void setTexts(Player player) {
         TextView userNameView = findViewById(R.id.playerProfileUserNameTextView);
         userNameView.setText(player.getUserName());
 
+        /*
         TextView lowestScoreView = findViewById(R.id.playerProfileLowestScoreTextView);
         String lowestScoreString = "Lowest Score: " + player.getLowestScore();
         lowestScoreView.setText(lowestScoreString);
@@ -47,18 +73,6 @@ public class PlayerProfileActivity extends AppCompatActivity {
         TextView QRCodeCountView = findViewById(R.id.playerProfileQRCodeCountTextView);
         String QRCodeCountString = player.getQRCodeCount() + " QR Codes";
         QRCodeCountView.setText(QRCodeCountString);
-
-        Button gameStatusButton = findViewById(R.id.playerProfileGameStatusButton);
-
-        gameStatusButton.setOnClickListener(view ->{
-            Intent intent = new Intent(getApplicationContext(), PlayerStatusActivity.class);
-            intent.putExtra("uid", uid);
-            startActivity(intent);
-        });
-
-        // ends activity
-        Button backButton = findViewById(R.id.playerProfileBackButton);
-        backButton.setOnClickListener(view -> finish());
-
+        */
     }
 }

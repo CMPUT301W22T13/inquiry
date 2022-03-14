@@ -21,6 +21,7 @@ public class PlayerStatusActivity extends AppCompatActivity {
 
     private ArrayList<QRCode> qrCodeArrayList;
     private final Database db = new Database();
+    private Player player;
 
 
     @Override
@@ -29,8 +30,14 @@ public class PlayerStatusActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player_status);
 
         String uid = getIntent().getStringExtra("uid");
-        DocumentSnapshot document = db.getById("users", uid).getResult();
-        Player player = new Player((String) document.get("username"), (String) document.get("id"));
+        db.getById("users", uid).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document != null && document.exists()) {
+                    player = new Player((String) document.get("username"), (String) document.get("id"));
+                } else finish();
+            } else finish();
+        });
 
         ListView qrCodeListView = findViewById(R.id.playerQrCodesListView);
         qrCodeArrayList = player.getQRCodes(); //not sure what final function will be

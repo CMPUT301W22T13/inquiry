@@ -58,7 +58,7 @@ public class LeaderboardFragment extends Fragment {
                             Log.i("LeaderboardFragment", "Found users");
                             Log.i("LeaderboardFragment", documents.toString());
                             DocumentSnapshot document = documents.get(0);
-                            String uid = (String) document.get("uid");
+                            String uid = (String) document.get("id");
                             Intent intent = new Intent(getActivity(), PlayerProfileActivity.class);
                             intent.putExtra("uid", uid);
                             startActivity(intent);
