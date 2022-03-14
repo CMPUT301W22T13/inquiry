@@ -1,6 +1,11 @@
 package com.cmput301w22t13.inquiry.classes;
 
+import android.util.Log;
+
 import com.cmput301w22t13.inquiry.db.Database;
+import com.cmput301w22t13.inquiry.db.onQrDataListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -11,6 +16,7 @@ public class Player {
     private String uid;
     private String userName;
     private String email;
+    private ArrayList<QRCode> qrCodes;
 
     Database db = new Database();
 
@@ -23,31 +29,57 @@ public class Player {
     public Player(String userName, String uid, String email) {
         this.userName = userName;
         this.uid = uid;
-        if(email != null) {
+        if (email != null) {
             this.email = email;
         }
     }
 
-    public ArrayList<QRCode> getQRCodes() {
+    public Player(String userName, String uid, Boolean getQrCodes) {
+        this.userName = userName;
+        this.uid = uid;
+        if (getQrCodes) {
+            fetchQRCodes(qrCodes1 -> {
+                this.qrCodes = qrCodes1;
+            });
+        }
+    }
+
+    public void fetchQRCodes(onQrDataListener onSuccess) {
         ArrayList<QRCode> QrList = new ArrayList<>();
 
-        db.getFieldById("users", this.uid, "qr_codes").addOnCompleteListener(userQRs -> {
-            if (userQRs.isSuccessful()) {
-                for(Object qrId : Objects.requireNonNull(userQRs.getResult().getData()).values()) {
-                    db.getById("qr_codes", qrId.toString()).addOnCompleteListener(qrDoc -> {
-                        if (qrDoc.isSuccessful()) {
-                            Map<String, Object> qr = qrDoc.getResult().getData();
-                            QrList.add(new QRCode(Objects.requireNonNull(qr).get("hash").toString(), Integer.parseInt(qr.get("score").toString())));
-                        }
-                    });
+
+        db.getById("users", this.uid).addOnCompleteListener(userTask -> {
+            if (userTask.isSuccessful()) {
+                // loop through qr_codes field array and add to QrList ArrayList
+                DocumentSnapshot user = userTask.getResult();
+                ArrayList<DocumentReference> qrRefs = (ArrayList<DocumentReference>) user.get("qr_codes");
+                if (qrRefs != null) {
+                    for (int i = 0; i < qrRefs.size(); i++) {
+                        int finalI = i;
+                        qrRefs.get(i).get().addOnCompleteListener(qrTask -> {
+                            if (qrTask.isSuccessful()) {
+                                DocumentSnapshot qr = qrTask.getResult();
+                                QRCode qrCode = new QRCode(qr.getString("hash"), qr.getLong("score").intValue());
+                                Log.d("QRCode", qrCode.getHash());
+                                QrList.add(qrCode);
+
+                                if (finalI == qrRefs.size() - 1) {
+                                    onSuccess.getQrData(QrList);
+                                    this.qrCodes = QrList;
+                                }
+                            }
+                        });
+                    }
+                }
+                else {
+                    // TODO: error handling
                 }
             }
         });
+    }
 
-        if(QrList.size() == 0) {
-            return null;
-        }
-        return QrList;
+    public ArrayList<QRCode> getQRCodes() {
+        return this.qrCodes;
     }
 
     public String getUsername() {
