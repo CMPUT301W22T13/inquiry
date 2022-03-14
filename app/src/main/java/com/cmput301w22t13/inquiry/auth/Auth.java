@@ -58,7 +58,7 @@ public class Auth {
                         getCurrentUser().updateProfile(profileUpdates);
 
                         // initialize player with new user details
-                        player = new Player(uid, username);
+                        player = new Player(username, uid,true);
                     }
                 }
             });
