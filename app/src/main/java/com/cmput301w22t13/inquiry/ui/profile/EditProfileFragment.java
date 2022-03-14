@@ -127,7 +127,7 @@ public class EditProfileFragment extends Fragment {
                     UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                             .setDisplayName(usernameToSave).build();
                     currentUser.updateProfile(profileUpdates);
-                    currentUser.updateEmail(emailToSave);
+                    if (!emailToSave.equals("")) currentUser.updateEmail(emailToSave);
 
                     profileViewModel.updateData(user, userData);
 
