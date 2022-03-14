@@ -75,5 +75,8 @@ public class PlayerProfileActivity extends AppCompatActivity {
         String QRCodeCountString = player.getQRCodeCount() + " QR Codes";
         QRCodeCountView.setText(QRCodeCountString);
 
+        TextView QRCodeRankView = findViewById(R.id.playerProfileRankingTextView);
+        String QRCodeRankString = "rank: " + player.getRank();
+        QRCodeRankView.setText(QRCodeRankString);
     }
 }
