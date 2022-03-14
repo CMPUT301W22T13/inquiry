@@ -101,6 +101,7 @@ public class Player {
                 }
                 else {
                     // TODO: error handling
+                    onSuccess.getQrData(null);
                 }
             }
         });
