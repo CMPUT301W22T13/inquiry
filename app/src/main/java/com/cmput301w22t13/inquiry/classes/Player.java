@@ -6,11 +6,8 @@ import java.util.ArrayList;
 
 public class Player {
     private String userName;
-    private int pId;
-
-    Database db = new Database();
-    public Player(String userName){
         this.userName = userName;
+        this.pid = pid;
     }
 
     public void addQRCode(String hash) {
