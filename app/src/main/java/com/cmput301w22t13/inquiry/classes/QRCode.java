@@ -44,8 +44,8 @@ public class QRCode {
     public int createScore(String str) {
         int currentScore = 0;
         char prevChar = 'z';
-        int tempScore = 0;
         for (int i = 0; i < str.length(); i++) {
+            int tempScore = 0;
             char c = str.charAt(i);
             if (tempScore == 0 && c == prevChar) {
                 tempScore += 1;
