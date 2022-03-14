@@ -32,7 +32,7 @@ public class PlayerProfileActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document != null && document.exists()) {
-                    Player player = new Player((String) document.get("username"), (String) document.get("id"));
+                    Player player = new Player((String) document.get("username"), (String) document.get("id"), true);
                     setTexts(player);
                 } else finish();
             } else finish();
@@ -72,13 +72,10 @@ public class PlayerProfileActivity extends AppCompatActivity {
         String totalScoreString = "Total Score: " + player.getTotalScore();
         totalScoreView.setText(totalScoreString);
 
-        TextView rankView = findViewById(R.id.playerProfileRankingTextView);
-        String rankString = "Rank: " + player.getRank();
-        rankView.setText(rankString);
-
         TextView QRCodeCountView = findViewById(R.id.playerProfileQRCodeCountTextView);
         String QRCodeCountString = player.getQRCodeCount() + " QR Codes";
         QRCodeCountView.setText(QRCodeCountString);
         */
+
     }
 }
