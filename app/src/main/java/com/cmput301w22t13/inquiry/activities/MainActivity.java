@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // NOTE: FOR TESTING ONLY, THIS CLEARS ALL PREFERENCES BEFORE RUNNING
-        prefs.edit().clear().commit();
+//        prefs.edit().clear().commit();
         boolean previouslyStarted = prefs.getBoolean(PREV_STARTED, false);
         if (!previouslyStarted) {
             prefs

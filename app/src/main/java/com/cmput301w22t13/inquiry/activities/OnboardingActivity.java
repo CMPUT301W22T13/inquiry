@@ -16,13 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.databinding.ActivityOnboardingBinding;
 import com.cmput301w22t13.inquiry.ui.profile.ProfileViewModel;
-import com.cmput301w22t13.inquiry.ui.profile.onProfileDataListener;
-
-import java.util.Map;
 
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
+ * An activity that displays the first time the application is run.
  */
 public class OnboardingActivity extends AppCompatActivity {
 
@@ -36,25 +32,31 @@ public class OnboardingActivity extends AppCompatActivity {
         ActivityOnboardingBinding binding = ActivityOnboardingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // get view ids
         TextView message = findViewById(R.id.onboarding_message);
         Button scanning = findViewById(R.id.onboarding_start_button);
         Button profileButton = findViewById(R.id.onboarding_profile_button);
 
+        // get the username and set the message to include the username
+        // use the string "user" if the user cannot be found.
         message.setText(String.format(getString(R.string.onboarding_message), "user"));
         mContentView = binding.fullscreenContent;
         ProfileViewModel profile = new ProfileViewModel();
         profile.getData(data -> {
+            // if the user exists on the database (will be created by the view model)
             Object user = data.get("username");
             if (user != null) message.setText(String.format(getString(R.string.onboarding_message), user));
         });
 
+        // set what happens when the start scanning button is clicked
         scanning.setOnClickListener(view -> {
             finish();
         });
 
+        // set what happens when the profile button is clicked
         profileButton.setOnClickListener(view -> {
-            // set shared preferences across activities
 
+            // set shared preferences across activities to tell the first activity to open profile view
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             prefs
                     .edit()
@@ -63,6 +65,7 @@ public class OnboardingActivity extends AppCompatActivity {
             finish();
         });
 
+        // hide status bar and ui
         hide();
 
     }
