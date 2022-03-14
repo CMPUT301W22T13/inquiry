@@ -1,4 +1,4 @@
-package com.cmput301w22t13.inquiry.ui.profile;
+package com.cmput301w22t13.inquiry.db;
 /**
  *  Callback to fetch user data from firestore database
  */

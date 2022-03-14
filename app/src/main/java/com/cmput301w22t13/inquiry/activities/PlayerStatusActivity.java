@@ -1,5 +1,6 @@
 package com.cmput301w22t13.inquiry.activities;
-/** Populates views of activity_player_status.xml with a specific player's
+/**
+ * Populates views of activity_player_status.xml with a specific player's
  * data when the user wants to browse a specific player's QR codes.
  * Responsible for getting QR codes from database to populate the listview
  */
@@ -39,13 +40,13 @@ public class PlayerStatusActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document != null && document.exists()) {
-                    player = new Player((String) document.get("username"), (String) document.get("id"));
+                    player = new Player((String) document.get("username"), (String) document.get("id"), true);
                 } else finish();
             } else finish();
         });
 
         ListView qrCodeListView = findViewById(R.id.playerQrCodesListView);
-        qrCodeArrayList = player.getQRCodes(); //not sure what final function will be
+        qrCodeArrayList = player.getQRCodes();
         PlayerStatusQRCodeListAdapter qrCodeListAdapter = new PlayerStatusQRCodeListAdapter(this, qrCodeArrayList, player);
         qrCodeListView.setAdapter(qrCodeListAdapter);
         qrCodeListView.setClickable(true);
