@@ -1,4 +1,8 @@
 package com.cmput301w22t13.inquiry.classes;
+/**
+ * Calculates a SHA-256 hash of the QR code content
+ * Saves scanned qr code to the firestore dabatase
+ */
 
 import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.db.Database;

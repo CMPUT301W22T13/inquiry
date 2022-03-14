@@ -1,5 +1,9 @@
 package com.cmput301w22t13.inquiry.ui.profile;
 
+/** Handles navigation for fragment_edit_profile.xml
+ * Calls method db.update() when user wants to save changes
+ */
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
@@ -25,6 +29,7 @@ import com.cmput301w22t13.inquiry.db.Database;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
 
 /**
  *
