@@ -1,10 +1,8 @@
 package com.cmput301w22t13.inquiry.classes;
 
-import com.cmput301w22t13.inquiry.db.Database;
 import com.google.common.hash.Hashing;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 
 public class QRCode {
     private String hash;
@@ -33,6 +31,10 @@ public class QRCode {
 
         }
         return currentScore;
+
+    }
+    public String getHash(){
+        return this.hash;
     }
     public void Save(){
         /*

@@ -141,6 +141,15 @@
             android:gravity="center"
             android:text="SHARE GAME STATUS"></Button>
 
+        <Button
+            android:id="@+id/view_QR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+
+            android:gravity="center"
+            android:text="View QR Codes"></Button>
+
     </LinearLayout>
 
 </LinearLayout>

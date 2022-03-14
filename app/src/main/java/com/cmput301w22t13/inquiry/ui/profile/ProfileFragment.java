@@ -1,6 +1,7 @@
 package com.cmput301w22t13.inquiry.ui.profile;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -8,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -51,7 +53,14 @@ public class ProfileFragment extends Fragment {
         final TextView usernameText = root.findViewById(R.id.username_text);
         final TextView emailText = root.findViewById(R.id.user_email_text);
         final ProgressBar spinner = root.findViewById(R.id.profile_progress_spinner);
-
+        final Button button = root.findViewById(R.id.view_QR);
+        button.setOnClickListener(new View.OnClickListener() {
+                                      @Override
+                                      public void onClick(View view) {
+                                       Intent intent = new Intent();
+                                      }
+                                  }
+        );
         profileViewModel.getData(new onProfileDataListener() {
             // get data from success listener and display it
             // TODO: Handle error

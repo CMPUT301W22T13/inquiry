@@ -14,6 +14,7 @@ public class Player {
     }
     public ArrayList<QRCode> getQRCodes(){
         // get Players QRCodes
+        
         return null;
     }
 

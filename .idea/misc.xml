@@ -28,10 +28,11 @@
         <entry key="..\:/Users/socce/OneDrive - ualberta.ca/Winter2022/CMPUT-301/inquiry/app/src/main/res/layout/profile_view_list_item.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.41309255079006774" />
         <entry key="app/src/main/res/layout/activity_scanner.xml" value="0.3658155289213132" />
-        <entry key="app/src/main/res/layout/scanner_fragment.xml" value="0.4136933461909354" />
+        <entry key="app/src/main/res/layout/activity_view_qr_codes.xml" value="0.7631080227416298" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.32222222222222224" />
-        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.32222222222222224" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.67" />
+        <entry key="app/src/main/res/layout/scanner_fragment.xml" value="0.4136933461909354" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.32222222222222224" />
       </map>
     </option>
