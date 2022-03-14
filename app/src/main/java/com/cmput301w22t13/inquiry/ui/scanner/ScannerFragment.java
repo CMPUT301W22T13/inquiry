@@ -70,4 +70,5 @@ public class ScannerFragment extends Fragment {
     public void onPause() {
         mCodeScanner.releaseResources();
         super.onPause();
-    }}
+    }
+}

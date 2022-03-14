@@ -24,25 +24,27 @@ public class QRCode {
 
     /**
      * Initalized the QRCode with a sha-256 hash using the input string
+     *
      * @param text input text that was gotten from the QR code
      */
-    public QRCode(String text){
+    public QRCode(String text) {
         this.hash = Hashing.sha256()
                 .hashString(text, StandardCharsets.UTF_8)
                 .toString();
         this.score = createScore(this.hash);
     }
-    public int createScore(String str){
+
+    public int createScore(String str) {
         int currentScore = 0;
         char prevChar = 'z';
-        for(int i=0;i<str.length();i++){
+        for (int i = 0; i < str.length(); i++) {
             int tempScore = 0;
             char c = str.charAt(i);
-            if(tempScore==0 && c == prevChar){
+            if (tempScore == 0 && c == prevChar) {
                 tempScore += 1;
-            }else if(c==prevChar){
+            } else if (c == prevChar) {
                 tempScore *= (int) c;
-            }else{
+            } else {
                 currentScore += tempScore;
                 tempScore = 0;
             }
@@ -52,32 +54,32 @@ public class QRCode {
         return currentScore;
 
     }
-    public String getHash(){
+
+    public String getHash() {
         return this.hash;
 
     }
 
     /**
-     *  Saves the given hash into a collection owned by user
+     * Saves the given hash into a collection owned by user
      */
-    public void save(){
+    public void save() {
         Map<String, Object> qrCode = new HashMap<>();
         qrCode.put("hash", this.hash);
 
         FirebaseUser currentUser = Auth.getCurrentUser();
-        if( currentUser != null){
+        if (currentUser != null) {
             String id = currentUser.getUid();
-            db.addToCollection("users","hashes" , id,qrCode);
+            db.addToCollection("users", "hashes", id, qrCode);
 
         }
 //        db.update("users", this.uid, "qr_codes");
     }
 
     /**
-     *
      * @return the score that was calculated
      */
-    public int getScore(){
+    public int getScore() {
         return this.score;
     }
 }

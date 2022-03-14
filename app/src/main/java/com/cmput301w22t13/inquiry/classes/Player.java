@@ -3,6 +3,7 @@ package com.cmput301w22t13.inquiry.classes;
 import com.cmput301w22t13.inquiry.db.Database;
 
 import java.util.ArrayList;
+
 public class Player {
 
     private final String uid;
@@ -14,11 +15,10 @@ public class Player {
         this.uid = uid;
     }
 
-    
 
-    public ArrayList<QRCode> getQRCodes(){
+    public ArrayList<QRCode> getQRCodes() {
         // get Players QRCodes
-        
+
         return null;
     }
 
@@ -26,33 +26,34 @@ public class Player {
         return userName;
     }
 
-    public int getRank(){
+    public int getRank() {
         // returns Rank of player
         return 0;
     }
-    public int getTotalScore(){
+
+    public int getTotalScore() {
         // returns total score of QRCodes from database
 
 
         ArrayList<QRCode> QrList = getQRCodes();
 
         int totalScore = 0;
-        for (int i = 0;i<QrList.size();i++){
+        for (int i = 0; i < QrList.size(); i++) {
             QRCode code = QrList.get(i);
             totalScore = totalScore + code.getScore();
         }
         return totalScore;
     }
 
-    public int getHighestScore(){
+    public int getHighestScore() {
         // returns highest score QRCode from database
         ArrayList<QRCode> QrList = getQRCodes();
 
         int maxScore = 0;
-        for (int i = 0;i<QrList.size();i++){
+        for (int i = 0; i < QrList.size(); i++) {
             QRCode code = QrList.get(i);
             int score = code.getScore();
-            if (score > maxScore){
+            if (score > maxScore) {
                 maxScore = score;
             }
         }
@@ -75,7 +76,7 @@ public class Player {
         return minScore;
     }
 
-    public int getQRCodeCount(){
+    public int getQRCodeCount() {
         // returns amount of QRCodes scanned by player from database
 
         ArrayList<QRCode> QrList = getQRCodes();

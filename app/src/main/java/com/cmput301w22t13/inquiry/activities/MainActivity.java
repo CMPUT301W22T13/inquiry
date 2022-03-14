@@ -6,17 +6,14 @@ package com.cmput301w22t13.inquiry.activities;
 */
 
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.auth.Auth;
-import com.cmput301w22t13.inquiry.classes.Scanner;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
