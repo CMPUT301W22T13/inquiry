@@ -129,9 +129,15 @@ public class Database {
      * @param collection the name of the collection, e.g. "users"
      * @param id         the String id of the document to get
      */
-    public Task<DocumentSnapshot> getFieldById(String collection, String id, String field) {
-        return db.collection(collection).document(id).get(Source.valueOf(field));
-    }
+//    public Task<DocumentSnapshot> getFieldById(String collection, String id, String field) {
+//        Task<DocumentSnapshot> task = db.collection(collection).document(id).get();
+//        if(task.isSuccessful()) {
+//            DocumentSnapshot document = task.getResult();
+//            if(document.exists()) {
+//                return (Task<DocumentSnapshot>) document.get(field);
+//            }
+//        }
+//    }
 
     /**
      * get a reference to a document
