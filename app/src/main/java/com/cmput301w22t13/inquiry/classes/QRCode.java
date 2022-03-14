@@ -31,9 +31,7 @@ public class QRCode {
      * @param text input text that was gotten from the QR code
      */
     public QRCode(String text) {
-        this.hash = Hashing.sha256()
-                .hashString(text, StandardCharsets.UTF_8)
-                .toString();
+        this.hash = QRName.getHash(text);
         this.score = createScore(this.hash);
     }
 
@@ -102,5 +100,12 @@ public class QRCode {
      */
     public int getScore() {
         return this.score;
+    }
+
+    /**
+     * @return the name of the qr code
+     */
+    public String getName() { 
+        return QRName.fromHash(this.hash);
     }
 }
