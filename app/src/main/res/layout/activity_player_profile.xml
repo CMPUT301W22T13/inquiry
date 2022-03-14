@@ -43,7 +43,8 @@
         android:text="0 QR Codes"
         app:layout_constraintEnd_toStartOf="@+id/playerProfileUserNameTextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playerProfileUserNameTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/playerProfileUserNameTextView"
+        android:drawableLeft="@drawable/ic_dashboard_black_24dp"/>
 
     <TextView
         android:id="@+id/playerProfileTotalScoreTextView"
@@ -53,17 +54,21 @@
         android:text="Total Score: 0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/playerProfileUserNameTextView"
-        app:layout_constraintTop_toBottomOf="@+id/playerProfileUserNameTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/playerProfileUserNameTextView"
+        android:drawableLeft="@drawable/ic_baseline_insights_24"
+        />
 
     <TextView
         android:id="@+id/playerProfileHighestScoreTextView"
+        android:drawableLeft="@drawable/ic_highestscore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="Highest Score: 0"
         app:layout_constraintEnd_toStartOf="@+id/playerProfileUserNameTextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playerProfileQRCodeCountTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/playerProfileQRCodeCountTextView"
+        />
 
     <TextView
         android:id="@+id/playerProfileLowestScoreTextView"
@@ -73,7 +78,8 @@
         android:text="Lowest Score: 0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/playerProfileUserNameTextView"
-        app:layout_constraintTop_toBottomOf="@+id/playerProfileTotalScoreTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/playerProfileTotalScoreTextView"
+        android:drawableLeft="@drawable/ic_lowestscore"/>
 
     <TextView
         android:id="@+id/playerProfileRankingTextView"
@@ -83,7 +89,9 @@
         android:text="Rank: 0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playerProfileUserNameTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/playerProfileUserNameTextView"
+        android:drawableLeft="@drawable/ic_ranking"
+        />
 
     <Button
         android:id="@+id/playerProfileGameStatusButton"

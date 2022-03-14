@@ -45,26 +45,23 @@ public class ProfileViewModel extends ViewModel {
             String id = currentUser.getUid();
 
             // get the user's data from firestore
-            db.getById("users", id).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if(task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document != null && document.exists()) {
-                            String username = (String) document.get("username");
-                            String email = (String) document.get("email");
-                            String uid = (String) document.get("id");
+            db.getById("users", id).addOnCompleteListener(task -> {
+                if(task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null && document.exists()) {
+                        String username = (String) document.get("username");
+                        String email = (String) document.get("email");
+                        String uid = (String) document.get("id");
 
-                            // create a map of the user's data to pass to the success callback
-                            Map<String, Object> userData = new HashMap<>();
+                        // create a map of the user's data to pass to the success callback
+                        Map<String, Object> userData = new HashMap<>();
 
-                            userData.put("username", username);
-                            userData.put("email", email);
-                            userData.put("uid", uid);
+                        userData.put("username", username);
+                        userData.put("email", email);
+                        userData.put("uid", uid);
 
-                            if(username != null && uid != null) {
-                                onSuccess.getProfileData(userData);
-                            }
+                        if(username != null && uid != null) {
+                            onSuccess.getProfileData(userData);
                         }
                     }
                 }
