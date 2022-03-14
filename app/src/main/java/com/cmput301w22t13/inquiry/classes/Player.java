@@ -37,7 +37,7 @@ public class Player {
                     db.getById("qr_codes", qrId.toString()).addOnCompleteListener(qrDoc -> {
                         if (qrDoc.isSuccessful()) {
                             Map<String, Object> qr = qrDoc.getResult().getData();
-                            QrList.add(new QRCode(qr.get("hash").toString(), Integer.parseInt(qr.get("score").toString())));
+                            QrList.add(new QRCode(Objects.requireNonNull(qr).get("hash").toString(), Integer.parseInt(qr.get("score").toString())));
                         }
                     });
                 }

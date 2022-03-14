@@ -69,7 +69,7 @@ public class ProfileFragment extends Fragment {
                     emailText.setText(emailString);
                 }
 
-                usernameText.setText(String.format(getResources().getString(R.string.profile_greeting), usernameString));
+                usernameText.setText(usernameString);
 
                 spinner.setVisibility(View.GONE);
                 usernameText.setVisibility(View.VISIBLE);
