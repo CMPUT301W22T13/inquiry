@@ -11,7 +11,10 @@ public class QRCode {
         this.hash = Hashing.sha256()
                 .hashString(text, StandardCharsets.UTF_8)
                 .toString();
-        
+
+    }
+    public String getHash(){
+        return this.hash;
     }
     public void Save(){
         /*
