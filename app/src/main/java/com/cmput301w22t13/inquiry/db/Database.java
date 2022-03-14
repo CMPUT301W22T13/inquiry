@@ -1,4 +1,5 @@
 package com.cmput301w22t13.inquiry.db;
+//collection of general methods, being called whenever we need the base
 
 import androidx.annotation.NonNull;
 

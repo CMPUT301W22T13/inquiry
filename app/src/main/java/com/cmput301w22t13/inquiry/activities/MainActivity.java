@@ -1,5 +1,11 @@
 package com.cmput301w22t13.inquiry.activities;
 
+/** First class launched when app starts running,
+* sets up bottom navigation, authorization for user is initialized,
+* binding class is generated for each XML layout file present in the module
+*/
+
+
 import android.content.Intent;
 import android.os.Bundle;
 

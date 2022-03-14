@@ -1,5 +1,6 @@
 package com.cmput301w22t13.inquiry.ui.main;
 
+
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

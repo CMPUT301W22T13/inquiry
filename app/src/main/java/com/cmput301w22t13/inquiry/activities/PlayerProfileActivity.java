@@ -1,5 +1,10 @@
 package com.cmput301w22t13.inquiry.activities;
 
+/** Populates views of activity_player_profile.xml with a specific player's
+ * data when the user wants to browse a specific player's profile.
+ * The views show a specific player's information and their game wide rankings
+ */
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
