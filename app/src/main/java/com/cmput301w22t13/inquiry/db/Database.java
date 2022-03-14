@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
@@ -115,5 +116,15 @@ public class Database {
 
                     }
                 });
+    }
+    /**
+     * get a Query in a specified collection for a specific field result
+     *
+     * @param  collection  the name of the collection, e.g. "users"
+     * @param  field name of field to query
+     * @param  value the value to search the field and collection for
+     */
+    public Task<QuerySnapshot> query(String collection, String field, String value){
+        return db.collection(collection).whereEqualTo(field, value).get();
     }
 }

@@ -24,14 +24,15 @@
         <entry key="..\:/Users/socce/OneDrive - ualberta.ca/Winter2022/CMPUT-301/inquiry/app/src/main/res/layout/activity_player_status.xml" value="0.43523550724637683" />
         <entry key="..\:/Users/socce/OneDrive - ualberta.ca/Winter2022/CMPUT-301/inquiry/app/src/main/res/layout/activity_profile_view.xml" value="0.33" />
         <entry key="..\:/Users/socce/OneDrive - ualberta.ca/Winter2022/CMPUT-301/inquiry/app/src/main/res/layout/fragment_dashboard.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/socce/OneDrive - ualberta.ca/Winter2022/CMPUT-301/inquiry/app/src/main/res/layout/fragment_leaderboard.xml" value="0.33" />
         <entry key="..\:/Users/socce/OneDrive - ualberta.ca/Winter2022/CMPUT-301/inquiry/app/src/main/res/layout/fragment_notifications.xml" value="0.358695652173913" />
         <entry key="..\:/Users/socce/OneDrive - ualberta.ca/Winter2022/CMPUT-301/inquiry/app/src/main/res/layout/profile_view_list_item.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.41309255079006774" />
         <entry key="app/src/main/res/layout/activity_scanner.xml" value="0.3658155289213132" />
-        <entry key="app/src/main/res/layout/scanner_fragment.xml" value="0.4136933461909354" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.32222222222222224" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.32222222222222224" />
+        <entry key="app/src/main/res/layout/scanner_fragment.xml" value="0.4136933461909354" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.32222222222222224" />
       </map>
     </option>

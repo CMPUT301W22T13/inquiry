@@ -12,26 +12,29 @@ import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.classes.PlayerStatusQRCodeListAdapter;
 import com.cmput301w22t13.inquiry.classes.QRCode;
+import com.cmput301w22t13.inquiry.db.Database;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 
 public class PlayerStatusActivity extends AppCompatActivity {
 
-    ListView qrCodeListView;
-    PlayerStatusQRCodeListAdapter qrCodeListAdapter;
-    ArrayList<QRCode> qrCodeArrayList;
-    Player player;
+    private ArrayList<QRCode> qrCodeArrayList;
+    private final Database db = new Database();
+
 
     @Override
     protected void onCreate(Bundle savedInstances) {
         super.onCreate(savedInstances);
         setContentView(R.layout.activity_player_status);
 
-        player = (Player) getIntent().getSerializableExtra("player");
+        String uid = getIntent().getStringExtra("uid");
+        DocumentSnapshot document = db.getById("users", uid).getResult();
+        Player player = new Player((String) document.get("username"), (String) document.get("id"));
 
-        qrCodeListView = findViewById(R.id.playerQrCodesListView);
+        ListView qrCodeListView = findViewById(R.id.playerQrCodesListView);
         qrCodeArrayList = player.getQRCodes(); //not sure what final function will be
-        qrCodeListAdapter = new PlayerStatusQRCodeListAdapter(this, qrCodeArrayList, player);
+        PlayerStatusQRCodeListAdapter qrCodeListAdapter = new PlayerStatusQRCodeListAdapter(this, qrCodeArrayList, player);
         qrCodeListView.setAdapter(qrCodeListAdapter);
         qrCodeListView.setClickable(true);
 
@@ -39,7 +42,7 @@ public class PlayerStatusActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 QRCode clickedQR = qrCodeArrayList.get(i);
-                // move to qr code view
+                // move to qr code fragment or activity
             }
         });
 
