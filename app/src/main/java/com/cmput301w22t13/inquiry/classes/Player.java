@@ -14,9 +14,7 @@ public class Player {
         this.uid = uid;
     }
 
-    public void addQRCode(String hash) {
-        // add to database
-    }
+    
 
     public ArrayList<QRCode> getQRCodes(){
         // get Players QRCodes
