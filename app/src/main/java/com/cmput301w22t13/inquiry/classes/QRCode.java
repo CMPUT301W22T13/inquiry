@@ -37,6 +37,11 @@ public class QRCode {
         this.score = createScore(this.hash);
     }
 
+    public QRCode(String hash, int score) {
+        this.hash = hash;
+        this.score = score;
+    }
+
     public int createScore(String str) {
         int currentScore = 0;
         char prevChar = 'z';

@@ -13,6 +13,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.firestore.Source;
 
 import java.util.Map;
 
@@ -120,6 +121,16 @@ public class Database {
      */
     public Task<DocumentSnapshot> getById(String collection, String id) {
         return db.collection(collection).document(id).get();
+    }
+
+    /**
+     * get a document in a specified collection using its ID
+     *
+     * @param collection the name of the collection, e.g. "users"
+     * @param id         the String id of the document to get
+     */
+    public Task<DocumentSnapshot> getFieldById(String collection, String id, String field) {
+        return db.collection(collection).document(id).get(Source.valueOf(field));
     }
 
     /**

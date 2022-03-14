@@ -4,6 +4,7 @@ import com.cmput301w22t13.inquiry.db.Database;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 
 public class Player {
 
@@ -22,13 +23,31 @@ public class Player {
     public Player(String userName, String uid, String email) {
         this.userName = userName;
         this.uid = uid;
-        this.email = email;
+        if(email != null) {
+            this.email = email;
+        }
     }
 
     public ArrayList<QRCode> getQRCodes() {
-        // get Players QRCodes
+        ArrayList<QRCode> QrList = new ArrayList<>();
 
-        return null;
+        db.getFieldById("users", this.uid, "qr_codes").addOnCompleteListener(userQRs -> {
+            if (userQRs.isSuccessful()) {
+                for(Object qrId : Objects.requireNonNull(userQRs.getResult().getData()).values()) {
+                    db.getById("qr_codes", qrId.toString()).addOnCompleteListener(qrDoc -> {
+                        if (qrDoc.isSuccessful()) {
+                            Map<String, Object> qr = qrDoc.getResult().getData();
+                            QrList.add(new QRCode(qr.get("hash").toString(), Integer.parseInt(qr.get("score").toString())));
+                        }
+                    });
+                }
+            }
+        });
+
+        if(QrList.size() == 0) {
+            return null;
+        }
+        return QrList;
     }
 
     public String getUsername() {
