@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.cmput301w22t13.inquiry.auth.Auth;
+import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.db.Database;
 import com.cmput301w22t13.inquiry.db.onProfileDataListener;
 import com.google.firebase.auth.FirebaseUser;
@@ -65,6 +66,15 @@ public class ProfileViewModel extends ViewModel {
                 }
             });
         }
+    }
+
+    /**
+     * update the user's data in firestore
+     *
+     * @param  data updated user data
+     */
+    public void updateData(Player user, Map<String, Object> data) {
+        user.updateUser(data);
     }
 
     public LiveData<String> getText() {

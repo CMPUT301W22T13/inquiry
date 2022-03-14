@@ -20,6 +20,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.InQuiRy">
         <activity
+            android:name=".activities.PlayerProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.PlayerStatusActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.OnboardingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"
