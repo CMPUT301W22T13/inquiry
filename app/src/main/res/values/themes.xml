@@ -13,10 +13,12 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
     <style name="Theme.InQuiRy.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="Theme.InQuiRy.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="OverflowMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
         <!-- Required for pre-Lollipop. -->
@@ -26,4 +28,15 @@
         <item name="android:overlapAnchor">false</item>
     </style>
     <style name="Theme.InQuiRy.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.InQuiRy.Fullscreen" parent="Theme.InQuiRy">
+        <item name="android:actionBarStyle">@style/Widget.Theme.InQuiRy.ActionBar.Fullscreen</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+    </style>
+
+    <style name="ThemeOverlay.InQuiRy.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
+        <item name="fullscreenTextColor">@color/light_blue_A200</item>
+    </style>
 </resources>
