@@ -5,6 +5,7 @@ package com.cmput301w22t13.inquiry.ui.scanner;
  */
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,7 +21,10 @@ import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.cmput301w22t13.inquiry.R;
+import com.cmput301w22t13.inquiry.activities.PlayerStatusActivity;
+import com.cmput301w22t13.inquiry.activities.ScannerResultActivity;
 import com.cmput301w22t13.inquiry.auth.Auth;
+import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.classes.QRCode;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.zxing.Result;
@@ -30,7 +34,7 @@ import java.util.Objects;
 public class ScannerFragment extends Fragment {
 
     private CodeScanner mCodeScanner;
-    FirebaseUser currentUser = Auth.getCurrentUser();
+    Player player = Auth.getPlayer();
 
     @Nullable
     @Override
@@ -43,14 +47,15 @@ public class ScannerFragment extends Fragment {
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
             public void onDecoded(@NonNull final Result result) {
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(activity, result.getText(), Toast.LENGTH_SHORT).show();
-                        QRCode QR = new QRCode(result.getText());
-                        QR.save();
-                    }
-                });
+
+                QRCode QR = new QRCode(result.getText());
+                QR.save();
+
+                Intent intent = new Intent(activity.getApplicationContext(), ScannerResultActivity.class);
+                intent.putExtra("name", QR.getName());
+                intent.putExtra("score", QR.getScore());
+                startActivity(intent);
+
             }
         });
         scannerView.setOnClickListener(new View.OnClickListener() {

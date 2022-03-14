@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                     .edit()
                     .putBoolean(PROF_NAV, true)
                     .apply();
-            if (navView != null) navView.setSelectedItemId(R.id.navigation_profile);
+            if (navView != null) navView.setSelectedItemId(R.id.navigation_myqrs);
         }
     }
 
