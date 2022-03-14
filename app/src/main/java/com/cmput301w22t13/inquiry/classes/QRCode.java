@@ -18,7 +18,6 @@ import java.util.Map;
 
 public class QRCode {
     private final String hash;
-    private final String uid;
     private int score;
 
     Database db = new Database();
