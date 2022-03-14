@@ -1,4 +1,11 @@
 package com.cmput301w22t13.inquiry.ui.profile;
+/**
+ *  Class that is responsible for preparing and managing the data for ProfileFragment.
+ *  It also handles the communication of the  Fragment with the rest of the application
+ *  This class fetches the user data and uses the onProfileDataListener
+ *  callback to send it to the ProfileFragment
+ */
+
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -14,6 +21,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class ProfileViewModel extends ViewModel {
 

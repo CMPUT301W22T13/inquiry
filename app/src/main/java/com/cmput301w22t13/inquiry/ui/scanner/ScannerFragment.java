@@ -1,4 +1,8 @@
 package com.cmput301w22t13.inquiry.ui.scanner;
+/**
+ * Class responsible for user navigation in scanner_fragment.xml
+ * Let's user scan any code and add it to their profile
+ */
 
 import android.app.Activity;
 import android.os.Bundle;
