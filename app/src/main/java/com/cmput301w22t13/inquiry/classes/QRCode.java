@@ -25,9 +25,8 @@ public class QRCode {
     /**
      * Initalized the QRCode with a sha-256 hash using the input string
      * @param text input text that was gotten from the QR code
-     * @param uid input for the users id which created the QRCode
      */
-    public QRCode(String text, String uid){
+    public QRCode(String text){
         this.hash = Hashing.sha256()
                 .hashString(text, StandardCharsets.UTF_8)
                 .toString();

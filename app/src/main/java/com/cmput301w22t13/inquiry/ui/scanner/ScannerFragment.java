@@ -45,7 +45,7 @@ public class ScannerFragment extends Fragment {
                     @Override
                     public void run() {
                         Toast.makeText(activity, result.getText(), Toast.LENGTH_SHORT).show();
-                        QRCode QR = new QRCode(result.getText(), currentUser.getUid());
+                        QRCode QR = new QRCode(result.getText());
                         QR.save();
                     }
                 });

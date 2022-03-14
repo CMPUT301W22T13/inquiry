@@ -11,7 +11,7 @@ public class QRTest {
     public class ExampleUnitTest {
         @Test
         public void addition_isCorrect() {
-            QRCode qr = new QRCode("abc","someUser");
+            QRCode qr = new QRCode("abc");
             int score = qr.getScore();
             assertEquals("edeaaff3f1774ad2888673770c6d64097e391bc362d7d6fb34982ddf0efd18cb",qr.getHash());
             assertEquals(0,score);
