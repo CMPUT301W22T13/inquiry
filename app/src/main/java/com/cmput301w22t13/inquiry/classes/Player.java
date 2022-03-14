@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public class Player {
     private String userName;
+    private String pid;
+    public void Player(String userName, String pid){
         this.userName = userName;
         this.pid = pid;
     }

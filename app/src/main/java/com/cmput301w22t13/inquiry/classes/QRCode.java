@@ -20,6 +20,11 @@ public class QRCode {
 
     Database db = new Database();
 
+    /**
+     * Initalized the QRCode with a sha-256 hash using the input string
+     * @param text input text that was gotten from the QR code
+     * @param uid input for the users id which created the QRCode
+     */
     public QRCode(String text, String uid){
         this.hash = Hashing.sha256()
                 .hashString(text, StandardCharsets.UTF_8)
@@ -27,6 +32,10 @@ public class QRCode {
 
         this.uid = uid;
     }
+
+    /**
+     *  Saves the given hash into a collection owned by user
+     */
     public void save(){
         Map<String, Object> qrCode = new HashMap<>();
         qrCode.put("hash", this.hash);
@@ -40,6 +49,10 @@ public class QRCode {
 //        db.update("users", this.uid, "qr_codes");
     }
 
+    /**
+     *
+     * @return the score that was calculated
+     */
     public int getScore(){
         return this.score;
     }

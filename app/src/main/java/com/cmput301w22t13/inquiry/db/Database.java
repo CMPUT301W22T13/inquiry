@@ -52,7 +52,7 @@ public class Database {
     }
 
     /**
-     * Put a new document in a specified collection with a specified ID
+     * Put a new document in a collection that is owned by another collection
      * If a non-unique ID is passed in, the old document will get overwritten
      *
      * Example usage:
@@ -62,9 +62,10 @@ public class Database {
      *     user.put("born", 1815);
      *
      *     Database db = new Database();
-     *     db.put("users", "12345", user); // specify a unique document ID
+     *     db.put(collection name, collection name, id, user); // specify a unique document ID
      *
      * @param  collection  the name of the collection, e.g. "users"
+     * @param  collection2 the name of the collection owned by collection
      * @param  id custom id to assign to the document, ensure this is a unique ID otherwise data loss can occur
      * @param  data the document to create in the collection, must be of type Map<String, Object>
      *              note: the new data does not replace the old data, it is merged with it
