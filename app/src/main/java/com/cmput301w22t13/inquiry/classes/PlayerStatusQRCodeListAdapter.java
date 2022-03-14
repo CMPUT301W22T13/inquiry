@@ -42,7 +42,7 @@ public class PlayerStatusQRCodeListAdapter extends ArrayAdapter {
         TextView playerTextView = view.findViewById(R.id.QRCodePlayerTextView);
         TextView numberTextView = view.findViewById(R.id.QRCodeNumberTextView);
         TextView scoreTextView = view.findViewById(R.id.QRCodeScoreTextView);
-        playerTextView.setText(player.getUserName()); // player class not complete may need to change
+        playerTextView.setText(player.getUsername()); // player class not complete may need to change
         numberTextView.setText(position+1);
         scoreTextView.setText(qrCode.getScore());
 

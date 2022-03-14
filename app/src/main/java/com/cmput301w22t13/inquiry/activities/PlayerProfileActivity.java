@@ -57,7 +57,7 @@ public class PlayerProfileActivity extends AppCompatActivity {
     private void setTexts(Player player) {
         // sets the player data TextViews to show the proper data
         TextView userNameView = findViewById(R.id.playerProfileUserNameTextView);
-        userNameView.setText(player.getUserName());
+        userNameView.setText(player.getUsername());
 
         /*
         TextView lowestScoreView = findViewById(R.id.playerProfileLowestScoreTextView);
