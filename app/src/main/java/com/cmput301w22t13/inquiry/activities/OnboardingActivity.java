@@ -1,9 +1,12 @@
 package com.cmput301w22t13.inquiry.activities;
 
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.WindowInsets;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
@@ -24,6 +27,7 @@ import java.util.Map;
 public class OnboardingActivity extends AppCompatActivity {
 
     private View mContentView;
+    public static final String PROF_NAV = "profNav";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,8 @@ public class OnboardingActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         TextView message = findViewById(R.id.onboarding_message);
+        Button scanning = findViewById(R.id.onboarding_start_button);
+        Button profileButton = findViewById(R.id.onboarding_profile_button);
 
         message.setText(String.format(getString(R.string.onboarding_message), "user"));
         mContentView = binding.fullscreenContent;
@@ -40,6 +46,21 @@ public class OnboardingActivity extends AppCompatActivity {
         profile.getData(data -> {
             Object user = data.get("username");
             if (user != null) message.setText(String.format(getString(R.string.onboarding_message), user));
+        });
+
+        scanning.setOnClickListener(view -> {
+            finish();
+        });
+
+        profileButton.setOnClickListener(view -> {
+            // set shared preferences across activities
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+            prefs
+                    .edit()
+                    .putBoolean(PROF_NAV, Boolean.TRUE)
+                    .apply();
+            finish();
         });
 
         hide();

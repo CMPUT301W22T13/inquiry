@@ -1,5 +1,7 @@
 package com.cmput301w22t13.inquiry.activities;
 
+import static com.cmput301w22t13.inquiry.activities.OnboardingActivity.PROF_NAV;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,10 +26,25 @@ import com.cmput301w22t13.inquiry.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     public static final String PREV_STARTED = "prevStarted";
+    SharedPreferences prefs;
+    BottomNavigationView navView;
 
     private void showHelp() {
         Intent intent = new Intent(this, OnboardingActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        boolean profile = prefs.getBoolean(PROF_NAV, false);
+        if (profile) {
+            prefs
+                    .edit()
+                    .putBoolean(PROF_NAV, true)
+                    .apply();
+            if (navView != null) navView.setSelectedItemId(R.id.navigation_profile);
+        }
     }
 
     @Override
@@ -37,7 +54,9 @@ public class MainActivity extends AppCompatActivity {
         com.cmput301w22t13.inquiry.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+
+        navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -47,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 R.id.navigation_leaderboard,
                 R.id.navigation_profile)
                 .build();
+
 
         final NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
         assert navHostFragment != null;
@@ -64,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
         // Answer: https://stackoverflow.com/a/7238549
         // Author: https://stackoverflow.com/users/691688/femi
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
         // NOTE: FOR TESTING ONLY, THIS CLEARS ALL PREFERENCES BEFORE RUNNING
         prefs.edit().clear().commit();
