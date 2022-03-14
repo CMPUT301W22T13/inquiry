@@ -2,7 +2,8 @@ package com.cmput301w22t13.inquiry.ui.profile;
 /**
  *  Class that is responsible for preparing and managing the data for ProfileFragment.
  *  It also handles the communication of the  Fragment with the rest of the application
- *  User data is passed to this ViewModel using onProfileDataListener callback
+ *  This class fetches the user data and uses the onProfileDataListener
+ *  callback to send it to the ProfileFragment
  */
 
 
