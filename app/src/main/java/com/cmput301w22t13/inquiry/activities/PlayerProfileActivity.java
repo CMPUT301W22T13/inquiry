@@ -59,7 +59,6 @@ public class PlayerProfileActivity extends AppCompatActivity {
         TextView userNameView = findViewById(R.id.playerProfileUserNameTextView);
         userNameView.setText(player.getUsername());
 
-        /*
         TextView lowestScoreView = findViewById(R.id.playerProfileLowestScoreTextView);
         String lowestScoreString = "Lowest Score: " + player.getLowestScore();
         lowestScoreView.setText(lowestScoreString);
@@ -75,7 +74,6 @@ public class PlayerProfileActivity extends AppCompatActivity {
         TextView QRCodeCountView = findViewById(R.id.playerProfileQRCodeCountTextView);
         String QRCodeCountString = player.getQRCodeCount() + " QR Codes";
         QRCodeCountView.setText(QRCodeCountString);
-        */
 
     }
 }
