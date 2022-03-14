@@ -17,12 +17,15 @@ public class PlayerTest {
     QRCode qr2;
     @BeforeEach
     public void addQr(){
+        /*
          qr1 = new QRCode("hello1234");
          qr2 = new QRCode("hi5678");
 
         player.addQRCode(qr1);
         player.addQRCode(qr2);
         codes = player.getQRCodes();
+
+         */
     }
 
     @Test

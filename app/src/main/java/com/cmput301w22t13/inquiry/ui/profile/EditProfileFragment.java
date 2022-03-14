@@ -11,6 +11,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -83,7 +84,9 @@ public class EditProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle("Edit Profile");
-        
+
+        ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
         // fill in username and email fields from user data
@@ -126,7 +129,7 @@ public class EditProfileFragment extends Fragment {
                     currentUser.updateProfile(profileUpdates);
                     currentUser.updateEmail(emailToSave);
 
-                    user.updateUser(userData);
+                    profileViewModel.updateData(user, userData);
 
                     // hide the keyboard and go back to the profile
                     final InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
