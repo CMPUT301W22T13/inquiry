@@ -50,7 +50,7 @@ public class QRCode {
             if (tempScore == 0 && c == prevChar) {
                 tempScore += 1;
             } else if (c == prevChar) {
-                tempScore *= (int) c;
+                tempScore *= (int) c - 48;
             } else {
                 currentScore += tempScore;
                 tempScore = 0;
@@ -58,6 +58,7 @@ public class QRCode {
             prevChar = c;
 
         }
+        currentScore += tempScore;
         return currentScore;
 
     }
