@@ -4,6 +4,17 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_scanner">Scanner</string>
+    <string name="title_profile">Profile</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="menu_edit_profile">Edit Profile</string>
+    <string name="text_cancel">Cancel</string>
+    <string name="profile_greeting">Hi, %1$s!</string>
+    <string name="input_edit_username">Username</string>
+    <string name="input_edit_email">Email</string>
+    <string name="title_myqrs">My QRs</string>
+    <string name="title_leaderboard">Leaderboard</string>
+    <string name="save_changes_button">Save Changes</string>
 </resources>
