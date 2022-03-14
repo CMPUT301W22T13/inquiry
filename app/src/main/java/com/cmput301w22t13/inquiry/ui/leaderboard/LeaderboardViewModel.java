@@ -1,16 +1,17 @@
-package com.cmput301w22t13.inquiry.ui.home;
+package com.cmput301w22t13.inquiry.ui.leaderboard;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+public class LeaderboardViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public HomeViewModel() {
+    public LeaderboardViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        mText.setValue("This is leaderboard fragment");
+
     }
 
     public LiveData<String> getText() {

@@ -1,4 +1,8 @@
 package com.cmput301w22t13.inquiry.ui.scanner;
+/**
+ * Class responsible for user navigation in scanner_fragment.xml
+ * Let's user scan any code and add it to their profile
+ */
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -16,12 +20,17 @@ import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.cmput301w22t13.inquiry.R;
+import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.classes.QRCode;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.zxing.Result;
+
+import java.util.Objects;
 
 public class ScannerFragment extends Fragment {
 
     private CodeScanner mCodeScanner;
+    FirebaseUser currentUser = Auth.getCurrentUser();
 
     @Nullable
     @Override
@@ -30,7 +39,7 @@ public class ScannerFragment extends Fragment {
         final Activity activity = getActivity();
         View root = inflater.inflate(R.layout.scanner_fragment, container, false);
         CodeScannerView scannerView = root.findViewById(R.id.scanner_view);
-        mCodeScanner = new CodeScanner(activity, scannerView);
+        mCodeScanner = new CodeScanner(Objects.requireNonNull(activity), scannerView);
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
             public void onDecoded(@NonNull final Result result) {
@@ -39,7 +48,7 @@ public class ScannerFragment extends Fragment {
                     public void run() {
                         Toast.makeText(activity, result.getText(), Toast.LENGTH_SHORT).show();
                         QRCode QR = new QRCode(result.getText());
-
+                        QR.save();
                     }
                 });
             }
@@ -63,4 +72,5 @@ public class ScannerFragment extends Fragment {
     public void onPause() {
         mCodeScanner.releaseResources();
         super.onPause();
-    }}
+    }
+}
