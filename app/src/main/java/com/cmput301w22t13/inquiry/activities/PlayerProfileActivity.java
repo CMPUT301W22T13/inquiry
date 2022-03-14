@@ -1,5 +1,10 @@
 package com.cmput301w22t13.inquiry.activities;
 
+/** Populates views of activity_player_profile.xml with a specific player's
+ * data when the user wants to browse a specific player's profile.
+ * The views show a specific player's information and their game wide rankings
+ */
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -21,6 +26,7 @@ public class PlayerProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_profile);
 
+        // gets player data from database to be displayed
         String uid = getIntent().getStringExtra("uid");
         db.getById("users", uid).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -34,13 +40,12 @@ public class PlayerProfileActivity extends AppCompatActivity {
 
 
 
-
+        // moves to the gameStatus activity if the button is pressed
         Button gameStatusButton = findViewById(R.id.playerProfileGameStatusButton);
-
         gameStatusButton.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), PlayerStatusActivity.class);
             intent.putExtra("uid", uid);
-            startActivity(intent);
+            //startActivity(intent); removed until getQRCodes implemented
         });
 
         // ends activity
@@ -50,6 +55,7 @@ public class PlayerProfileActivity extends AppCompatActivity {
     }
 
     private void setTexts(Player player) {
+        // sets the player data TextViews to show the proper data
         TextView userNameView = findViewById(R.id.playerProfileUserNameTextView);
         userNameView.setText(player.getUserName());
 

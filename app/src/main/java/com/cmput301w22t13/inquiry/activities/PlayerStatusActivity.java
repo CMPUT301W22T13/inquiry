@@ -1,4 +1,8 @@
 package com.cmput301w22t13.inquiry.activities;
+/** Populates views of activity_player_status.xml with a specific player's
+ * data when the user wants to browse a specific player's QR codes.
+ * Responsible for getting QR codes from database to populate the listview
+ */
 
 import android.os.Bundle;
 import android.view.View;
@@ -29,6 +33,7 @@ public class PlayerStatusActivity extends AppCompatActivity {
         super.onCreate(savedInstances);
         setContentView(R.layout.activity_player_status);
 
+        // gets player data from database to be displayed
         String uid = getIntent().getStringExtra("uid");
         db.getById("users", uid).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {

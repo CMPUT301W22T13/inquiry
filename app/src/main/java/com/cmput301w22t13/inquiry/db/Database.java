@@ -1,8 +1,8 @@
 package com.cmput301w22t13.inquiry.db;
+//collection of general methods, being called whenever we need the base
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -12,7 +12,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class Database {
@@ -66,6 +65,8 @@ public class Database {
      * @param  collection  the name of the collection, e.g. "users"
      * @param  id custom id to assign to the document, ensure this is a unique ID otherwise data loss can occur
      * @param  data the document to create in the collection, must be of type Map<String, Object>
+     *              note: the new data does not replace the old data, it is merged with it
+     *                    so only pass in the fields that need to be updated
      */
     public void set(String collection, String id, Map<String, Object> data) {
         this.db.collection(collection)
@@ -91,14 +92,26 @@ public class Database {
      * @param  id the String id of the document to get
      */
     public Task<DocumentSnapshot> getById(String collection, String id) {
-
         return db.collection(collection).document(id).get();
-
     }
 
+    /**
+     * query a collection for documents matching a specified field
+     * @param  collection  the name of the collection, e.g. "users"
+     * @param  field the name of the field to query, e.g. "username"
+     * @param  value the query value, e.g. "Ada"
+     * @return a QuerySnapshot of the documents matching the query (usage: query(...).addOnSuccessListener(...))
+     */
+    public Task<QuerySnapshot> query(String collection, String field, String value) {
+        return db.collection(collection).whereEqualTo(field, value).get();
+    }
 
     /**
      * update a document in a specified collection using its ID
+     * @param  collection  the name of the collection, e.g. "users"
+     * @param  id the String id of the document to update
+     * @param  data the new data to update the document, must be of type Map<String, Object>
+     *              note: this will overwrite the existing data
      */
     public void update(String collection, String id, Map<String, Object> data) {
         this.db.collection(collection)
@@ -116,15 +129,5 @@ public class Database {
 
                     }
                 });
-    }
-    /**
-     * get a Query in a specified collection for a specific field result
-     *
-     * @param  collection  the name of the collection, e.g. "users"
-     * @param  field name of field to query
-     * @param  value the value to search the field and collection for
-     */
-    public Task<QuerySnapshot> query(String collection, String field, String value){
-        return db.collection(collection).whereEqualTo(field, value).get();
     }
 }
