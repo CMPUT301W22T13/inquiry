@@ -25,6 +25,8 @@ import com.cmput301w22t13.inquiry.classes.QRCode;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.zxing.Result;
 
+import java.util.Objects;
+
 public class ScannerFragment extends Fragment {
 
     private CodeScanner mCodeScanner;
@@ -37,7 +39,7 @@ public class ScannerFragment extends Fragment {
         final Activity activity = getActivity();
         View root = inflater.inflate(R.layout.scanner_fragment, container, false);
         CodeScannerView scannerView = root.findViewById(R.id.scanner_view);
-        mCodeScanner = new CodeScanner(activity, scannerView);
+        mCodeScanner = new CodeScanner(Objects.requireNonNull(activity), scannerView);
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
             public void onDecoded(@NonNull final Result result) {

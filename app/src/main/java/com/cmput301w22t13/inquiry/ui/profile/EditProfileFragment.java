@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,11 +23,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.cmput301w22t13.inquiry.R;
+import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.db.Database;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 
 /**
@@ -36,16 +35,12 @@ import java.util.Objects;
  */
 public class EditProfileFragment extends Fragment {
 
-    private final String username;
-    private final String email;
-    private final String uid;
+    private final Player user;
 
     Database db = new Database();
 
-    public EditProfileFragment(String uid, String username, String email) {
-        this.uid = uid;
-        this.username = username;
-        this.email = email;
+    public EditProfileFragment(Player user) {
+        this.user = user;
     }
 
     private void closeFragment() {
@@ -90,11 +85,12 @@ public class EditProfileFragment extends Fragment {
 
         // fill in username and email fields from user data
         TextView usernameInput = root.findViewById(R.id.input_edit_username);
-        usernameInput.setText(username);
+        usernameInput.setText(user.getUsername());
 
         TextView emailInput = root.findViewById(R.id.input_edit_email);
-        if(email != null) {
-            emailInput.setText(email);
+        String userEmail = user.getEmail();
+        if(userEmail != null) {
+            emailInput.setText(userEmail);
         }
 
         Button saveChangesButton = root.findViewById(R.id.save_edit_profile_button);
@@ -112,11 +108,15 @@ public class EditProfileFragment extends Fragment {
 //                Log.i("EditProfileFragment", "Email: " + emailToSave);
 //                Log.i("EditProfileFragment", "UID: " + uid);
 
-                if(!usernameToSave.isEmpty() && uid != null) {
+                String userId = user.getUid();
+
+                if(!usernameToSave.isEmpty() && userId != null) {
                     // update user document in database
                     userData.put("username", usernameToSave);
                     userData.put("email", emailToSave);
-                    db.update("users", uid, userData);
+
+                    user.updateUser(userData);
+//                    db.update("users", userId, userData);
 
                     // hide the keyboard and go back to the profile
                     final InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);

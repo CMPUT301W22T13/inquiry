@@ -26,6 +26,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.cmput301w22t13.inquiry.R;
+import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.databinding.FragmentProfileBinding;
 
 import java.util.Map;
@@ -34,17 +35,7 @@ public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
 
-    private String username;
-    private String email;
-    private String uid;
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public void setUid(String uid) { this.uid = uid; }
+    private Player user;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -59,14 +50,7 @@ public class ProfileFragment extends Fragment {
         final TextView usernameText = root.findViewById(R.id.username_text);
         final TextView emailText = root.findViewById(R.id.user_email_text);
         final ProgressBar spinner = root.findViewById(R.id.profile_progress_spinner);
-        final Button button = root.findViewById(R.id.view_QR);
-        button.setOnClickListener(new View.OnClickListener() {
-                                      @Override
-                                      public void onClick(View view) {
-                                       Intent intent = new Intent();
-                                      }
-                                  }
-        );
+
         profileViewModel.getData(new onProfileDataListener() {
             // get data from success listener and display it
             // TODO: Handle error
@@ -77,13 +61,12 @@ public class ProfileFragment extends Fragment {
                 String uidString = (String) data.get("uid");
 
                 if(usernameString != null) {
-                    setUsername(usernameString);
+                    user = new Player(usernameString, uidString);
                 }
                 if(emailString != null) {
-                    setEmail(emailString);
+                    user.setEmail(emailString);
                     emailText.setText(emailString);
                 }
-                setUid(uidString);
 
                 usernameText.setText(String.format(getResources().getString(R.string.profile_greeting), usernameString));
 
@@ -115,15 +98,15 @@ public class ProfileFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_edit_profile) {
             // navigate to edit profile fragment and pass user data to it
-            Fragment newFragment = new EditProfileFragment(uid, username, email);
+            Fragment newFragment = new EditProfileFragment(user);
             FragmentTransaction ft = this.getParentFragmentManager().beginTransaction();
 
-            Bundle bundle = new Bundle();
-            bundle.putString("username", username);
-            bundle.putString("email", email);
-            bundle.putString("uid", uid);
-
-            newFragment.setArguments(bundle);
+//            Bundle bundle = new Bundle();
+//            bundle.putString("username", username);
+//            bundle.putString("email", email);
+//            bundle.putString("uid", uid);
+//
+//            newFragment.setArguments(bundle);
             ft.replace(R.id.nav_host_fragment_activity_main, newFragment, "PROFILE");
 
             // configure navigation options
