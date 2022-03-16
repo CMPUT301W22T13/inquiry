@@ -6,8 +6,10 @@ import com.cmput301w22t13.inquiry.db.Database;
 import com.cmput301w22t13.inquiry.db.onQrDataListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Player {
@@ -43,10 +45,38 @@ public class Player {
         }
     }
 
+    /**
+     * store a new new QRCode reference to the user's qr_codes field array
+     * first checks if the QRCode already exists in the database
+     * @param newQrRef the DocumentReference of the QRCode to be stored
+     */
+    public void addQRCode(DocumentReference newQrRef, String hash) {
+        // append the qr code's reference to the user's qr_codes array
+        // see: stackoverflow.com/a/51983589/12955797
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("qr_codes", FieldValue.arrayUnion(newQrRef));
+
+        this.fetchQRCodes(userQrs -> {
+            if(userQrs != null) {
+                for (QRCode qr : userQrs) {
+                    if(qr.getHash().equals(hash)) {
+                        Log.d("QRCode", "QRCode already exists in user");
+                    }
+                    else {
+                        db.update("users", this.uid, userMap);
+                        Log.d("QRCode", "QRCode added to user");
+                    }
+                }
+            }
+            else {
+                db.update("users", this.uid, userMap);
+            }
+        });
+    }
+
     public void fetchQRCodes(onQrDataListener onSuccess) {
         ArrayList<QRCode> QrList = new ArrayList<>();
         db = new Database();
-
 
         db.getById("users", this.uid).addOnCompleteListener(userTask -> {
             if (userTask.isSuccessful()) {
@@ -60,7 +90,6 @@ public class Player {
                             if (qrTask.isSuccessful()) {
                                 DocumentSnapshot qr = qrTask.getResult();
                                 QRCode qrCode = new QRCode(qr.getString("hash"), qr.getLong("score").intValue());
-                                Log.d("QRCode", qrCode.getHash());
                                 QrList.add(qrCode);
 
                                 if (finalI == qrRefs.size() - 1) {
@@ -73,6 +102,7 @@ public class Player {
                 }
                 else {
                     // TODO: error handling
+                    onSuccess.getQrData(null);
                 }
             }
         });

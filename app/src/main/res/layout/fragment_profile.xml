@@ -50,7 +50,7 @@
              android:layout_weight="1"
             android:drawableLeft="@drawable/ic_dashboard_black_24dp"
             android:layout_marginRight="20sp"
-            android:text="  Total QRs:"
+            android:text="0 QR Codes"
 
 
             />
@@ -61,7 +61,7 @@
             android:layout_weight="1"
             android:id="@+id/total_score"
             android:layout_marginLeft="20sp"
-            android:text=" Total Score"
+            android:text="Total Score: 0"
             android:drawableLeft="@drawable/ic_baseline_insights_24"
 
 
@@ -83,7 +83,7 @@
             android:layout_weight="1"
             android:padding="20sp"
             android:layout_marginRight="20sp"
-            android:text="  Highest Score"
+            android:text="Highest Score: 0"
             android:drawableLeft="@drawable/ic_highestscore"
 
 
@@ -98,7 +98,7 @@
             android:id="@+id/lowest_score"
             android:padding="20sp"
             android:layout_marginLeft="20sp"
-            android:text="  Lowest Score"
+            android:text="Lowest Score: 0"
             android:drawableLeft="@drawable/ic_lowestscore"
 
             />

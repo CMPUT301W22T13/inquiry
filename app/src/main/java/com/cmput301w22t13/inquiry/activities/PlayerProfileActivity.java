@@ -33,7 +33,9 @@ public class PlayerProfileActivity extends AppCompatActivity {
                 DocumentSnapshot document = task.getResult();
                 if (document != null && document.exists()) {
                     Player player = new Player((String) document.get("username"), (String) document.get("id"), true);
-                    setTexts(player);
+                    player.fetchQRCodes(qrCodes -> {
+                        setTexts(player);
+                    });
                 } else finish();
             } else finish();
         });

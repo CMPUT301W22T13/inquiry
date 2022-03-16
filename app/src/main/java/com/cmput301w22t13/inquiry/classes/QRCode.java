@@ -1,22 +1,25 @@
 package com.cmput301w22t13.inquiry.classes;
 /**
  * Calculates a SHA-256 hash of the QR code content
- * Saves scanned qr code to the firestore dabatase
+ * Saves scanned qr code to the firestore database
  */
-
 
 import android.util.Log;
 
 import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.db.Database;
+import com.google.android.gms.tasks.Task;
 import com.google.common.hash.Hashing;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.nio.charset.StandardCharsets;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -65,11 +68,11 @@ public class QRCode {
 
     public String getHash() {
         return this.hash;
-
     }
 
     /**
      * Saves the given hash into a collection owned by user
+     * before saving, check if a qr code with the same hash already exists
      */
     public void save() {
         // create a map of the data to be saved
@@ -77,26 +80,40 @@ public class QRCode {
         qrCode.put("hash", this.hash);
         qrCode.put("score", this.score);
 
-        FirebaseUser currentUser = Auth.getCurrentUser();
-        if (currentUser != null) {
-            String id = currentUser.getUid();
+        Player user = Auth.getPlayer();
+        if (user != null) {
+            Log.d("QRCode", "Saving qr code");
 
-            // save the QR code to the qr_codes collection, then save a reference to it in the user's document
-            db.put("qr_codes", qrCode).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-//                    Log.i("QRCode", "QRCode saved successfully");
-
-                    // get document reference from the qr code's id
-                    String qrDocumentId = task.getResult().getId();
-                    DocumentReference qrRef = db.getDocReference("qr_codes/" + qrDocumentId);
-
-                    // append the qr code's reference to the user's qr_codes array
-                    // see: stackoverflow.com/a/51983589/12955797
-                    Map<String, Object> userQrCode = new HashMap<>();
-                    userQrCode.put("qr_codes", FieldValue.arrayUnion(qrRef));
-                    db.update("users", id, userQrCode);
+            // check if the qr code already exists
+            Task<QuerySnapshot> qrQuery = db.query("qr_codes", "hash", this.hash);
+            qrQuery.addOnCompleteListener(qrTask -> {
+                if (qrQuery.isComplete()) {
+                    Log.d("QRCode", "QR code query complete");
+                    List<DocumentSnapshot> qrList = qrQuery.getResult().getDocuments();
+                    // if it does, just add the qr to the user
+                    if (qrList.size() > 0) {
+                        String qrDocumentId = qrList.get(0).getId();
+                        DocumentReference qrRef = db.getDocReference("qr_codes/" + qrDocumentId);
+                        user.addQRCode(qrRef, this.hash);
+                        Log.d("QRCode", "QR code already exists, adding to user");
+                    }
+                    // otherwise, create a new qr code and then add it to the user
+                    else {
+                        Log.d("QRCode", "QR code does not exist, creating new qr code");
+                        // save the QR code to the qr_codes collection, then save a reference to it in the user's document
+                        db.put("qr_codes", qrCode).addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                // get document reference from the qr code's id
+                                String qrDocumentId = task.getResult().getId();
+                                DocumentReference qrRef = db.getDocReference("qr_codes/" + qrDocumentId);
+                                user.addQRCode(qrRef, this.hash);
+                                Log.d("QRCode", "new QR code saved, adding to user");
+                            }
+                        });
+                    }
                 }
             });
+
         }
     }
 
@@ -110,7 +127,7 @@ public class QRCode {
     /**
      * @return the name of the qr code
      */
-    public String getName() { 
+    public String getName() {
         return QRName.fromHash(this.hash);
     }
 }
