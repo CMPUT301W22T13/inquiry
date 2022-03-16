@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import com.cmput301w22t13.inquiry.R;
+import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.databinding.ActivityOnboardingBinding;
 import com.cmput301w22t13.inquiry.ui.profile.ProfileViewModel;
 
@@ -28,6 +29,8 @@ public class OnboardingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Auth.init();
 
         ActivityOnboardingBinding binding = ActivityOnboardingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
