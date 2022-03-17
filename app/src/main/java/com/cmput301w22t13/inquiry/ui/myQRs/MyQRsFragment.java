@@ -39,7 +39,7 @@ public class MyQRsFragment extends Fragment {
         myQRsViewModel.getPlayer().fetchQRCodes(new onQrDataListener() {
             @Override
             public void getQrData(ArrayList<QRCode> qrCodes) {
-                if (qrCodes.size() > 0) {
+                if (qrCodes != null && qrCodes.size() > 0) {
                     qrCodeListAdapter = new MyQRsListAdapter(root.getContext(), qrCodes);
                     recyclerView.setAdapter(qrCodeListAdapter);
 
