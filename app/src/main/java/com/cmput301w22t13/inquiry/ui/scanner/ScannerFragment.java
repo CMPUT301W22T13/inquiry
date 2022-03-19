@@ -37,7 +37,7 @@ import java.util.Objects;
 
 public class ScannerFragment extends Fragment {
 
-    private CodeScanner mCodeScanner;
+    private CodeScanner mCodeScanner = null;
     Player player = Auth.getPlayer();
 
     @Nullable
@@ -80,12 +80,17 @@ public class ScannerFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mCodeScanner.startPreview();
+        if(mCodeScanner!= null){
+            mCodeScanner.startPreview();
+
+        }
     }
 
     @Override
     public void onPause() {
-        mCodeScanner.releaseResources();
+        if(mCodeScanner!= null) {
+            mCodeScanner.releaseResources();
+        }
         super.onPause();
     }
 }

@@ -17,7 +17,7 @@ public class Player {
     private String uid;
     private String userName;
     private String email;
-    private ArrayList<QRCode> qrCodes;
+    private ArrayList<QRCode> qrCodes = new ArrayList<QRCode>();
 
     Database db;
 
@@ -102,7 +102,7 @@ public class Player {
                 }
                 else {
                     // TODO: error handling
-                    onSuccess.getQrData(null);
+                    onSuccess.getQrData(new ArrayList<QRCode>());
                 }
             }
         });
@@ -144,19 +144,19 @@ public class Player {
     public int getTotalScore() {
         // returns total score of QRCodes from database
 
-        if (this.qrCodes != null) {
+        if (this.qrCodes.size() != 0) {
             int totalScore = 0;
             for (int i = 0; i < this.qrCodes.size(); i++) {
                 QRCode code = this.qrCodes.get(i);
                 totalScore = totalScore + code.getScore();
             }
             return totalScore;
-        }else return -1;
+        }else return 0;
     }
 
     public int getHighestScore() {
         // returns highest score QRCode from database
-        if (this.qrCodes != null) {
+        if (this.qrCodes.size() != 0) {
             int maxScore = 0;
             for (int i = 0; i < this.qrCodes.size(); i++) {
                 QRCode code = this.qrCodes.get(i);
@@ -166,29 +166,29 @@ public class Player {
                 }
             }
             return maxScore;
-        }else return -1;
+        }else return 0;
     }
 
     public int getLowestScore() {
         // returns highest score QRCode from database
 
-        if (this.qrCodes != null) {
+        if (this.qrCodes.size() != 0) {
             int minScore = this.qrCodes.get(0).getScore();
             for (int i = 1; i < this.qrCodes.size(); i++) {
                 QRCode code = this.qrCodes.get(i);
                 int score = code.getScore();
                 if (score < minScore) {
-                    minScore = score;
+                    minScore = this.qrCodes.get(i).getScore();
                 }
             }
             return minScore;
-        }else return -1;
+        }else return 0;
     }
 
     public int getQRCodeCount() {
         // returns amount of QRCodes scanned by player from database
-        if (this.qrCodes != null) return this.qrCodes.size();
-        else return -1;
+        if (this.qrCodes.size() != 0) return this.qrCodes.size();
+        else return 0;
     }
 
     // updates user data in database
