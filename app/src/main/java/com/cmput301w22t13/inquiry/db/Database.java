@@ -15,9 +15,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Source;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class Database {
+public class Database implements Serializable {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     /**

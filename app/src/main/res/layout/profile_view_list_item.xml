@@ -6,22 +6,28 @@
 
     <TextView
         android:id="@+id/QRCodePlayerTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Player" />
+        android:gravity="left"
+        android:text="Number"
+        android:textAlignment="gravity" />
 
     <TextView
         android:id="@+id/QRCodeNumberTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="number" />
+        android:gravity="left"
+        android:text="Name"
+        android:textAlignment="gravity" />
 
     <TextView
         android:id="@+id/QRCodeScoreTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Score" />
+        android:gravity="left"
+        android:text="Score"
+        android:textAlignment="gravity" />
 </LinearLayout>

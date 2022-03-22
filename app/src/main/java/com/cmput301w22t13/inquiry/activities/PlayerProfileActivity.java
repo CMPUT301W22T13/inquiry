@@ -17,9 +17,12 @@ import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.db.Database;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.io.Serializable;
+
 public class PlayerProfileActivity extends AppCompatActivity {
 
     private final Database db = new Database();
+    private Player player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +35,7 @@ public class PlayerProfileActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document != null && document.exists()) {
-                    Player player = new Player((String) document.get("username"), (String) document.get("id"), true);
+                    player = new Player((String) document.get("username"), (String) document.get("id"), true);
                     player.fetchQRCodes(qrCodes -> {
                         setTexts(player);
                     });
@@ -47,12 +50,14 @@ public class PlayerProfileActivity extends AppCompatActivity {
         gameStatusButton.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), PlayerStatusActivity.class);
             intent.putExtra("uid", uid);
-            //startActivity(intent); removed until getQRCodes implemented
+            startActivity(intent); //removed until getQRCodes implemented
         });
 
         // ends activity
         Button backButton = findViewById(R.id.playerProfileBackButton);
         backButton.setOnClickListener(view -> finish());
+
+
 
     }
 

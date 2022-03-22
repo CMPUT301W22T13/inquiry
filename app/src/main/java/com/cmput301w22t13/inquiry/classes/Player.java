@@ -8,11 +8,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Player {
+public class Player implements Serializable {
 
     private String uid;
     private String userName;
@@ -185,7 +186,7 @@ public class Player {
         }else return -1;
     }
 
-    public int getQRCodeCount() {
+    public Integer getQRCodeCount() {
         // returns amount of QRCodes scanned by player from database
         if (this.qrCodes != null) return this.qrCodes.size();
         else return -1;
@@ -195,4 +196,9 @@ public class Player {
     public void updateUser(Map<String, Object> userData) {
         db.update("users", this.uid, userData);
     }
+
+    public boolean hasQR(String hash){
+        return false;
+    }
+
 }
