@@ -11,7 +11,8 @@
         android:layout_weight="1"
         android:gravity="left"
         android:text="Number"
-        android:textAlignment="gravity" />
+        android:textAlignment="gravity"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/QRCodeNumberTextView"
@@ -20,7 +21,8 @@
         android:layout_weight="1"
         android:gravity="left"
         android:text="Name"
-        android:textAlignment="gravity" />
+        android:textAlignment="gravity"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/QRCodeScoreTextView"
@@ -29,5 +31,6 @@
         android:layout_weight="1"
         android:gravity="left"
         android:text="Score"
-        android:textAlignment="gravity" />
+        android:textAlignment="gravity"
+        android:textSize="16sp" />
 </LinearLayout>
