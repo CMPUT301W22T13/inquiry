@@ -43,6 +43,7 @@ public class Player {
                 this.qrCodes = qrCodes1;
             });
         }
+
     }
 
     /**
@@ -143,7 +144,6 @@ public class Player {
 
     public int getTotalScore() {
         // returns total score of QRCodes from database
-
         if (this.qrCodes.size() != 0) {
             int totalScore = 0;
             for (int i = 0; i < this.qrCodes.size(); i++) {

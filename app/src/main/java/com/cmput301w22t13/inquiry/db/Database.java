@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Source;
@@ -185,5 +186,13 @@ public class Database {
 
                     }
                 });
+    }
+
+    public Task<QuerySnapshot> indexQuery(String collection, String mainField, String secondaryField, int amount){
+        return this.db.collection(collection)
+                .orderBy(mainField, Query.Direction.DESCENDING)
+                .orderBy(secondaryField, Query.Direction.ASCENDING)
+                .limit(amount)
+                .get();
     }
 }
