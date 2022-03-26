@@ -44,7 +44,9 @@ public class Player {
             });
         }
     }
-
+    public String getID(){
+        return this.uid;
+    }
     /**
      * store a new new QRCode reference to the user's qr_codes field array
      * first checks if the QRCode already exists in the database
