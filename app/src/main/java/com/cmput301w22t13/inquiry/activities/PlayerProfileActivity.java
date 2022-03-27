@@ -27,26 +27,18 @@ public class PlayerProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player_profile);
 
         // gets player data from database to be displayed
-        String uid = getIntent().getStringExtra("uid");
-        db.getById("users", uid).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document != null && document.exists()) {
-                    Player player = new Player((String) document.get("username"), (String) document.get("id"), true);
-                    player.fetchQRCodes(qrCodes -> {
-                        setTexts(player);
-                    });
-                } else finish();
-            } else finish();
-        });
+        Player player = (Player) getIntent().getSerializableExtra("Player");
 
+        player.fetchQRCodes(qrCodes -> {
+            setTexts(player);
+        });
 
 
         // moves to the gameStatus activity if the button is pressed
         Button gameStatusButton = findViewById(R.id.playerProfileGameStatusButton);
         gameStatusButton.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), PlayerStatusActivity.class);
-            intent.putExtra("uid", uid);
+            intent.putExtra("Player", player);
             //startActivity(intent); removed until getQRCodes implemented
         });
 

@@ -22,13 +22,13 @@ public class Owner extends Player{
     }
     public void deleteQR(QRCode qr){
         String hash = qr.getHash();
-        db.remove("qr_codes", hash);
+        //db.remove("qr_codes", hash);
         // need to add delete from players list
 
     }
     public void deletePlayer(Player player){
         String newId = player.getID();
-        db.remove("users", newId);
+        //db.remove("users", newId);
 
     }
 }

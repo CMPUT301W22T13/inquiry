@@ -8,18 +8,18 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Player {
+public class Player implements Serializable {
 
     private String uid;
     private String userName;
     private String email;
     private ArrayList<QRCode> qrCodes = new ArrayList<QRCode>();
 
-    Database db;
 
     public Player(String userName, String uid) {
         this.userName = userName;
@@ -57,7 +57,7 @@ public class Player {
         // see: stackoverflow.com/a/51983589/12955797
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("qr_codes", FieldValue.arrayUnion(newQrRef));
-
+        Database db = new Database();
         this.fetchQRCodes(userQrs -> {
             if(userQrs != null) {
                 for (QRCode qr : userQrs) {
@@ -78,7 +78,7 @@ public class Player {
 
     public void fetchQRCodes(onQrDataListener onSuccess) {
         ArrayList<QRCode> QrList = new ArrayList<>();
-        db = new Database();
+        Database db = new Database();
 
         db.getById("users", this.uid).addOnCompleteListener(userTask -> {
             if (userTask.isSuccessful()) {
@@ -195,6 +195,7 @@ public class Player {
 
     // updates user data in database
     public void updateUser(Map<String, Object> userData) {
+        Database db = new Database();
         db.update("users", this.uid, userData);
     }
 }
