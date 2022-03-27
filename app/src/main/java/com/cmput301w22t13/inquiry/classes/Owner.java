@@ -17,7 +17,9 @@ public class Owner extends Player{
         super(userName,uid,getQrCodes);
     }
 
-
+    public boolean getIsOwner(){
+        return this.isOwner;
+    }
     public void deleteQR(QRCode qr){
         String hash = qr.getHash();
         db.remove("qr_codes", hash);
