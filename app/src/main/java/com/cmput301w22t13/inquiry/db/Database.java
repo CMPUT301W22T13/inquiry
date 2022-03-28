@@ -186,4 +186,21 @@ public class Database {
                     }
                 });
     }
+
+    public void remove(String collection,String id){
+       this.db.collection(collection).document(id).delete()
+       .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+
+    }
 }

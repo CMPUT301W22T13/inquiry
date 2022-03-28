@@ -8,23 +8,24 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Player {
+public class Player implements Serializable {
 
     private String uid;
     private String userName;
     private String email;
     private ArrayList<QRCode> qrCodes = new ArrayList<QRCode>();
-
-    Database db;
+    private boolean isOwner;
 
     public Player(String userName, String uid) {
         this.userName = userName;
         this.uid = uid;
         this.email = "";
+        this.isOwner = false;
     }
 
     public Player(String userName, String uid, String email) {
@@ -33,6 +34,7 @@ public class Player {
         if (email != null) {
             this.email = email;
         }
+        this.isOwner = false;
     }
 
     public Player(String userName, String uid, Boolean getQrCodes) {
@@ -43,8 +45,11 @@ public class Player {
                 this.qrCodes = qrCodes1;
             });
         }
+        this.isOwner = false;
     }
-
+    public String getID(){
+        return this.uid;
+    }
     /**
      * store a new new QRCode reference to the user's qr_codes field array
      * first checks if the QRCode already exists in the database
@@ -55,7 +60,7 @@ public class Player {
         // see: stackoverflow.com/a/51983589/12955797
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("qr_codes", FieldValue.arrayUnion(newQrRef));
-
+        Database db = new Database();
         this.fetchQRCodes(userQrs -> {
             if(userQrs != null) {
                 for (QRCode qr : userQrs) {
@@ -76,7 +81,7 @@ public class Player {
 
     public void fetchQRCodes(onQrDataListener onSuccess) {
         ArrayList<QRCode> QrList = new ArrayList<>();
-        db = new Database();
+        Database db = new Database();
 
         db.getById("users", this.uid).addOnCompleteListener(userTask -> {
             if (userTask.isSuccessful()) {
@@ -120,6 +125,9 @@ public class Player {
         return uid;
     }
 
+    public boolean getIsOwner() {
+        return this.isOwner;
+    }
     public String getEmail() {
         return email;
     }
@@ -193,6 +201,11 @@ public class Player {
 
     // updates user data in database
     public void updateUser(Map<String, Object> userData) {
+        Database db = new Database();
         db.update("users", this.uid, userData);
+    }
+
+    public void deletePlayer(Player id) {
+
     }
 }

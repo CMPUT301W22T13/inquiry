@@ -9,10 +9,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.cmput301w22t13.inquiry.R;
+import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.db.Database;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -20,33 +23,25 @@ import com.google.firebase.firestore.DocumentSnapshot;
 public class PlayerProfileActivity extends AppCompatActivity {
 
     private final Database db = new Database();
-
+    private final Auth auth = new Auth();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_profile);
 
         // gets player data from database to be displayed
-        String uid = getIntent().getStringExtra("uid");
-        db.getById("users", uid).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document != null && document.exists()) {
-                    Player player = new Player((String) document.get("username"), (String) document.get("id"), true);
-                    player.fetchQRCodes(qrCodes -> {
-                        setTexts(player);
-                    });
-                } else finish();
-            } else finish();
-        });
+        Player player = (Player) getIntent().getSerializableExtra("Player");
 
+        player.fetchQRCodes(qrCodes -> {
+            setTexts(player);
+        });
 
 
         // moves to the gameStatus activity if the button is pressed
         Button gameStatusButton = findViewById(R.id.playerProfileGameStatusButton);
         gameStatusButton.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), PlayerStatusActivity.class);
-            intent.putExtra("uid", uid);
+            intent.putExtra("Player", player);
             //startActivity(intent); removed until getQRCodes implemented
         });
 
@@ -54,6 +49,20 @@ public class PlayerProfileActivity extends AppCompatActivity {
         Button backButton = findViewById(R.id.playerProfileBackButton);
         backButton.setOnClickListener(view -> finish());
 
+        if(auth.getPlayer().getIsOwner()){
+            Log.d("VERBS",auth.getPlayer().getUsername());
+            Log.d("VERBS", "isOwner");
+            Button deletePlayerButton = findViewById(R.id.deletePlayer);
+            deletePlayerButton.setVisibility(View.VISIBLE);
+            deletePlayerButton.setOnClickListener(view -> {
+                auth.getPlayer().deletePlayer(player);
+                finish();
+
+            });
+        }else{
+            Log.d("VERBS",auth.getPlayer().getUsername());
+            Log.d("VERBS", "notOWner");
+        }
     }
 
     private void setTexts(Player player) {
