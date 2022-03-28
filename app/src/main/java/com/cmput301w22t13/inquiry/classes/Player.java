@@ -19,12 +19,13 @@ public class Player implements Serializable {
     private String userName;
     private String email;
     private ArrayList<QRCode> qrCodes = new ArrayList<QRCode>();
-
+    private boolean isOwner;
 
     public Player(String userName, String uid) {
         this.userName = userName;
         this.uid = uid;
         this.email = "";
+        this.isOwner = false;
     }
 
     public Player(String userName, String uid, String email) {
@@ -33,6 +34,7 @@ public class Player implements Serializable {
         if (email != null) {
             this.email = email;
         }
+        this.isOwner = false;
     }
 
     public Player(String userName, String uid, Boolean getQrCodes) {
@@ -43,6 +45,7 @@ public class Player implements Serializable {
                 this.qrCodes = qrCodes1;
             });
         }
+        this.isOwner = false;
     }
     public String getID(){
         return this.uid;
@@ -122,6 +125,9 @@ public class Player implements Serializable {
         return uid;
     }
 
+    public boolean getIsOwner() {
+        return this.isOwner;
+    }
     public String getEmail() {
         return email;
     }
@@ -197,5 +203,9 @@ public class Player implements Serializable {
     public void updateUser(Map<String, Object> userData) {
         Database db = new Database();
         db.update("users", this.uid, userData);
+    }
+
+    public void deletePlayer(Player id) {
+
     }
 }

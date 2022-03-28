@@ -1,10 +1,10 @@
 package com.cmput301w22t13.inquiry.classes;
 
+
 import com.cmput301w22t13.inquiry.db.Database;
 
 public class Owner extends Player{
 
-    private Boolean isOwner = true;
 
     public Owner(String userName, String uid) {
         super(userName, uid);
@@ -18,7 +18,7 @@ public class Owner extends Player{
     }
 
     public boolean getIsOwner(){
-        return this.isOwner;
+        return true;
     }
     public void deleteQR(QRCode qr){
         String hash = qr.getHash();
@@ -27,8 +27,9 @@ public class Owner extends Player{
 
     }
     public void deletePlayer(Player player){
+        Database db = new Database();
         String newId = player.getID();
-        //db.remove("users", newId);
+        db.remove("users", newId);
 
     }
 }
