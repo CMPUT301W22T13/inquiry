@@ -21,8 +21,9 @@ public class Owner extends Player{
         return true;
     }
     public void deleteQR(QRCode qr){
+        Database db = new Database();
         String hash = qr.getHash();
-        //db.remove("qr_codes", hash);
+        db.remove("qr_codes", hash);
         // need to add delete from players list
 
     }
