@@ -174,6 +174,14 @@ public class LeaderboardFragment extends Fragment {
                         sorted = false;
                     }
                 }
+                if (b == 4){
+                    if (a.get(i).getLowestScore() < a.get(i-1).getLowestScore() && a.get(i).getLowestScore() != 0){
+                        temp = a.get(i);
+                        a.set(i,a.get(i-1));
+                        a.set(i-1,temp);
+                        sorted = false;
+                    }
+                }
             }
         }
     }

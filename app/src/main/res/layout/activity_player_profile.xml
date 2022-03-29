@@ -9,96 +9,83 @@
         android:id="@+id/playerProfileBackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:text="Back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/playerProfileAvatarImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="125dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/playerProfileUserNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:text="UserName"
+        android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playerProfileAvatarImageView" />
+        app:layout_constraintTop_toBottomOf="@+id/playerProfileBackButton" />
 
     <TextView
         android:id="@+id/playerProfileQRCodeCountTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="50dp"
+        android:drawableLeft="@drawable/ic_dashboard_black_24dp"
         android:text="0 QR Codes"
-        app:layout_constraintEnd_toStartOf="@+id/playerProfileUserNameTextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playerProfileUserNameTextView"
-        android:drawableLeft="@drawable/ic_dashboard_black_24dp"/>
+        app:layout_constraintTop_toBottomOf="@+id/playerProfileRankingTextView" />
 
     <TextView
         android:id="@+id/playerProfileTotalScoreTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="10dp"
+        android:drawableLeft="@drawable/ic_baseline_insights_24"
         android:text="Total Score: 0"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/playerProfileUserNameTextView"
-        app:layout_constraintTop_toBottomOf="@+id/playerProfileUserNameTextView"
-        android:drawableLeft="@drawable/ic_baseline_insights_24"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/playerProfileRankingTextView" />
 
     <TextView
         android:id="@+id/playerProfileHighestScoreTextView"
-        android:drawableLeft="@drawable/ic_highestscore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
+        android:drawableLeft="@drawable/ic_highestscore"
         android:text="Highest Score: 0"
-        app:layout_constraintEnd_toStartOf="@+id/playerProfileUserNameTextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playerProfileQRCodeCountTextView"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/playerProfileQRCodeCountTextView" />
 
     <TextView
         android:id="@+id/playerProfileLowestScoreTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:drawableLeft="@drawable/ic_lowestscore"
         android:text="Lowest Score: 0"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/playerProfileUserNameTextView"
-        app:layout_constraintTop_toBottomOf="@+id/playerProfileTotalScoreTextView"
-        android:drawableLeft="@drawable/ic_lowestscore"/>
+        app:layout_constraintTop_toBottomOf="@+id/playerProfileTotalScoreTextView" />
 
     <TextView
         android:id="@+id/playerProfileRankingTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="5dp"
+        android:drawableLeft="@drawable/ic_ranking"
         android:text="Rank: 0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playerProfileUserNameTextView"
-        android:drawableLeft="@drawable/ic_ranking"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/playerProfileUserNameTextView" />
 
     <Button
         android:id="@+id/playerProfileGameStatusButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="75dp"
         android:text="GameStatus"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playerProfileRankingTextView" />

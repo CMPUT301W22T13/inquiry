@@ -100,7 +100,12 @@ public class ProfileFragment extends Fragment {
                             for (int i = 0; i < players.size(); i++){
                                 if (players.get(i).getUid().equals(user.getUid())) qrCodeCountRank = i+1;
                             }
-                            String lowestScoreString = "Lowest Score: " + user.getLowestScore();
+                            LeaderboardFragment.bubbleSort(players,4);
+                            int lowestRank = -1;
+                            for (int i = 0; i < players.size(); i++){
+                                if (players.get(i).getUid().equals(user.getUid())) lowestRank = i+1;
+                            }
+                            String lowestScoreString = "Lowest Score: " + user.getLowestScore() + " Rank: " + lowestRank;
                             lowestScoreText.setText(lowestScoreString);
                             String highestScoreString = "Highest Score: " + user.getHighestScore() + " Rank: " + highestRank;
                             highestScoreText.setText(highestScoreString);

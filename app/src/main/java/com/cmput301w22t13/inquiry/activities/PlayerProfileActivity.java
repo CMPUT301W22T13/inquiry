@@ -28,6 +28,7 @@ public class PlayerProfileActivity extends AppCompatActivity {
 
     private Player player;
     private final Auth auth = new Auth();
+    private ArrayList<Player> players = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +38,6 @@ public class PlayerProfileActivity extends AppCompatActivity {
         player = (Player) getIntent().getSerializableExtra("Player");
         player.fetchQRCodes(Task -> {});
         //refreshes textViews every 2 seconds so if userdata changes it updates
-        ArrayList<Player> players = new ArrayList<>();
         LeaderboardFragment.getPlayers(players);
         LeaderboardFragment.bubbleSort(players,1);
         for (int i = 0; i < players.size(); i++){
@@ -99,24 +99,40 @@ public class PlayerProfileActivity extends AppCompatActivity {
         TextView userNameView = findViewById(R.id.playerProfileUserNameTextView);
         userNameView.setText(player.getUsername());
 
+        LeaderboardFragment.bubbleSort(players,2);
+        int highestRank = -1;
+        for (int i = 0; i < players.size(); i++){
+            if (players.get(i).getUid().equals(player.getUid())) highestRank = i+1;
+        }
+        LeaderboardFragment.bubbleSort(players,3);
+        int qrCodeCountRank = -1;
+        for (int i = 0; i < players.size(); i++){
+            if (players.get(i).getUid().equals(player.getUid())) qrCodeCountRank = i+1;
+        }
+        LeaderboardFragment.bubbleSort(players,4);
+        int lowestRank = -1;
+        for (int i = 0; i < players.size(); i++){
+            if (players.get(i).getUid().equals(player.getUid())) lowestRank = i+1;
+        }
+
         TextView lowestScoreView = findViewById(R.id.playerProfileLowestScoreTextView);
-        String lowestScoreString = "Lowest Score: " + player.getLowestScore();
+        String lowestScoreString = "Lowest Score: " + player.getLowestScore() + " Rank: " + lowestRank;
         lowestScoreView.setText(lowestScoreString);
 
         TextView highestScoreView = findViewById(R.id.playerProfileHighestScoreTextView);
-        String highestScoreString = "Highest Score: " + player.getHighestScore();
+        String highestScoreString = "Highest Score: " + player.getHighestScore() + " Rank: " + highestRank;
         highestScoreView.setText(highestScoreString);
 
         TextView totalScoreView = findViewById(R.id.playerProfileTotalScoreTextView);
-        String totalScoreString = "Total Score: " + player.getTotalScore();
+        String totalScoreString = "Total Score: " + player.getTotalScore() + " Rank: " + player.getRank();
         totalScoreView.setText(totalScoreString);
 
         TextView QRCodeCountView = findViewById(R.id.playerProfileQRCodeCountTextView);
-        String QRCodeCountString = player.getQRCodeCount() + " QR Codes";
+        String QRCodeCountString = player.getQRCodeCount() + " QR Codes"+ " Rank: " + qrCodeCountRank;
         QRCodeCountView.setText(QRCodeCountString);
 
         TextView QRCodeRankView = findViewById(R.id.playerProfileRankingTextView);
-        String QRCodeRankString = "rank: " + player.getRank();
+        String QRCodeRankString = "Rank: " + player.getRank();
         QRCodeRankView.setText(QRCodeRankString);
     }
 }
