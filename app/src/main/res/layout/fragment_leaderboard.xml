@@ -81,7 +81,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5"
-        android:paddingBottom="45dp"/>
+        android:paddingBottom="45dp"
+        android:paddingTop="20dp"/>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
