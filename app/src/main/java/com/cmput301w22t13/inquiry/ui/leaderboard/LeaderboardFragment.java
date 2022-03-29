@@ -35,6 +35,7 @@ public class LeaderboardFragment extends Fragment {
 
     private FragmentLeaderboardBinding binding;
     private final Database db = new Database();
+    private int mode = 1;
 
     @SuppressLint("SetTextI18n")
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -106,7 +107,7 @@ public class LeaderboardFragment extends Fragment {
         Runnable timerRunnable = new Runnable() {
             @Override
             public void run() {
-                bubbleSort(playersArrayList, 1);
+                bubbleSort(playersArrayList, mode);
                 playerListAdapter.notifyDataSetChanged();
                 timerHandler.postDelayed(this, 1000);
             }
@@ -123,6 +124,33 @@ public class LeaderboardFragment extends Fragment {
             startActivity(intent);
         });
 
+
+        Button totalButton = root.findViewById(R.id.total_score_button);
+        Button highestButton = root.findViewById(R.id.highest_score_button);
+        Button countButton = root.findViewById(R.id.qrcode_count_button);
+        Button lowestButton = root.findViewById(R.id.lowest_score_button);
+        TextView scoreType = root.findViewById(R.id.leaderboard_score_type_textview);
+        totalButton.setOnClickListener(view -> {
+            mode = 1;
+            scoreType.setText("Total Score");
+            playerListAdapter.setType(1);
+        });
+        highestButton.setOnClickListener(view -> {
+            mode = 2;
+            scoreType.setText("Highest Score");
+            playerListAdapter.setType(2);
+
+        });
+        countButton.setOnClickListener(view -> {
+            mode = 3;
+            scoreType.setText("QR Codes");
+            playerListAdapter.setType(3);
+        });
+        lowestButton.setOnClickListener(view -> {
+            mode = 4;
+            scoreType.setText("Lowest Score");
+            playerListAdapter.setType(4);
+        });
 
 
 

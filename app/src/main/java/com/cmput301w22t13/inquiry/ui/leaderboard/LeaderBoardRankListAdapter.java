@@ -20,6 +20,7 @@ import java.util.ArrayList;
 public class LeaderBoardRankListAdapter extends ArrayAdapter {
     private ArrayList<Player> players;
     private Context context;
+    private int type = 1;
 
 
     public LeaderBoardRankListAdapter(@NonNull Context context, ArrayList<Player> players) {
@@ -27,6 +28,10 @@ public class LeaderBoardRankListAdapter extends ArrayAdapter {
         this.context = context;
         this.players = players;
 
+    }
+
+    public void setType(int type){
+        this.type = type;
     }
 
     @SuppressLint("SetTextI18n")
@@ -43,7 +48,10 @@ public class LeaderBoardRankListAdapter extends ArrayAdapter {
         TextView scoreTextView = view.findViewById(R.id.leaderBoardScoreTextView);
         playerTextView.setText(player.getUsername()); // player class not complete may need to change
         rankTextView.setText(Integer.toString(position+1));
-        scoreTextView.setText(Integer.toString(player.getTotalScore()));
+        if (type == 1) scoreTextView.setText(Integer.toString(player.getTotalScore()));
+        if (type == 2) scoreTextView.setText(Integer.toString(player.getHighestScore()));
+        if (type == 3) scoreTextView.setText(Integer.toString(player.getQRCodeCount()));
+        if (type == 4) scoreTextView.setText(Integer.toString(player.getLowestScore()));
 
 
 
