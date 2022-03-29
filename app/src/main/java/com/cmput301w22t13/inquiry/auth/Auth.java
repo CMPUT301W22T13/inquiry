@@ -6,8 +6,13 @@ package com.cmput301w22t13.inquiry.auth;
  * authenticating the user and saving the user in the firestore database
  */
 
+import android.content.Intent;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
+import com.cmput301w22t13.inquiry.activities.PlayerProfileActivity;
+import com.cmput301w22t13.inquiry.classes.Owner;
 import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.db.Database;
 import com.github.javafaker.Faker;
@@ -17,6 +22,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -64,6 +70,21 @@ public class Auth {
             });
         } else {
             // initialize player with current user details
+            db.getById("users",currentUser.getUid()).addOnCompleteListener(task -> {
+                if(task.isSuccessful()){
+                    DocumentSnapshot document2 = task.getResult();
+                    if (document2 != null && document2.exists()) {
+                        if(String.valueOf(document2.get("isOwner")) == "true"){
+                            player = new Owner((String) document2.get("username"), (String) document2.get("id"));
+                        }else{
+                            player = new Player((String) document2.get("username"), (String) document2.get("id"));
+                        }
+
+                    }
+                } else{
+                    Log.i("LeaderboardFragment", "No users found");
+                }
+            });
             player = new Player(currentUser.getDisplayName(), currentUser.getUid(), currentUser.getEmail());
         }
     }

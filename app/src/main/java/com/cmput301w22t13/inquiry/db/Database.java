@@ -188,11 +188,20 @@ public class Database {
                 });
     }
 
-    public Task<QuerySnapshot> indexQuery(String collection, String mainField, String secondaryField, int amount){
-        return this.db.collection(collection)
-                .orderBy(mainField, Query.Direction.DESCENDING)
-                .orderBy(secondaryField, Query.Direction.ASCENDING)
-                .limit(amount)
-                .get();
+    public void remove(String collection,String id){
+       this.db.collection(collection).document(id).delete()
+       .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+
     }
 }

@@ -10,10 +10,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.cmput301w22t13.inquiry.R;
+import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.classes.QRCode;
 import com.cmput301w22t13.inquiry.db.Database;
@@ -29,6 +32,7 @@ public class PlayerProfileActivity extends AppCompatActivity {
     private final Database db = new Database();
     Player player;
 
+    private final Auth auth = new Auth();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +41,7 @@ public class PlayerProfileActivity extends AppCompatActivity {
         // gets player data from database to be displayed
         String uid = getIntent().getStringExtra("uid");
         //refreshes textViews every 2 seconds so if userdata changes it updates
-
+        Player player = (Player) getIntent().getSerializableExtra("Player");
         ArrayList<Player> players = new ArrayList<>();
         LeaderboardFragment.getPlayers(players);
         final Handler timerHandler = new Handler();
@@ -72,11 +76,12 @@ public class PlayerProfileActivity extends AppCompatActivity {
         timerHandler.post(timerRunnable);
 
 
+
         // moves to the gameStatus activity if the button is pressed
         Button gameStatusButton = findViewById(R.id.playerProfileGameStatusButton);
         gameStatusButton.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), PlayerStatusActivity.class);
-            intent.putExtra("uid", uid);
+            intent.putExtra("Player", player);
             //startActivity(intent); removed until getQRCodes implemented
             setTexts();
         });
@@ -85,6 +90,20 @@ public class PlayerProfileActivity extends AppCompatActivity {
         Button backButton = findViewById(R.id.playerProfileBackButton);
         backButton.setOnClickListener(view -> finish());
 
+        if(auth.getPlayer().getIsOwner()){
+            Log.d("VERBS",auth.getPlayer().getUsername());
+            Log.d("VERBS", "isOwner");
+            Button deletePlayerButton = findViewById(R.id.deletePlayer);
+            deletePlayerButton.setVisibility(View.VISIBLE);
+            deletePlayerButton.setOnClickListener(view -> {
+                auth.getPlayer().deletePlayer(player);
+                finish();
+
+            });
+        }else{
+            Log.d("VERBS",auth.getPlayer().getUsername());
+            Log.d("VERBS", "notOWner");
+        }
     }
 
     private void updateQRCodes(String uid) {
