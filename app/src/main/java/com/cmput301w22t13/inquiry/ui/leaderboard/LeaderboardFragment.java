@@ -3,12 +3,14 @@ package com.cmput301w22t13.inquiry.ui.leaderboard;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,8 +24,10 @@ import com.cmput301w22t13.inquiry.databinding.FragmentLeaderboardBinding;
 import com.cmput301w22t13.inquiry.db.Database;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -40,8 +44,6 @@ public class LeaderboardFragment extends Fragment {
         binding = FragmentLeaderboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textLeaderboard;
-        leaderboardViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         final EditText searchEditText = root.findViewById(R.id.leaderBoardEditTextSearch);
         final Button searchButton = root.findViewById(R.id.leaderBoardSearchButton);
         final TextView errorTextView = root.findViewById(R.id.leaderBoardSearchErrorTextView);
@@ -90,8 +92,90 @@ public class LeaderboardFragment extends Fragment {
 
 
         });
+        ArrayList<Player> playersArrayList = new ArrayList<>();
+        ListView playersListView = root.findViewById(R.id.leaderBoardListView);
+        LeaderBoardRankListAdapter playerListAdapter = new LeaderBoardRankListAdapter(requireActivity(), playersArrayList);
+        playersListView.setAdapter(playerListAdapter);
+        playersListView.setClickable(true);
+
+        getPlayers(playersArrayList);
+        bubbleSort(playersArrayList, 1);
+        playerListAdapter.notifyDataSetChanged();
+
+        final Handler timerHandler = new Handler();
+        Runnable timerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                bubbleSort(playersArrayList, 1);
+                playerListAdapter.notifyDataSetChanged();
+                timerHandler.postDelayed(this, 1000);
+            }
+        };
+        timerHandler.post(timerRunnable);
+
+
+        playersListView.setClickable(true);
+        playersListView.setOnItemClickListener((adapterView, view, i, l) -> {
+            Intent intent = new Intent(getActivity(), PlayerProfileActivity.class);
+            Player player = new Player(playersArrayList.get(i).getUsername(), playersArrayList.get(i).getUid(),true);
+            intent.putExtra("Player", player);
+            //intent.putExtra("uid",playersArrayList.get(i).getUid());
+            startActivity(intent);
+        });
+
+
+
 
         return root;
+    }
+    public static void getPlayers(ArrayList<Player> playersArrayList){
+        Task<QuerySnapshot> playersQuery = FirebaseFirestore.getInstance().collection("users").get();
+        playersQuery.addOnCompleteListener(task -> {
+            if (playersQuery.isSuccessful()) {
+                QuerySnapshot queryResults = playersQuery.getResult();
+                List<DocumentSnapshot> documents = queryResults.getDocuments();
+                if (documents.size() != 0) {
+                    for (DocumentSnapshot document : documents) {
+                        Player newPlayer = new Player((String) document.get("username"),(String) document.get("id"),true);
+                        playersArrayList.add(newPlayer);
+                    }
+                } else Log.i("LeaderboardFragment", "documents empty");
+            } else Log.i("LeaderboardFragment", "query not successful");
+        });
+    }
+
+    public static void bubbleSort(ArrayList<Player> a, int b){
+        boolean sorted = false;
+        Player temp;
+        while(!sorted){
+            sorted = true;
+            for (int i = a.size()-1; i > 0; i--){
+                if (b == 1){
+                    if (a.get(i).getTotalScore() > a.get(i-1).getTotalScore()){
+                        temp = a.get(i);
+                        a.set(i,a.get(i-1));
+                        a.set(i-1,temp);
+                        sorted = false;
+                    }
+                }
+                if (b == 2){
+                    if (a.get(i).getHighestScore() > a.get(i-1).getHighestScore()){
+                        temp = a.get(i);
+                        a.set(i,a.get(i-1));
+                        a.set(i-1,temp);
+                        sorted = false;
+                    }
+                }
+                if (b == 3){
+                    if (a.get(i).getQRCodeCount() > a.get(i-1).getQRCodeCount()){
+                        temp = a.get(i);
+                        a.set(i,a.get(i-1));
+                        a.set(i-1,temp);
+                        sorted = false;
+                    }
+                }
+            }
+        }
     }
 
     @Override

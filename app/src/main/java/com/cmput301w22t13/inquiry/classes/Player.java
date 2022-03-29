@@ -19,6 +19,9 @@ public class Player implements Serializable {
     private String userName;
     private String email;
     private ArrayList<QRCode> qrCodes = new ArrayList<QRCode>();
+    private int rank = -1;
+
+    Database db;
     private boolean isOwner;
 
     public Player(String userName, String uid) {
@@ -144,14 +147,19 @@ public class Player implements Serializable {
         this.email = email;
     }
 
+    public void setRank(int rank){ this.rank = rank; }
+
+    public void setQrCodes(ArrayList<QRCode> qrCodes) {
+        this.qrCodes = (ArrayList<QRCode>) qrCodes.clone();
+    }
+
     public int getRank() {
         // returns Rank of player
-        return -1;
+        return this.rank;
     }
 
     public int getTotalScore() {
         // returns total score of QRCodes from database
-
         if (this.qrCodes.size() != 0) {
             int totalScore = 0;
             for (int i = 0; i < this.qrCodes.size(); i++) {

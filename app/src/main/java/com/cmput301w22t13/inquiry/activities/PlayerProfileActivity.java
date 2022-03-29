@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,12 +18,15 @@ import android.widget.TextView;
 import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.classes.Player;
-import com.cmput301w22t13.inquiry.db.Database;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.cmput301w22t13.inquiry.classes.QRCode;
+import com.cmput301w22t13.inquiry.ui.leaderboard.LeaderboardFragment;
+
+
+import java.util.ArrayList;
 
 public class PlayerProfileActivity extends AppCompatActivity {
 
-    private final Database db = new Database();
+    private Player player;
     private final Auth auth = new Auth();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +34,30 @@ public class PlayerProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player_profile);
 
         // gets player data from database to be displayed
-        Player player = (Player) getIntent().getSerializableExtra("Player");
-
-        player.fetchQRCodes(qrCodes -> {
-            setTexts(player);
-        });
+        player = (Player) getIntent().getSerializableExtra("Player");
+        player.fetchQRCodes(Task -> {});
+        //refreshes textViews every 2 seconds so if userdata changes it updates
+        ArrayList<Player> players = new ArrayList<>();
+        LeaderboardFragment.getPlayers(players);
+        LeaderboardFragment.bubbleSort(players,1);
+        for (int i = 0; i < players.size(); i++){
+            if (players.get(i).getUid().equals(player.getUid())) player.setRank(i+1);
+        }
+        setTexts();
+        final Handler timerHandler = new Handler();
+        Runnable timerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                //refreshes textViews after 1/2 of a second to give qr codes time to fetch
+                    LeaderboardFragment.bubbleSort(players,1);
+                    for (int i = 0; i < players.size(); i++){
+                        if (players.get(i).getUid().equals(player.getUid())) player.setRank(i+1);
+                    }
+                    setTexts();
+                timerHandler.postDelayed(this, 500);
+            }
+        };
+        timerHandler.post(timerRunnable);
 
 
         // moves to the gameStatus activity if the button is pressed
@@ -43,6 +66,7 @@ public class PlayerProfileActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), PlayerStatusActivity.class);
             intent.putExtra("Player", player);
             //startActivity(intent); removed until getQRCodes implemented
+            setTexts();
         });
 
         // ends activity
@@ -65,7 +89,12 @@ public class PlayerProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void setTexts(Player player) {
+    private void updateQRCodes(String uid) {
+        ArrayList<QRCode> qrList = new ArrayList<>();
+
+    }
+
+    public void setTexts() {
         // sets the player data TextViews to show the proper data
         TextView userNameView = findViewById(R.id.playerProfileUserNameTextView);
         userNameView.setText(player.getUsername());
