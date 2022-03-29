@@ -134,22 +134,30 @@ public class LeaderboardFragment extends Fragment {
             mode = 1;
             scoreType.setText("Total Score");
             playerListAdapter.setType(1);
+            bubbleSort(playersArrayList, mode);
+            playerListAdapter.notifyDataSetChanged();
         });
         highestButton.setOnClickListener(view -> {
             mode = 2;
             scoreType.setText("Highest Score");
             playerListAdapter.setType(2);
+            bubbleSort(playersArrayList, mode);
+            playerListAdapter.notifyDataSetChanged();
 
         });
         countButton.setOnClickListener(view -> {
             mode = 3;
             scoreType.setText("QR Codes");
             playerListAdapter.setType(3);
+            bubbleSort(playersArrayList, mode);
+            playerListAdapter.notifyDataSetChanged();
         });
         lowestButton.setOnClickListener(view -> {
             mode = 4;
             scoreType.setText("Lowest Score");
             playerListAdapter.setType(4);
+            bubbleSort(playersArrayList, mode);
+            playerListAdapter.notifyDataSetChanged();
         });
 
 
