@@ -19,19 +19,14 @@ import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.classes.QRCode;
-import com.cmput301w22t13.inquiry.db.Database;
 import com.cmput301w22t13.inquiry.ui.leaderboard.LeaderboardFragment;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 
 import java.util.ArrayList;
 
 public class PlayerProfileActivity extends AppCompatActivity {
 
-    private final Database db = new Database();
-    Player player;
-
+    private Player player;
     private final Auth auth = new Auth();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,42 +34,30 @@ public class PlayerProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player_profile);
 
         // gets player data from database to be displayed
-        String uid = getIntent().getStringExtra("uid");
+        player = (Player) getIntent().getSerializableExtra("Player");
+        player.fetchQRCodes(Task -> {});
         //refreshes textViews every 2 seconds so if userdata changes it updates
-        Player player = (Player) getIntent().getSerializableExtra("Player");
         ArrayList<Player> players = new ArrayList<>();
         LeaderboardFragment.getPlayers(players);
+        LeaderboardFragment.bubbleSort(players,1);
+        for (int i = 0; i < players.size(); i++){
+            if (players.get(i).getUid().equals(player.getUid())) player.setRank(i+1);
+        }
+        setTexts();
         final Handler timerHandler = new Handler();
         Runnable timerRunnable = new Runnable() {
             @Override
             public void run() {
-                db.getById("users", uid).addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document != null && document.exists()) {
-                            player = new Player((String) document.get("username"), (String) document.get("id"),true);
-                            //refreshes textViews after 1/2 of a second to give qr codes time to fetch
-
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                public void run() {
-                                    LeaderboardFragment.bubbleSort(players,1);
-                                    for (int i = 0; i < players.size(); i++){
-                                        if (players.get(i).getUid().equals(player.getUid())) player.setRank(i+1);
-                                    }
-                                    setTexts();
-                                }
-                            }, 500);
-
-
-                        } else finish();
-                    } else finish();
-                });
-                timerHandler.postDelayed(this, 2000);
+                //refreshes textViews after 1/2 of a second to give qr codes time to fetch
+                    LeaderboardFragment.bubbleSort(players,1);
+                    for (int i = 0; i < players.size(); i++){
+                        if (players.get(i).getUid().equals(player.getUid())) player.setRank(i+1);
+                    }
+                    setTexts();
+                timerHandler.postDelayed(this, 500);
             }
         };
         timerHandler.post(timerRunnable);
-
 
 
         // moves to the gameStatus activity if the button is pressed

@@ -117,7 +117,9 @@ public class LeaderboardFragment extends Fragment {
         playersListView.setClickable(true);
         playersListView.setOnItemClickListener((adapterView, view, i, l) -> {
             Intent intent = new Intent(getActivity(), PlayerProfileActivity.class);
-            intent.putExtra("uid",playersArrayList.get(i).getUid());
+            Player player = new Player(playersArrayList.get(i).getUsername(), playersArrayList.get(i).getUid(),true);
+            intent.putExtra("Player", player);
+            //intent.putExtra("uid",playersArrayList.get(i).getUid());
             startActivity(intent);
         });
 
