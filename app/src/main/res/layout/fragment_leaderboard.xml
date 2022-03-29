@@ -43,28 +43,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Rank"
-        android:textSize="25dp"
+        android:textSize="20dp"
         app:layout_constraintStart_toStartOf="@+id/leaderBoardListView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Player"
-        android:textSize="25dp"
+        android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingRight="10sp"/>
 
     <TextView
         android:id="@+id/leaderboard_score_type_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Total Score"
-        android:textSize="25dp"
+        android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="@+id/leaderBoardListView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <ListView
         android:id="@+id/leaderBoardListView"
@@ -77,7 +80,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        android:paddingBottom="45dp"/>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -86,7 +90,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:orientation="horizontal"
-        android:weightSum="4"
+        android:weightSum="5.5"
         app:layout_constraintBottom_toTopOf="@+id/leaderBoardEditTextSearch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -97,7 +101,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Total" />
+            android:text="Total"
+            />
 
         <Button
             android:id="@+id/highest_score_button"
