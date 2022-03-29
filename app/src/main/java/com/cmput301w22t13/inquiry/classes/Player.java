@@ -18,6 +18,7 @@ public class Player {
     private String userName;
     private String email;
     private ArrayList<QRCode> qrCodes = new ArrayList<QRCode>();
+    private int rank = -1;
 
     Database db;
 
@@ -137,9 +138,15 @@ public class Player {
         this.email = email;
     }
 
+    public void setRank(int rank){ this.rank = rank; }
+
+    public void setQrCodes(ArrayList<QRCode> qrCodes) {
+        this.qrCodes = (ArrayList<QRCode>) qrCodes.clone();
+    }
+
     public int getRank() {
         // returns Rank of player
-        return -1;
+        return this.rank;
     }
 
     public int getTotalScore() {

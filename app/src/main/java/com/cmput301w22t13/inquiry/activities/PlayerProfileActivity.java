@@ -9,17 +9,25 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.classes.Player;
+import com.cmput301w22t13.inquiry.classes.QRCode;
 import com.cmput301w22t13.inquiry.db.Database;
+import com.cmput301w22t13.inquiry.ui.leaderboard.LeaderboardFragment;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+
+
+import java.util.ArrayList;
 
 public class PlayerProfileActivity extends AppCompatActivity {
 
     private final Database db = new Database();
+    Player player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,18 +36,40 @@ public class PlayerProfileActivity extends AppCompatActivity {
 
         // gets player data from database to be displayed
         String uid = getIntent().getStringExtra("uid");
-        db.getById("users", uid).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document != null && document.exists()) {
-                    Player player = new Player((String) document.get("username"), (String) document.get("id"), true);
-                    player.fetchQRCodes(qrCodes -> {
-                        setTexts(player);
-                    });
-                } else finish();
-            } else finish();
-        });
+        //refreshes textViews every 2 seconds so if userdata changes it updates
 
+        ArrayList<Player> players = new ArrayList<>();
+        LeaderboardFragment.getPlayers(players);
+        final Handler timerHandler = new Handler();
+        Runnable timerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                db.getById("users", uid).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document != null && document.exists()) {
+                            player = new Player((String) document.get("username"), (String) document.get("id"),true);
+                            //refreshes textViews after 1/2 of a second to give qr codes time to fetch
+
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                public void run() {
+                                    LeaderboardFragment.bubbleSort(players,1);
+                                    for (int i = 0; i < players.size(); i++){
+                                        if (players.get(i).getUid().equals(player.getUid())) player.setRank(i+1);
+                                    }
+                                    setTexts();
+                                }
+                            }, 500);
+
+
+                        } else finish();
+                    } else finish();
+                });
+                timerHandler.postDelayed(this, 2000);
+            }
+        };
+        timerHandler.post(timerRunnable);
 
 
         // moves to the gameStatus activity if the button is pressed
@@ -48,6 +78,7 @@ public class PlayerProfileActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), PlayerStatusActivity.class);
             intent.putExtra("uid", uid);
             //startActivity(intent); removed until getQRCodes implemented
+            setTexts();
         });
 
         // ends activity
@@ -56,7 +87,12 @@ public class PlayerProfileActivity extends AppCompatActivity {
 
     }
 
-    private void setTexts(Player player) {
+    private void updateQRCodes(String uid) {
+        ArrayList<QRCode> qrList = new ArrayList<>();
+
+    }
+
+    public void setTexts() {
         // sets the player data TextViews to show the proper data
         TextView userNameView = findViewById(R.id.playerProfileUserNameTextView);
         userNameView.setText(player.getUsername());

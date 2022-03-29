@@ -8,6 +8,7 @@ package com.cmput301w22t13.inquiry.ui.profile;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,9 +29,10 @@ import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.databinding.FragmentProfileBinding;
 import com.cmput301w22t13.inquiry.db.onProfileDataListener;
+import com.cmput301w22t13.inquiry.ui.leaderboard.LeaderboardFragment;
 
-import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class ProfileFragment extends Fragment {
@@ -68,23 +70,54 @@ public class ProfileFragment extends Fragment {
 
                 if(usernameString != null) {
                     user = new Player(usernameString, uidString, true);
-                    user.fetchQRCodes(qrCodes -> {
-                        String lowestScoreString = "Lowest Score: " + user.getLowestScore();
-                        lowestScoreText.setText(lowestScoreString);
-                        String highestScoreString = "Highest Score: " + user.getHighestScore();
-                        highestScoreText.setText(highestScoreString);
-                        String totalScoreString = "Total Score: " + user.getTotalScore();
-                        totalScoreText.setText(totalScoreString);
-                        String QRCodeCountString = user.getQRCodeCount() + " QR Codes";
-                        totalQrsText.setText(QRCodeCountString);
-                    });
+                    String lowestScoreString = "Lowest Score: " + user.getLowestScore();
+                    lowestScoreText.setText(lowestScoreString);
+                    String highestScoreString = "Highest Score: " + user.getHighestScore();
+                    highestScoreText.setText(highestScoreString);
+                    String totalScoreString = "Total Score: " + user.getTotalScore();
+                    totalScoreText.setText(totalScoreString);
+                    String QRCodeCountString = user.getQRCodeCount() + " QR Codes";
+                    totalQrsText.setText(QRCodeCountString);
+
+                    ArrayList<Player> players = new ArrayList<>();
+                    LeaderboardFragment.getPlayers(players);
+
+                    final Handler timerHandler = new Handler();
+                    Runnable timerRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            LeaderboardFragment.bubbleSort(players,1);
+                            for (int i = 0; i < players.size(); i++){
+                                if (players.get(i).getUid().equals(user.getUid())) user.setRank(i+1);
+                            }
+                            LeaderboardFragment.bubbleSort(players,2);
+                            int highestRank = -1;
+                            for (int i = 0; i < players.size(); i++){
+                                if (players.get(i).getUid().equals(user.getUid())) highestRank = i+1;
+                            }
+                            LeaderboardFragment.bubbleSort(players,3);
+                            int qrCodeCountRank = -1;
+                            for (int i = 0; i < players.size(); i++){
+                                if (players.get(i).getUid().equals(user.getUid())) qrCodeCountRank = i+1;
+                            }
+                            String lowestScoreString = "Lowest Score: " + user.getLowestScore();
+                            lowestScoreText.setText(lowestScoreString);
+                            String highestScoreString = "Highest Score: " + user.getHighestScore() + " Rank: " + highestRank;
+                            highestScoreText.setText(highestScoreString);
+                            String totalScoreString = "Total Score: " + user.getTotalScore() + " Rank: " + user.getRank();
+                            totalScoreText.setText(totalScoreString);
+                            String QRCodeCountString = user.getQRCodeCount() + " QR Codes"+ " Rank: " + qrCodeCountRank;
+                            totalQrsText.setText(QRCodeCountString);
+                            timerHandler.postDelayed(this, 500);
+                        }
+
+                    };
+                    timerHandler.post(timerRunnable);
                 }
                 if(emailString != null) {
                     user.setEmail(emailString);
                     emailText.setText(emailString);
                 }
-
-
 
                 usernameText.setText(usernameString);
 
