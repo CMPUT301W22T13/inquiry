@@ -26,6 +26,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.auth.Auth;
+import com.cmput301w22t13.inquiry.classes.LeaderBoard;
 import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.databinding.FragmentProfileBinding;
 import com.cmput301w22t13.inquiry.db.onProfileDataListener;
@@ -69,6 +70,7 @@ public class ProfileFragment extends Fragment {
                 String uidString = (String) data.get("uid");
 
                 if(usernameString != null) {
+                    // sets the initial look of the textviews
                     user = new Player(usernameString, uidString, true);
                     String lowestScoreString = "Lowest Score: " + user.getLowestScore();
                     lowestScoreText.setText(lowestScoreString);
@@ -80,27 +82,28 @@ public class ProfileFragment extends Fragment {
                     totalQrsText.setText(QRCodeCountString);
 
                     ArrayList<Player> players = new ArrayList<>();
-                    LeaderboardFragment.getPlayers(players);
+                    LeaderBoard.getPlayers(players);
 
+                    // continously sets the textviews and finds the ranks as new data comes in for the player
                     final Handler timerHandler = new Handler();
                     Runnable timerRunnable = new Runnable() {
                         @Override
                         public void run() {
-                            LeaderboardFragment.bubbleSort(players,1);
+                            LeaderBoard.bubbleSort(players,1);
                             for (int i = 0; i < players.size(); i++){
                                 if (players.get(i).getUid().equals(user.getUid())) user.setRank(i+1);
                             }
-                            LeaderboardFragment.bubbleSort(players,2);
+                            LeaderBoard.bubbleSort(players,2);
                             int highestRank = -1;
                             for (int i = 0; i < players.size(); i++){
                                 if (players.get(i).getUid().equals(user.getUid())) highestRank = i+1;
                             }
-                            LeaderboardFragment.bubbleSort(players,3);
+                            LeaderBoard.bubbleSort(players,3);
                             int qrCodeCountRank = -1;
                             for (int i = 0; i < players.size(); i++){
                                 if (players.get(i).getUid().equals(user.getUid())) qrCodeCountRank = i+1;
                             }
-                            LeaderboardFragment.bubbleSort(players,4);
+                            LeaderBoard.bubbleSort(players,4);
                             int lowestRank = -1;
                             for (int i = 0; i < players.size(); i++){
                                 if (players.get(i).getUid().equals(user.getUid())) lowestRank = i+1;

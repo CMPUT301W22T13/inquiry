@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.activities.PlayerProfileActivity;
+import com.cmput301w22t13.inquiry.classes.LeaderBoard;
 import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.databinding.FragmentLeaderboardBinding;
 import com.cmput301w22t13.inquiry.db.Database;
@@ -93,38 +94,38 @@ public class LeaderboardFragment extends Fragment {
 
 
         });
+        // initializations
         ArrayList<Player> playersArrayList = new ArrayList<>();
         ListView playersListView = root.findViewById(R.id.leaderBoardListView);
         LeaderBoardRankListAdapter playerListAdapter = new LeaderBoardRankListAdapter(requireActivity(), playersArrayList);
         playersListView.setAdapter(playerListAdapter);
         playersListView.setClickable(true);
-
-        getPlayers(playersArrayList);
-        bubbleSort(playersArrayList, 1);
+        LeaderBoard.getPlayers(playersArrayList);
+        LeaderBoard.bubbleSort(playersArrayList, 1);
         playerListAdapter.notifyDataSetChanged();
 
+        // refreshes the list every second and sorts it again
         final Handler timerHandler = new Handler();
         Runnable timerRunnable = new Runnable() {
             @Override
             public void run() {
-                bubbleSort(playersArrayList, mode);
+                LeaderBoard.bubbleSort(playersArrayList, mode);
                 playerListAdapter.notifyDataSetChanged();
                 timerHandler.postDelayed(this, 1000);
             }
         };
         timerHandler.post(timerRunnable);
 
-
+        // when player clicks on the leaderboard to go to a players profile
         playersListView.setClickable(true);
         playersListView.setOnItemClickListener((adapterView, view, i, l) -> {
             Intent intent = new Intent(getActivity(), PlayerProfileActivity.class);
             Player player = new Player(playersArrayList.get(i).getUsername(), playersArrayList.get(i).getUid(),true);
             intent.putExtra("Player", player);
-            //intent.putExtra("uid",playersArrayList.get(i).getUid());
             startActivity(intent);
         });
 
-
+        //options for changing leaderboard view
         Button totalButton = root.findViewById(R.id.total_score_button);
         Button highestButton = root.findViewById(R.id.highest_score_button);
         Button countButton = root.findViewById(R.id.qrcode_count_button);
@@ -134,14 +135,14 @@ public class LeaderboardFragment extends Fragment {
             mode = 1;
             scoreType.setText("Total Score");
             playerListAdapter.setType(1);
-            bubbleSort(playersArrayList, mode);
+            LeaderBoard.bubbleSort(playersArrayList, mode);
             playerListAdapter.notifyDataSetChanged();
         });
         highestButton.setOnClickListener(view -> {
             mode = 2;
             scoreType.setText("Highest Score");
             playerListAdapter.setType(2);
-            bubbleSort(playersArrayList, mode);
+            LeaderBoard.bubbleSort(playersArrayList, mode);
             playerListAdapter.notifyDataSetChanged();
 
         });
@@ -149,14 +150,14 @@ public class LeaderboardFragment extends Fragment {
             mode = 3;
             scoreType.setText("QR Codes");
             playerListAdapter.setType(3);
-            bubbleSort(playersArrayList, mode);
+            LeaderBoard.bubbleSort(playersArrayList, mode);
             playerListAdapter.notifyDataSetChanged();
         });
         lowestButton.setOnClickListener(view -> {
             mode = 4;
             scoreType.setText("Lowest Score");
             playerListAdapter.setType(4);
-            bubbleSort(playersArrayList, mode);
+            LeaderBoard.bubbleSort(playersArrayList, mode);
             playerListAdapter.notifyDataSetChanged();
         });
 
@@ -164,63 +165,8 @@ public class LeaderboardFragment extends Fragment {
 
         return root;
     }
-    public static void getPlayers(ArrayList<Player> playersArrayList){
-        Task<QuerySnapshot> playersQuery = FirebaseFirestore.getInstance().collection("users").get();
-        playersQuery.addOnCompleteListener(task -> {
-            if (playersQuery.isSuccessful()) {
-                QuerySnapshot queryResults = playersQuery.getResult();
-                List<DocumentSnapshot> documents = queryResults.getDocuments();
-                if (documents.size() != 0) {
-                    for (DocumentSnapshot document : documents) {
-                        Player newPlayer = new Player((String) document.get("username"),(String) document.get("id"),true);
-                        playersArrayList.add(newPlayer);
-                    }
-                } else Log.i("LeaderboardFragment", "documents empty");
-            } else Log.i("LeaderboardFragment", "query not successful");
-        });
-    }
 
-    public static void bubbleSort(ArrayList<Player> a, int b){
-        boolean sorted = false;
-        Player temp;
-        while(!sorted){
-            sorted = true;
-            for (int i = a.size()-1; i > 0; i--){
-                if (b == 1){
-                    if (a.get(i).getTotalScore() > a.get(i-1).getTotalScore()){
-                        temp = a.get(i);
-                        a.set(i,a.get(i-1));
-                        a.set(i-1,temp);
-                        sorted = false;
-                    }
-                }
-                if (b == 2){
-                    if (a.get(i).getHighestScore() > a.get(i-1).getHighestScore()){
-                        temp = a.get(i);
-                        a.set(i,a.get(i-1));
-                        a.set(i-1,temp);
-                        sorted = false;
-                    }
-                }
-                if (b == 3){
-                    if (a.get(i).getQRCodeCount() > a.get(i-1).getQRCodeCount()){
-                        temp = a.get(i);
-                        a.set(i,a.get(i-1));
-                        a.set(i-1,temp);
-                        sorted = false;
-                    }
-                }
-                if (b == 4){
-                    if (a.get(i).getLowestScore() < a.get(i-1).getLowestScore() && a.get(i).getLowestScore() != 0){
-                        temp = a.get(i);
-                        a.set(i,a.get(i-1));
-                        a.set(i-1,temp);
-                        sorted = false;
-                    }
-                }
-            }
-        }
-    }
+
 
     @Override
     public void onDestroyView() {
