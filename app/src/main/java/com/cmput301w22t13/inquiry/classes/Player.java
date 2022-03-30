@@ -22,7 +22,6 @@ public class Player implements Serializable {
     private ArrayList<QRCode> qrCodes = new ArrayList<QRCode>();
     private int rank = -1;
 
-    Database db;
     private final boolean isOwner;
 
     public Player(String userName, String uid) {
@@ -68,9 +67,9 @@ public class Player implements Serializable {
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("qr_codes", FieldValue.arrayUnion(newQrRef));
 
-        if (db == null) {
-            db = new Database();
-        }
+
+        Database db = new Database();
+
 
         this.fetchQRCodes(userQrs -> {
             Log.d("QRCode", "After fetchQRCodes");
@@ -93,9 +92,7 @@ public class Player implements Serializable {
     public void fetchQRCodes(onQrDataListener onSuccess) {
         ArrayList<QRCode> QrList = new ArrayList<>();
 
-        if (db == null) {
-            db = new Database();
-        }
+        Database db = new Database();
 
         db.getById("users", this.uid).addOnCompleteListener(userTask -> {
             if (userTask.isSuccessful()) {
@@ -222,9 +219,7 @@ public class Player implements Serializable {
 
     // updates user data in database
     public void updateUser(Map<String, Object> userData) {
-        if (db == null) {
-            db = new Database();
-        }
+        Database db = new Database();
         db.update("users", this.uid, userData);
     }
 
