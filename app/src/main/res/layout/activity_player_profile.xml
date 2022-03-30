@@ -32,7 +32,6 @@
         android:layout_marginTop="5dp"
         android:text="UserName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playerProfileAvatarImageView" />
 
@@ -40,12 +39,11 @@
         android:id="@+id/playerProfileQRCodeCountTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="44dp"
         android:drawableLeft="@drawable/ic_dashboard_black_24dp"
         android:text="0 QR Codes"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playerProfileUserNameTextView" />
+        tools:layout_editor_absoluteY="297dp" />
 
     <TextView
         android:id="@+id/playerProfileTotalScoreTextView"
@@ -56,7 +54,7 @@
         android:drawableLeft="@drawable/ic_baseline_insights_24"
         android:text="Total Score: 0"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.857"
+        app:layout_constraintHorizontal_bias="0.839"
         app:layout_constraintStart_toEndOf="@+id/playerProfileQRCodeCountTextView"
         app:layout_constraintTop_toBottomOf="@+id/playerProfileUserNameTextView" />
 
@@ -64,7 +62,7 @@
         android:id="@+id/playerProfileHighestScoreTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
+        android:layout_marginStart="44dp"
         android:layout_marginTop="20dp"
         android:drawableLeft="@drawable/ic_highestscore"
         android:text="Highest Score: 0"
