@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.auth.Auth;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.color.DynamicColors;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -53,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
         com.cmput301w22t13.inquiry.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        DynamicColors.applyToActivitiesIfAvailable(this.getApplication());
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 

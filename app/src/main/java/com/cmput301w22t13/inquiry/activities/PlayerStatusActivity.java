@@ -7,6 +7,7 @@ package com.cmput301w22t13.inquiry.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cmput301w22t13.inquiry.R;
+import com.cmput301w22t13.inquiry.classes.LeaderBoard;
 import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.classes.PlayerStatusQRCodeListAdapter;
 import com.cmput301w22t13.inquiry.classes.QRCode;
@@ -27,10 +29,7 @@ import java.util.ArrayList;
 
 public class PlayerStatusActivity extends AppCompatActivity {
 
-    private ArrayList<QRCode> qrCodeArrayList;
-    private ArrayAdapter<QRCode> listAdapter;
-    private final Database db = new Database();
-    private Player player;
+    private ArrayList<QRCode> qrCodeArrayList = new ArrayList<>();
 
 
     @Override
@@ -39,36 +38,33 @@ public class PlayerStatusActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player_status);
 
         // gets player data from database to be displayed
-        Intent intent = getIntent();
-        String uid =  intent.getStringExtra("uid");
+        Player player = (Player) getIntent().getSerializableExtra("Player");
         TextView playerName = findViewById(R.id.playerDetailsTextView);
-
-       db.getById("users", uid).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document != null && document.exists()) {
-                    player = new Player((String) document.get("username"), uid,true);
-                    player.fetchQRCodes(qrCodes -> {
-                        updateList(player);
-                    });
-
-                } else finish();
-            } else finish();
-        });
+        playerName.setText(player.getUsername());
 
 
 
-
-
-
-
-
-/*
         ListView qrCodeListView = findViewById(R.id.playerQrCodesListView);
-        qrCodeArrayList = player.getQRCodes();
+        player.fetchQRCodes(Task -> {});
+        qrCodeArrayList.addAll(player.getQRCodes());
+
         PlayerStatusQRCodeListAdapter qrCodeListAdapter = new PlayerStatusQRCodeListAdapter(this, qrCodeArrayList, player);
         qrCodeListView.setAdapter(qrCodeListAdapter);
         qrCodeListView.setClickable(true);
+
+        final Handler timerHandler = new Handler();
+        Runnable timerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                qrCodeArrayList.clear();
+                qrCodeArrayList.addAll(player.getQRCodes());
+                bubbleSortQRCodes(qrCodeArrayList);
+                qrCodeListAdapter.notifyDataSetChanged();
+                timerHandler.postDelayed(this, 500);
+            }
+        };
+        timerHandler.post(timerRunnable);
+
 
         qrCodeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -77,9 +73,6 @@ public class PlayerStatusActivity extends AppCompatActivity {
                 // move to qr code fragment or activity
             }
         });
-
-         */
-
 
 
 
@@ -100,5 +93,19 @@ public class PlayerStatusActivity extends AppCompatActivity {
 
     }
 
-
+    public static void bubbleSortQRCodes(ArrayList<QRCode> a){
+        boolean sorted = false;
+        QRCode temp;
+        while(!sorted){
+            sorted = true;
+            for (int i = a.size()-1; i > 0; i--){
+                if (a.get(i).getScore() > a.get(i-1).getScore()){
+                    temp = a.get(i);
+                    a.set(i,a.get(i-1));
+                    a.set(i-1,temp);
+                    sorted = false;
+                }
+            }
+        }
+    }
 }

@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Source;
@@ -171,6 +172,8 @@ public class Database implements Serializable {
      *                   note: this will overwrite the existing data
      */
     public void update(String collection, String id, Map<String, Object> data) {
+        Log.d("DATABASE", "id: " + id);
+        Log.d("DATABASE", "update: " + data);
         this.db.collection(collection)
                 .document(id)
                 .update(data)
@@ -183,8 +186,25 @@ public class Database implements Serializable {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                        Log.w("DATABSE", "Error updating document", e);
                     }
                 });
+    }
+
+    public void remove(String collection,String id){
+       this.db.collection(collection).document(id).delete()
+       .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+
     }
 }
