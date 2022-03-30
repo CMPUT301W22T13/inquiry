@@ -211,7 +211,7 @@ public class Player implements Serializable {
         } else return 0;
     }
 
-    public int getQRCodeCount() {
+    public Integer getQRCodeCount() {
         // returns amount of QRCodes scanned by player from database
         if (this.qrCodes.size() != 0) return this.qrCodes.size();
         else return 0;

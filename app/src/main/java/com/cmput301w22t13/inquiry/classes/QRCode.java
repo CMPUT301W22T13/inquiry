@@ -120,7 +120,7 @@ public class QRCode {
     /**
      * @return the score that was calculated
      */
-    public int getScore() {
+    public Integer getScore() {
         return this.score;
     }
 

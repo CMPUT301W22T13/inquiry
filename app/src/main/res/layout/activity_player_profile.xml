@@ -22,6 +22,7 @@
         android:text="UserName"
         android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playerProfileBackButton" />
 
@@ -66,6 +67,7 @@
         android:layout_marginEnd="10dp"
         android:drawableLeft="@drawable/ic_lowestscore"
         android:text="Lowest Score: 0"
+        app:layout_constraintBottom_toTopOf="@+id/playerProfileRankingTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playerProfileTotalScoreTextView" />
 
@@ -87,6 +89,7 @@
         android:text="GameStatus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playerProfileRankingTextView" />
 
