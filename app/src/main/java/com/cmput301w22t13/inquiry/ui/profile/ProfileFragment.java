@@ -7,6 +7,7 @@ package com.cmput301w22t13.inquiry.ui.profile;
  */
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -31,6 +32,11 @@ import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.databinding.FragmentProfileBinding;
 import com.cmput301w22t13.inquiry.db.onProfileDataListener;
 import com.cmput301w22t13.inquiry.ui.leaderboard.LeaderboardFragment;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.encoder.QRCode;
 
 
 import java.util.ArrayList;
@@ -128,6 +134,18 @@ public class ProfileFragment extends Fragment {
                 }
 
                 usernameText.setText(usernameString);
+
+                if(uidString != null) {
+                    try {
+                        // generate a 150x150 QR code
+                        BitMatrix bm = new QRCodeWriter().encode(uidString, BarcodeFormat.QR_CODE, 150, 150);
+
+//                    if(bm != null) {
+//                        image_view.setImageBitmap(bm);
+//                    }
+                    } catch (WriterException e) {
+                    }
+                }
 
                 spinner.setVisibility(View.GONE);
                 usernameText.setVisibility(View.VISIBLE);
