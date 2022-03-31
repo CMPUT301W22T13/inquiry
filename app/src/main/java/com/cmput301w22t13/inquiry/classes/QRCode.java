@@ -11,6 +11,7 @@ import com.cmput301w22t13.inquiry.db.Database;
 import com.google.android.gms.tasks.Task;
 import com.google.common.hash.Hashing;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -18,6 +19,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.nio.charset.StandardCharsets;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +28,7 @@ import java.util.Map;
 public class QRCode {
     private final String hash;
     private int score;
+    private ArrayList<String> playerList;
 
     Database db = new Database();
 
@@ -130,4 +133,26 @@ public class QRCode {
     public String getName() {
         return QRName.fromHash(this.hash);
     }
+
+    public ArrayList<Player> getPlayerList(){
+
+        ArrayList<Player> playerList = new ArrayList<>();
+        db.arrayQuery("users","qr_codes",this.hash).addOnCompleteListener(task ->{
+            if (task.isSuccessful()){
+                List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                int size = documents.size();
+                if (size!= 0) {
+                    for (DocumentSnapshot document: documents) {
+                        String username = (String) document.get("username");
+                        Player player = new Player(username, (String)document.get("id"));
+                        playerList.add(player);
+
+                    }
+                }
+            }
+        });
+        return playerList;
+
+    }
+
 }
