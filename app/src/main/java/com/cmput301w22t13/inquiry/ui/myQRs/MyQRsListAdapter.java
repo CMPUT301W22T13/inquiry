@@ -40,11 +40,17 @@ public class MyQRsListAdapter extends RecyclerView.Adapter<MyQRsListAdapter.View
         holder.nameTextView.setText(name);
         holder.initialsTextView.setText(initials);
         holder.scoreTextView.setText(String.valueOf(score) + " pts");
+
+
     }
 
     @Override
     public int getItemCount() {
         return qrCodes.size();
+    }
+
+    public QRCode getQRAt(int position){
+        return  qrCodes.get(position); //returns qr object at that position
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

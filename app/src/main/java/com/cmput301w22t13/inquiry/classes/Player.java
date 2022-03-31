@@ -63,6 +63,8 @@ public class Player implements Serializable {
         // see: stackoverflow.com/a/51983589/12955797
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("qr_codes", FieldValue.arrayUnion(newQrRef));
+
+
         Database db = new Database();
         this.fetchQRCodes(userQrs -> {
             if(userQrs != null) {
@@ -81,6 +83,21 @@ public class Player implements Serializable {
             }
         });
     }
+
+    public void deleteQRCode(DocumentReference newQrRef, String hash) {
+        // delete the qr code's reference from the user's qr_codes array
+        // see: stackoverflow.com/a/51983589/12955797
+
+
+        final Map<String, Object> removeUserFromArrayMap = new HashMap<>();
+        removeUserFromArrayMap.put("qr_codes", FieldValue.arrayRemove(newQrRef));
+
+
+        Database db = new Database();
+
+        db.update("users", this.uid, removeUserFromArrayMap);
+    }
+
 
     public void fetchQRCodes(onQrDataListener onSuccess) {
         ArrayList<QRCode> QrList = new ArrayList<>();
