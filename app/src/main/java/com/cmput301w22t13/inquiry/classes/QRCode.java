@@ -134,6 +134,11 @@ public class QRCode {
         return QRName.fromHash(this.hash);
     }
 
+
+    /**
+     *
+     * @return an ArrayList with all the players containing matching Qr codes
+     */
     public ArrayList<Player> getPlayerList(){
 
         ArrayList<Player> playerList = new ArrayList<>();
