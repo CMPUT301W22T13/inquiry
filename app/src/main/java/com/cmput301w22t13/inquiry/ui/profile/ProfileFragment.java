@@ -146,9 +146,10 @@ public class ProfileFragment extends Fragment {
                     ImageView shareProfileQrCode = (ImageView) root.findViewById(R.id.share_profile_qr);
                     int size = 200;
                     try {
-                        // generate a 150x150 QR code
-                        BitMatrix bm = new QRCodeWriter().encode(uidString, BarcodeFormat.QR_CODE, size, size);
-                        Bitmap bitmap = Bitmap.createBitmap(IntStream.range(0, size).flatMap(h -> IntStream.range(0, size).map(w -> bm.get(w, h) ? Color.argb(100, 170, 0, 245) : Color.argb(0, 0, 0, 0))).toArray(),
+                        // generate a 200x200 QR code encoded with the user's id
+                        BitMatrix bm = new QRCodeWriter().encode("INQUIRY_USER_" + uidString, BarcodeFormat.QR_CODE, size, size);
+                        int qrColor = getResources().getString(R.string.theme_mode).equals("dark") ? Color.argb(255, 176, 116,255) : Color.argb(200, 140, 60,255);
+                        Bitmap bitmap = Bitmap.createBitmap(IntStream.range(0, size).flatMap(h -> IntStream.range(0, size).map(w -> bm.get(w, h) ? qrColor : Color.argb(0, 0, 0, 0))).toArray(),
                                 size, size, Bitmap.Config.ARGB_8888);
                         shareProfileQrCode.setImageBitmap(bitmap);
                     } catch (WriterException e) {
