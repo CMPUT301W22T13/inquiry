@@ -65,8 +65,9 @@ public class PlayerProfileActivity extends AppCompatActivity {
         Button gameStatusButton = findViewById(R.id.playerProfileGameStatusButton);
         gameStatusButton.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), PlayerStatusActivity.class);
-            intent.putExtra("Player", player);
-            //startActivity(intent); removed until getQRCodes implemented
+            Player newPlayer = new Player(player.getUsername(), player.getUid(),true);
+            intent.putExtra("Player", newPlayer);
+            startActivity(intent);
             setTexts();
         });
 

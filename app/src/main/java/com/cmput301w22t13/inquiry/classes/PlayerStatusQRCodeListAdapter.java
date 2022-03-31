@@ -2,6 +2,7 @@ package com.cmput301w22t13.inquiry.classes;
 /** a custom listAdapter that uses the activity_player_status.xml
  * sets the views in the xml depending on the player chosen and their QRCodes
  */
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,9 +29,10 @@ public class PlayerStatusQRCodeListAdapter extends ArrayAdapter {
         super(context,0,qrCodes);
         this.qrCodes = qrCodes;
         this.context = context;
-        this.player = player;
+        //this.player = player;
     }
 
+    @SuppressLint("SetTextI18n")
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -42,9 +44,9 @@ public class PlayerStatusQRCodeListAdapter extends ArrayAdapter {
         TextView playerTextView = view.findViewById(R.id.QRCodePlayerTextView);
         TextView numberTextView = view.findViewById(R.id.QRCodeNumberTextView);
         TextView scoreTextView = view.findViewById(R.id.QRCodeScoreTextView);
-        playerTextView.setText(player.getUsername()); // player class not complete may need to change
-        numberTextView.setText(position+1);
-        scoreTextView.setText(qrCode.getScore());
+        playerTextView.setText(String.valueOf(position + 1)); // player class not complete may need to change
+        numberTextView.setText(qrCode.getName());
+        scoreTextView.setText(qrCode.getScore().toString());
 
 
         return view;
