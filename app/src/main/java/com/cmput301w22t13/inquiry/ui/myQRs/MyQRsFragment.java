@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -42,7 +41,12 @@ public class MyQRsFragment extends Fragment {
 
         TextView emptyStateText = root.findViewById(R.id.myqrs_text_empty_state);
         RecyclerView recyclerView = root.findViewById(R.id.myqrs_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(root.getContext());
+//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+//                layoutManager.getOrientation());
+//        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.setLayoutManager(layoutManager);
 
         myQRsViewModel.getPlayer().fetchQRCodes(new onQrDataListener() {
             @Override

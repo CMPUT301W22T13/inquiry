@@ -28,6 +28,8 @@ public class MyQRsListAdapter extends RecyclerView.Adapter<MyQRsListAdapter.View
     @Override
     public MyQRsListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = View.inflate(context, R.layout.myqrs_list_item, null);
+        RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        view.setLayoutParams(lp);
         return new ViewHolder(view);
     }
 
