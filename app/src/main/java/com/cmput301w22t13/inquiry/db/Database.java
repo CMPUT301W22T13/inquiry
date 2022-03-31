@@ -16,9 +16,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Source;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class Database {
+public class Database implements Serializable {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     /**
@@ -171,6 +172,8 @@ public class Database {
      *                   note: this will overwrite the existing data
      */
     public void update(String collection, String id, Map<String, Object> data) {
+        Log.d("DATABASE", "id: " + id);
+        Log.d("DATABASE", "update: " + data);
         this.db.collection(collection)
                 .document(id)
                 .update(data)
@@ -183,7 +186,7 @@ public class Database {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                        Log.w("DATABSE", "Error updating document", e);
                     }
                 });
     }

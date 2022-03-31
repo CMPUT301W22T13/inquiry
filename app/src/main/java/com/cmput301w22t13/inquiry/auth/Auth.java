@@ -64,28 +64,28 @@ public class Auth {
                         getCurrentUser().updateProfile(profileUpdates);
 
                         // initialize player with new user details
-                        player = new Player(username, uid,true);
+                        player = new Player(username, uid, true);
                     }
                 }
             });
         } else {
             // initialize player with current user details
-            db.getById("users",currentUser.getUid()).addOnCompleteListener(task -> {
-                if(task.isSuccessful()){
+            db.getById("users", currentUser.getUid()).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
                     DocumentSnapshot document2 = task.getResult();
                     if (document2 != null && document2.exists()) {
-                        if(String.valueOf(document2.get("isOwner")) == "true"){
-                            player = new Owner((String) document2.get("username"), (String) document2.get("id"));
-                        }else{
-                            player = new Player((String) document2.get("username"), (String) document2.get("id"));
+                        if (String.valueOf(document2.get("isOwner")).equals("true")) {
+                            player = new Owner((String) document2.get("username"), (String) document2.get("id"), true);
+                        } else {
+                            player = new Player((String) document2.get("username"), (String) document2.get("id"), true);
                         }
 
                     }
-                } else{
+                } else {
                     Log.i("LeaderboardFragment", "No users found");
                 }
             });
-            player = new Player(currentUser.getDisplayName(), currentUser.getUid(), currentUser.getEmail());
+//            player = new Player(currentUser.getDisplayName(), currentUser.getUid(), currentUser.getEmail());
         }
     }
 

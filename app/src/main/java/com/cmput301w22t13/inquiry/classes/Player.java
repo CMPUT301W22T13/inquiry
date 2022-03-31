@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Player implements Serializable {
 
@@ -21,8 +22,7 @@ public class Player implements Serializable {
     private ArrayList<QRCode> qrCodes = new ArrayList<QRCode>();
     private int rank = -1;
 
-    Database db;
-    private boolean isOwner;
+    private final boolean isOwner;
 
     public Player(String userName, String uid) {
         this.userName = userName;
@@ -50,12 +50,15 @@ public class Player implements Serializable {
         }
         this.isOwner = false;
     }
-    public String getID(){
+
+    public String getID() {
         return this.uid;
     }
+
     /**
      * store a new new QRCode reference to the user's qr_codes field array
      * first checks if the QRCode already exists in the database
+     *
      * @param newQrRef the DocumentReference of the QRCode to be stored
      */
     public void addQRCode(DocumentReference newQrRef, String hash) {
@@ -66,19 +69,21 @@ public class Player implements Serializable {
 
 
         Database db = new Database();
+
+
         this.fetchQRCodes(userQrs -> {
-            if(userQrs != null) {
+            Log.d("QRCode", "After fetchQRCodes");
+            if (userQrs.size() > 0) {
                 for (QRCode qr : userQrs) {
-                    if(qr.getHash().equals(hash)) {
+                    if (qr.getHash().equals(hash)) {
                         Log.d("QRCode", "QRCode already exists in user");
-                    }
-                    else {
+                    } else {
                         db.update("users", this.uid, userMap);
                         Log.d("QRCode", "QRCode added to user");
                     }
                 }
-            }
-            else {
+            } else {
+                Log.d("QRCode", "QRCodes is null");
                 db.update("users", this.uid, userMap);
             }
         });
@@ -101,6 +106,7 @@ public class Player implements Serializable {
 
     public void fetchQRCodes(onQrDataListener onSuccess) {
         ArrayList<QRCode> QrList = new ArrayList<>();
+
         Database db = new Database();
 
         db.getById("users", this.uid).addOnCompleteListener(userTask -> {
@@ -114,7 +120,7 @@ public class Player implements Serializable {
                         qrRefs.get(i).get().addOnCompleteListener(qrTask -> {
                             if (qrTask.isSuccessful()) {
                                 DocumentSnapshot qr = qrTask.getResult();
-                                QRCode qrCode = new QRCode(qr.getString("hash"), qr.getLong("score").intValue());
+                                QRCode qrCode = new QRCode(qr.getString("hash"), Objects.requireNonNull(qr.getLong("score")).intValue());
                                 QrList.add(qrCode);
 
                                 if (finalI == qrRefs.size() - 1) {
@@ -124,8 +130,7 @@ public class Player implements Serializable {
                             }
                         });
                     }
-                }
-                else {
+                } else {
                     // TODO: error handling
                     onSuccess.getQrData(new ArrayList<QRCode>());
                 }
@@ -148,6 +153,7 @@ public class Player implements Serializable {
     public boolean getIsOwner() {
         return this.isOwner;
     }
+
     public String getEmail() {
         return email;
     }
@@ -164,7 +170,9 @@ public class Player implements Serializable {
         this.email = email;
     }
 
-    public void setRank(int rank){ this.rank = rank; }
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
 
     public void setQrCodes(ArrayList<QRCode> qrCodes) {
         this.qrCodes = (ArrayList<QRCode>) qrCodes.clone();
@@ -184,7 +192,7 @@ public class Player implements Serializable {
                 totalScore = totalScore + code.getScore();
             }
             return totalScore;
-        }else return 0;
+        } else return 0;
     }
 
     public int getHighestScore() {
@@ -199,7 +207,7 @@ public class Player implements Serializable {
                 }
             }
             return maxScore;
-        }else return 0;
+        } else return 0;
     }
 
     public int getLowestScore() {
@@ -215,10 +223,10 @@ public class Player implements Serializable {
                 }
             }
             return minScore;
-        }else return 0;
+        } else return 0;
     }
 
-    public int getQRCodeCount() {
+    public Integer getQRCodeCount() {
         // returns amount of QRCodes scanned by player from database
         if (this.qrCodes.size() != 0) return this.qrCodes.size();
         else return 0;
