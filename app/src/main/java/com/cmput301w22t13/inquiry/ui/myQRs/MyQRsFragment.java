@@ -107,8 +107,8 @@ public class MyQRsFragment extends Fragment {
             @Override
             public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-                        .addBackgroundColor(ContextCompat.getColor(requireActivity(), R.color.quantum_googred200))
                         .addActionIcon(R.drawable.ic_baseline_delete_24)
+                        .setActionIconTint(R.color.quantum_vanillaredA200)
                         .create()
                         .decorate();
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);

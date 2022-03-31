@@ -37,6 +37,11 @@ public class MyQRsListAdapter extends RecyclerView.Adapter<MyQRsListAdapter.View
         String initials = name.substring(0, 1);
         int score = qrCodes.get(position).getScore();
 
+        // add extra top margin to first item
+        if (position == 0) {
+            holder.itemView.setPadding(0, 40, 0, 0);
+        }
+
         holder.nameTextView.setText(name);
         holder.initialsTextView.setText(initials);
         holder.scoreTextView.setText(String.valueOf(score) + " pts");
