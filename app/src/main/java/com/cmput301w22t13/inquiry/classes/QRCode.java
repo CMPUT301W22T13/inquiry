@@ -109,11 +109,12 @@ public class QRCode {
         qrCode.put("score", this.score);
 
         // For location, we need to add a "geohash" -- added by Rajan
-
-        qrCode.put("lat", location.latitude);
-        qrCode.put("lng", location.longitude);
-        GeoLocation loc = new GeoLocation(location.latitude, location.longitude);
-        qrCode.put("geohash", GeoFireUtils.getGeoHashForLocation(loc));
+        if (location != null) {
+            qrCode.put("lat", location.latitude);
+            qrCode.put("lng", location.longitude);
+            GeoLocation loc = new GeoLocation(location.latitude, location.longitude);
+            qrCode.put("geohash", GeoFireUtils.getGeoHashForLocation(loc));
+        }
 
         Player user = Auth.getPlayer();
         if (user != null) {
