@@ -56,7 +56,6 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.4.1'
     implementation 'androidx.navigation:navigation-ui:2.4.1'
 
-
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation platform('com.google.firebase:firebase-bom:29.1.0')
     implementation 'com.google.firebase:firebase-firestore'
@@ -72,4 +71,5 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.0.1'
 
     implementation 'com.github.javafaker:javafaker:1.0.2'
+    implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.3'
 }

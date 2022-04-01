@@ -1,16 +1,14 @@
 package com.cmput301w22t13.inquiry.ui.myQRs;
 
-
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.classes.Player;
-import com.cmput301w22t13.inquiry.db.onQrDataListener;
 
 public class MyQRsViewModel extends ViewModel {
+
 
     private final MutableLiveData<String> mText;
     private final Player player = Auth.getPlayer();
@@ -26,5 +24,9 @@ public class MyQRsViewModel extends ViewModel {
 
     public LiveData<String> getText() {
         return mText;
+    }
+
+    public void deleteQRFromPlayer(String id) {
+        player.deleteQRCode(id);
     }
 }
