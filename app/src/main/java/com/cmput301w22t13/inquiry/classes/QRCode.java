@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.android.gms.maps.model.LatLng;
 
 
 import java.util.HashMap;
@@ -24,7 +25,7 @@ import java.util.Map;
 public class QRCode {
     private final String hash;
     private int score;
-
+    private LatLng location;
     private String id;
 
     Database db = new Database();
@@ -39,9 +40,20 @@ public class QRCode {
         this.score = createScore(this.hash);
     }
 
+    public QRCode(String text, LatLng location) {
+        this.hash = QRName.getHash(text);
+        this.score = createScore(this.hash);
+        this.location = location;
+    }
     public QRCode(String hash, int score) {
         this.hash = hash;
         this.score = score;
+    }
+
+    public QRCode(String hash, int score, LatLng location) {
+        this.hash = hash;
+        this.score = score;
+        this.location = location;
     }
 
     public QRCode(String hash, int score, String id) {
@@ -50,6 +62,12 @@ public class QRCode {
         this.id = id;
     }
 
+    public QRCode(String hash, int score, String id, LatLng location) {
+        this.hash = hash;
+        this.score = score;
+        this.id = id;
+        this.location = location;
+    }
     public int createScore(String str) {
         int currentScore = 0;
         char prevChar = 'z';
@@ -76,6 +94,10 @@ public class QRCode {
         return this.hash;
     }
 
+    public LatLng getLocation() { return this.location; }
+
+    public void setLocation(LatLng location) { this.location = location; }
+
     /**
      * Saves the given hash into a collection owned by user
      * before saving, check if a qr code with the same hash already exists
@@ -86,14 +108,12 @@ public class QRCode {
         qrCode.put("hash", this.hash);
         qrCode.put("score", this.score);
 
-
         // For location, we need to add a "geohash" -- added by Rajan
-        double lat = 51.5074; // placeholder
-        double lng = 0.1278; // placeholder
 
-        qrCode.put("lat", lat);
-        qrCode.put("lng", lng);
-        qrCode.put("geohash", GeoFireUtils.getGeoHashForLocation(new GeoLocation(lat, lng)));
+        qrCode.put("lat", location.latitude);
+        qrCode.put("lng", location.longitude);
+        GeoLocation loc = new GeoLocation(location.latitude, location.longitude);
+        qrCode.put("geohash", GeoFireUtils.getGeoHashForLocation(loc));
 
         Player user = Auth.getPlayer();
         if (user != null) {
