@@ -4,7 +4,6 @@ package com.cmput301w22t13.inquiry.classes;
  * Saves scanned qr code to the firestore database
  */
 
-import android.os.Handler;
 import android.util.Log;
 
 import com.cmput301w22t13.inquiry.auth.Auth;
@@ -12,27 +11,25 @@ import com.cmput301w22t13.inquiry.db.Database;
 import com.google.android.gms.tasks.Task;
 import com.google.common.hash.Hashing;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
-public class QRCode implements Serializable {
+public class QRCode {
     private final String hash;
     private int score;
-    private ArrayList<String> playerList = new ArrayList<>();
 
+    private String id;
 
+    Database db = new Database();
 
     /**
      * Initalized the QRCode with a sha-256 hash using the input string
@@ -47,6 +44,12 @@ public class QRCode implements Serializable {
     public QRCode(String hash, int score) {
         this.hash = hash;
         this.score = score;
+    }
+
+    public QRCode(String hash, int score, String id) {
+        this.hash = hash;
+        this.score = score;
+        this.id = id;
     }
 
     public int createScore(String str) {
@@ -80,8 +83,6 @@ public class QRCode implements Serializable {
      * before saving, check if a qr code with the same hash already exists
      */
     public void save() {
-        Database db = new Database();
-
         // create a map of the data to be saved
         Map<String, Object> qrCode = new HashMap<>();
         qrCode.put("hash", this.hash);
@@ -138,9 +139,10 @@ public class QRCode implements Serializable {
         return QRName.fromHash(this.hash);
     }
 
-
-
-
-
-
+    /**
+     * @return the id of the qr code
+     */
+    public String getId() {
+        return this.id;
+    }
 }

@@ -7,6 +7,9 @@ package com.cmput301w22t13.inquiry.ui.profile;
  */
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -15,10 +18,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -30,11 +35,14 @@ import com.cmput301w22t13.inquiry.classes.LeaderBoard;
 import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.databinding.FragmentProfileBinding;
 import com.cmput301w22t13.inquiry.db.onProfileDataListener;
-import com.cmput301w22t13.inquiry.ui.leaderboard.LeaderboardFragment;
-
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 public class ProfileFragment extends Fragment {
 
@@ -63,13 +71,14 @@ public class ProfileFragment extends Fragment {
         profileViewModel.getData(new onProfileDataListener() {
             // get data from success listener and display it
             // TODO: Handle error
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void getProfileData(Map<String, Object> data) {
                 String usernameString = (String) data.get("username");
                 String emailString = (String) data.get("email");
                 String uidString = (String) data.get("uid");
 
-                if(usernameString != null) {
+                if (usernameString != null) {
                     // sets the initial look of the textviews
                     user = new Player(usernameString, uidString, true);
                     String lowestScoreString = "Lowest Score: " + user.getLowestScore();
@@ -89,24 +98,28 @@ public class ProfileFragment extends Fragment {
                     Runnable timerRunnable = new Runnable() {
                         @Override
                         public void run() {
-                            LeaderBoard.bubbleSort(players,1);
-                            for (int i = 0; i < players.size(); i++){
-                                if (players.get(i).getUid().equals(user.getUid())) user.setRank(i+1);
+                            LeaderBoard.bubbleSort(players, 1);
+                            for (int i = 0; i < players.size(); i++) {
+                                if (players.get(i).getUid().equals(user.getUid()))
+                                    user.setRank(i + 1);
                             }
-                            LeaderBoard.bubbleSort(players,2);
+                            LeaderBoard.bubbleSort(players, 2);
                             int highestRank = -1;
-                            for (int i = 0; i < players.size(); i++){
-                                if (players.get(i).getUid().equals(user.getUid())) highestRank = i+1;
+                            for (int i = 0; i < players.size(); i++) {
+                                if (players.get(i).getUid().equals(user.getUid()))
+                                    highestRank = i + 1;
                             }
-                            LeaderBoard.bubbleSort(players,3);
+                            LeaderBoard.bubbleSort(players, 3);
                             int qrCodeCountRank = -1;
-                            for (int i = 0; i < players.size(); i++){
-                                if (players.get(i).getUid().equals(user.getUid())) qrCodeCountRank = i+1;
+                            for (int i = 0; i < players.size(); i++) {
+                                if (players.get(i).getUid().equals(user.getUid()))
+                                    qrCodeCountRank = i + 1;
                             }
-                            LeaderBoard.bubbleSort(players,4);
+                            LeaderBoard.bubbleSort(players, 4);
                             int lowestRank = -1;
-                            for (int i = 0; i < players.size(); i++){
-                                if (players.get(i).getUid().equals(user.getUid())) lowestRank = i+1;
+                            for (int i = 0; i < players.size(); i++) {
+                                if (players.get(i).getUid().equals(user.getUid()))
+                                    lowestRank = i + 1;
                             }
                             String lowestScoreString = "Lowest Score: " + user.getLowestScore() + " Rank: " + lowestRank;
                             lowestScoreText.setText(lowestScoreString);
@@ -114,7 +127,7 @@ public class ProfileFragment extends Fragment {
                             highestScoreText.setText(highestScoreString);
                             String totalScoreString = "Total Score: " + user.getTotalScore() + " Rank: " + user.getRank();
                             totalScoreText.setText(totalScoreString);
-                            String QRCodeCountString = user.getQRCodeCount() + " QR Codes"+ " Rank: " + qrCodeCountRank;
+                            String QRCodeCountString = user.getQRCodeCount() + " QR Codes" + " Rank: " + qrCodeCountRank;
                             totalQrsText.setText(QRCodeCountString);
                             timerHandler.postDelayed(this, 500);
                         }
@@ -122,12 +135,26 @@ public class ProfileFragment extends Fragment {
                     };
                     timerHandler.post(timerRunnable);
                 }
-                if(emailString != null) {
+                if (emailString != null) {
                     user.setEmail(emailString);
                     emailText.setText(emailString);
                 }
 
                 usernameText.setText(usernameString);
+
+                if (uidString != null) {
+                    ImageView shareProfileQrCode = (ImageView) root.findViewById(R.id.share_profile_qr);
+                    int size = 200;
+                    try {
+                        // generate a 200x200 QR code encoded with the user's id
+                        BitMatrix bm = new QRCodeWriter().encode("INQUIRY_USER_" + uidString, BarcodeFormat.QR_CODE, size, size);
+                        int qrColor = getResources().getString(R.string.theme_mode).equals("dark") ? Color.argb(255, 176, 116,255) : Color.argb(200, 140, 60,255);
+                        Bitmap bitmap = Bitmap.createBitmap(IntStream.range(0, size).flatMap(h -> IntStream.range(0, size).map(w -> bm.get(w, h) ? qrColor : Color.argb(0, 0, 0, 0))).toArray(),
+                                size, size, Bitmap.Config.ARGB_8888);
+                        shareProfileQrCode.setImageBitmap(bitmap);
+                    } catch (WriterException e) {
+                    }
+                }
 
                 spinner.setVisibility(View.GONE);
                 usernameText.setVisibility(View.VISIBLE);
