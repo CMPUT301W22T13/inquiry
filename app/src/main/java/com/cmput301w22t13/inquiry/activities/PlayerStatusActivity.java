@@ -70,8 +70,11 @@ public class PlayerStatusActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 QRCode clickedQR = qrCodeArrayList.get(i);
-                // move to qr code fragment or activity
-            }
+                Intent intent = new Intent(getApplicationContext(), MatchingQRActivity.class);
+                intent.putExtra("code", clickedQR);
+                intent.putExtra("player", player.getUsername());
+                startActivity(intent);
+                }
         });
 
 
@@ -89,7 +92,7 @@ public class PlayerStatusActivity extends AppCompatActivity {
 
         PlayerStatusQRCodeListAdapter qrCodeListAdapter = new PlayerStatusQRCodeListAdapter(this, qrCodeArrayList, player);
         qrCodeListView.setAdapter(qrCodeListAdapter);
-        //qrCodeListView.setClickable(true);
+        qrCodeListView.setClickable(true);
 
     }
 

@@ -74,7 +74,7 @@ public class PlayerProfileActivity extends AppCompatActivity {
         // ends activity
         Button backButton = findViewById(R.id.playerProfileBackButton);
         backButton.setOnClickListener(view -> finish());
-
+/*
         // owner stuff
         if(auth.getPlayer().getIsOwner()){
             Log.d("VERBS",auth.getPlayer().getUsername());
@@ -90,6 +90,10 @@ public class PlayerProfileActivity extends AppCompatActivity {
             Log.d("VERBS",auth.getPlayer().getUsername());
             Log.d("VERBS", "notOWner");
         }
+
+ */
+
+
     }
 
     public void setTexts() {

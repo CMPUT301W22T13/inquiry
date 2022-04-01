@@ -22,6 +22,9 @@
             android:name=".activities.ScannerResultActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.MatchingQRActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.PlayerProfileActivity"
             android:exported="false" />
         <activity

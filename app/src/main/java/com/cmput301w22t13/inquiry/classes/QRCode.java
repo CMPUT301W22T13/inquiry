@@ -4,6 +4,7 @@ package com.cmput301w22t13.inquiry.classes;
  * Saves scanned qr code to the firestore database
  */
 
+import android.os.Handler;
 import android.util.Log;
 
 import com.cmput301w22t13.inquiry.auth.Auth;
@@ -17,6 +18,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 
 import java.util.ArrayList;
@@ -25,12 +27,12 @@ import java.util.List;
 import java.util.Map;
 
 
-public class QRCode {
+public class QRCode implements Serializable {
     private final String hash;
     private int score;
-    private ArrayList<String> playerList;
+    private ArrayList<String> playerList = new ArrayList<>();
 
-    Database db = new Database();
+
 
     /**
      * Initalized the QRCode with a sha-256 hash using the input string
@@ -78,6 +80,8 @@ public class QRCode {
      * before saving, check if a qr code with the same hash already exists
      */
     public void save() {
+        Database db = new Database();
+
         // create a map of the data to be saved
         Map<String, Object> qrCode = new HashMap<>();
         qrCode.put("hash", this.hash);
@@ -135,29 +139,8 @@ public class QRCode {
     }
 
 
-    /**
-     *
-     * @return an ArrayList with all the players containing matching Qr codes
-     */
-    public ArrayList<Player> getPlayerList(){
 
-        ArrayList<Player> playerList = new ArrayList<>();
-        db.arrayQuery("users","qr_codes",this.hash).addOnCompleteListener(task ->{
-            if (task.isSuccessful()){
-                List<DocumentSnapshot> documents = task.getResult().getDocuments();
-                int size = documents.size();
-                if (size!= 0) {
-                    for (DocumentSnapshot document: documents) {
-                        String username = (String) document.get("username");
-                        Player player = new Player(username, (String)document.get("id"));
-                        playerList.add(player);
 
-                    }
-                }
-            }
-        });
-        return playerList;
 
-    }
 
 }

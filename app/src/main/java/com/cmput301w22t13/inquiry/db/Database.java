@@ -172,8 +172,8 @@ public class Database implements Serializable {
      * @param value      the query value, e.g. "Ada"
      * @return a QuerySnapshot of the documents matching the query (usage: query(...).addOnSuccessListener(...))
      */
-    public Task<QuerySnapshot> arrayQuery(String collection, String field, String value){
-        return db.collection(collection).whereArrayContains(field, value).get();
+    public Task<QuerySnapshot> arrayQuery(String collection, String field, DocumentReference value){
+        return db.collection(collection).whereArrayContains(field,value).get();
     }
 
     /**
