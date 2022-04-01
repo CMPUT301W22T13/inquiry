@@ -8,15 +8,13 @@ import android.util.Log;
 
 import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.db.Database;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoFireUtils;
 import com.google.android.gms.tasks.Task;
-import com.google.common.hash.Hashing;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.nio.charset.StandardCharsets;
 
 import java.util.HashMap;
 import java.util.List;
@@ -87,6 +85,15 @@ public class QRCode {
         Map<String, Object> qrCode = new HashMap<>();
         qrCode.put("hash", this.hash);
         qrCode.put("score", this.score);
+
+
+        // For location, we need to add a "geohash" -- added by Rajan
+        double lat = 51.5074; // placeholder
+        double lng = 0.1278; // placeholder
+
+        qrCode.put("lat", lat);
+        qrCode.put("lng", lng);
+        qrCode.put("geohash", GeoFireUtils.getGeoHashForLocation(new GeoLocation(lat, lng)));
 
         Player user = Auth.getPlayer();
         if (user != null) {
