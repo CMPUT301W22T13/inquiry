@@ -1,8 +1,10 @@
 package com.cmput301w22t13.inquiry.ui.myQRs;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput301w22t13.inquiry.R;
+import com.cmput301w22t13.inquiry.activities.MatchingQRActivity;
 import com.cmput301w22t13.inquiry.classes.QRCode;
 import com.cmput301w22t13.inquiry.databinding.FragmentMyqrsBinding;
 import com.cmput301w22t13.inquiry.db.onQrDataListener;
@@ -42,6 +45,7 @@ public class MyQRsFragment extends Fragment {
                 if (qrCodes != null && qrCodes.size() > 0) {
                     qrCodeListAdapter = new MyQRsListAdapter(root.getContext(), qrCodes);
                     recyclerView.setAdapter(qrCodeListAdapter);
+                    recyclerView.setClickable(true);
 
                     recyclerView.setVisibility(View.VISIBLE);
                     emptyStateText.setVisibility(View.GONE);
