@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,7 @@ import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.classes.QRCode;
 import com.cmput301w22t13.inquiry.databinding.FragmentMyqrsBinding;
 import com.cmput301w22t13.inquiry.db.onQrDataListener;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 
@@ -76,6 +76,9 @@ public class MyQRsFragment extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
 
+                int position = viewHolder.getAdapterPosition();
+                QRCode qrCode = qrCodeListAdapter.getQRAt(position);
+
                 //ask for user confirmation
                 /*
                 //from youtube.com
@@ -83,36 +86,48 @@ public class MyQRsFragment extends Fragment {
                 //author : Sanath Gosavi https://www.youtube.com/channel/UC5hwBZynOhshCbqTGGeoRSA
                 */
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Delete QRCode");
-                builder.setMessage("Are you sure?");
-                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(requireActivity());
+                dialog.setTitle("Delete " + qrCode.getName() + "?");
+                dialog.setMessage("Are you sure you want to delete this QR code?");
+                dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int position) {
-                        //data.removeAt(position);
-                        //notifyDataSetChanged();
-                        //myQRsViewModel.delete(adapter.getQRAt(viewHolder.getAdapterPosition()));
-                        //Toast.makeText(getActivity(), "Game Deleted", Toast.LENGTH_SHORT).show();
-                        //adapter.getRef(position).removeValue()
-                        
-
+                    public void onClick(DialogInterface dialogInterface, int p) {
+                        myQRsViewModel.deleteQRFromPlayer(qrCode.getId());
+                        Toast.makeText(getActivity(), "QR Code Deleted", Toast.LENGTH_SHORT).show();
+                        myQRsViewModel.getPlayer().fetchQRCodes(task -> {
+                            qrCodeListAdapter.removeQrAt(position);
+                            if(task.size() == 0) {
+                                recyclerView.setVisibility(View.GONE);
+                                emptyStateText.setVisibility(View.VISIBLE);
+                            }
+                        });
                     }
                 });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //adapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                        // cancel swipe
+//                        qrCodeListAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                    }
+                });
+
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        // cancel swipe
+                        qrCodeListAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
 
                     }
                 });
-                builder.show();
+
+                dialog.show();
             }
 
             @Override
             public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                         .addActionIcon(R.drawable.ic_baseline_delete_24)
-                        .setActionIconTint(R.color.quantum_vanillaredA200)
                         .create()
                         .decorate();
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);

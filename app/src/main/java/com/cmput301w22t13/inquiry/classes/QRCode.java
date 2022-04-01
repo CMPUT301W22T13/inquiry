@@ -27,6 +27,8 @@ public class QRCode {
     private final String hash;
     private int score;
 
+    private String id;
+
     Database db = new Database();
 
     /**
@@ -42,6 +44,12 @@ public class QRCode {
     public QRCode(String hash, int score) {
         this.hash = hash;
         this.score = score;
+    }
+
+    public QRCode(String hash, int score, String id) {
+        this.hash = hash;
+        this.score = score;
+        this.id = id;
     }
 
     public int createScore(String str) {
@@ -129,5 +137,12 @@ public class QRCode {
      */
     public String getName() {
         return QRName.fromHash(this.hash);
+    }
+
+    /**
+     * @return the id of the qr code
+     */
+    public String getId() {
+        return this.id;
     }
 }

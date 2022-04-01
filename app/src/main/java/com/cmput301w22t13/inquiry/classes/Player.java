@@ -1,7 +1,9 @@
 package com.cmput301w22t13.inquiry.classes;
 
 import android.util.Log;
+import android.widget.Toast;
 
+import com.cmput301w22t13.inquiry.activities.MainActivity;
 import com.cmput301w22t13.inquiry.db.Database;
 import com.cmput301w22t13.inquiry.db.onQrDataListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -67,10 +69,9 @@ public class Player implements Serializable {
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("qr_codes", FieldValue.arrayUnion(newQrRef));
 
-
         Database db = new Database();
 
-
+        Log.d("addQRCode", "adding qr code to user...");
         this.fetchQRCodes(userQrs -> {
             Log.d("QRCode", "After fetchQRCodes");
             if (userQrs.size() > 0) {
@@ -89,18 +90,18 @@ public class Player implements Serializable {
         });
     }
 
-    public void deleteQRCode(DocumentReference newQrRef, String hash) {
+    public void deleteQRCode(String id) {
         // delete the qr code's reference from the user's qr_codes array
         // see: stackoverflow.com/a/51983589/12955797
 
-
-        final Map<String, Object> removeUserFromArrayMap = new HashMap<>();
-        removeUserFromArrayMap.put("qr_codes", FieldValue.arrayRemove(newQrRef));
-
-
         Database db = new Database();
 
-        db.update("users", this.uid, removeUserFromArrayMap);
+        DocumentReference qrRef = db.getDocReference("qr_codes/" + id);
+
+        final Map<String, Object> qrCodesFieldArray = new HashMap<>();
+        qrCodesFieldArray.put("qr_codes", FieldValue.arrayRemove(qrRef));
+
+        db.update("users", this.uid, qrCodesFieldArray);
     }
 
 
@@ -114,13 +115,13 @@ public class Player implements Serializable {
                 // loop through qr_codes field array and add to QrList ArrayList
                 DocumentSnapshot user = userTask.getResult();
                 ArrayList<DocumentReference> qrRefs = (ArrayList<DocumentReference>) user.get("qr_codes");
-                if (qrRefs != null) {
+                if (qrRefs != null && qrRefs.size() > 0) {
                     for (int i = 0; i < qrRefs.size(); i++) {
                         int finalI = i;
                         qrRefs.get(i).get().addOnCompleteListener(qrTask -> {
                             if (qrTask.isSuccessful()) {
                                 DocumentSnapshot qr = qrTask.getResult();
-                                QRCode qrCode = new QRCode(qr.getString("hash"), Objects.requireNonNull(qr.getLong("score")).intValue());
+                                QRCode qrCode = new QRCode(qr.getString("hash"), Objects.requireNonNull(qr.getLong("score")).intValue(), qr.getId());
                                 QrList.add(qrCode);
 
                                 if (finalI == qrRefs.size() - 1) {

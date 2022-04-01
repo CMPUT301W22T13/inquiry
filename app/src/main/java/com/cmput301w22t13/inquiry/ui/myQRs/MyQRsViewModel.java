@@ -1,23 +1,11 @@
 package com.cmput301w22t13.inquiry.ui.myQRs;
 
-
-
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.classes.Player;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class MyQRsViewModel extends ViewModel {
 
@@ -38,6 +26,7 @@ public class MyQRsViewModel extends ViewModel {
         return mText;
     }
 
-    public void deleteQRFromPlayer(DocumentReference QRtoDelete) {
+    public void deleteQRFromPlayer(String id) {
+        player.deleteQRCode(id);
     }
 }

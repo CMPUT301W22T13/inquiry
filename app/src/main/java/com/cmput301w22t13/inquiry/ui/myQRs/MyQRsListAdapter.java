@@ -60,6 +60,11 @@ public class MyQRsListAdapter extends RecyclerView.Adapter<MyQRsListAdapter.View
         return  qrCodes.get(position); //returns qr object at that position
     }
 
+    public void removeQrAt(int position){
+        qrCodes.remove(position);
+        notifyItemRemoved(position);
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView;
         TextView initialsTextView;
