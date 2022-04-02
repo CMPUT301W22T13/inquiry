@@ -11,6 +11,7 @@ public class QRDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.Theme_InQuiRy_NoActionBar);
         setContentView(R.layout.activity_qrdetails);
     }
 }

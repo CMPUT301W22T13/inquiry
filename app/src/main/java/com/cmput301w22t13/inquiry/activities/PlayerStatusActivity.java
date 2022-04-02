@@ -35,6 +35,7 @@ public class PlayerStatusActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstances) {
         super.onCreate(savedInstances);
+        setTheme(R.style.Theme_InQuiRy_NoActionBar);
         setContentView(R.layout.activity_player_status);
 
         // gets player data from database to be displayed

@@ -33,6 +33,7 @@ public class OnboardingActivity extends AppCompatActivity {
         Auth.init();
 
         ActivityOnboardingBinding binding = ActivityOnboardingBinding.inflate(getLayoutInflater());
+        setTheme(R.style.Theme_InQuiRy_NoActionBar);
         setContentView(binding.getRoot());
 
         // get view ids
