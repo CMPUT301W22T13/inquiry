@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput301w22t13.inquiry.R;
+import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.classes.QRCode;
 import com.cmput301w22t13.inquiry.databinding.FragmentMyqrsBinding;
 import com.cmput301w22t13.inquiry.db.onQrDataListener;
@@ -48,18 +49,22 @@ public class MyQRsFragment extends Fragment {
 //        recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setLayoutManager(layoutManager);
 
-        myQRsViewModel.getPlayer().fetchQRCodes(new onQrDataListener() {
-            @Override
-            public void getQrData(ArrayList<QRCode> qrCodes) {
-                if (qrCodes != null && qrCodes.size() > 0) {
-                    qrCodeListAdapter = new MyQRsListAdapter(root.getContext(), qrCodes);
-                    recyclerView.setAdapter(qrCodeListAdapter);
+        Player player = myQRsViewModel.getPlayer();
+        if (player != null) {
 
-                    recyclerView.setVisibility(View.VISIBLE);
-                    emptyStateText.setVisibility(View.GONE);
+            player.fetchQRCodes(new onQrDataListener() {
+                @Override
+                public void getQrData(ArrayList<QRCode> qrCodes) {
+                    if (qrCodes != null && qrCodes.size() > 0) {
+                        qrCodeListAdapter = new MyQRsListAdapter(root.getContext(), qrCodes);
+                        recyclerView.setAdapter(qrCodeListAdapter);
+
+                        recyclerView.setVisibility(View.VISIBLE);
+                        emptyStateText.setVisibility(View.GONE);
+                    }
                 }
-            }
-        });
+            });
+        }
         //user swipes right to delete QR code
         /*
         //from youtube.com
