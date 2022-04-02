@@ -16,6 +16,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 
 import java.util.HashMap;
@@ -23,13 +24,12 @@ import java.util.List;
 import java.util.Map;
 
 
-public class QRCode {
+public class QRCode implements Serializable {
     private final String hash;
     private int score;
 
     private String id;
 
-    Database db = new Database();
 
     /**
      * Initalized the QRCode with a sha-256 hash using the input string
@@ -83,6 +83,9 @@ public class QRCode {
      * before saving, check if a qr code with the same hash already exists
      */
     public void save() {
+
+        Database db = new Database();
+
         // create a map of the data to be saved
         Map<String, Object> qrCode = new HashMap<>();
         qrCode.put("hash", this.hash);

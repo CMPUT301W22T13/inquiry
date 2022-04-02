@@ -70,7 +70,7 @@ public class PlayerStatusActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 QRCode clickedQR = qrCodeArrayList.get(i);
-                Intent intent = new Intent(getApplicationContext(), MatchingQRActivity.class);
+                Intent intent = new Intent(getApplicationContext(), QRDetailsActivity.class);
                 intent.putExtra("code", clickedQR);
                 intent.putExtra("player", player.getUsername());
                 startActivity(intent);
