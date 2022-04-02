@@ -66,6 +66,7 @@
         android:id="@+id/textView6"
         android:layout_width="87dp"
         android:layout_height="19dp"
+        android:layout_marginTop="16dp"
         android:text="Scanned By"
         android:textAllCaps="true"
         android:textStyle="bold"
@@ -74,7 +75,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/QRCodeName" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <ListView
         android:id="@+id/recyclerView2"
         android:layout_width="349dp"
         android:layout_height="150dp"
@@ -90,35 +91,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Comments"
+        android:textAllCaps="true"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/recyclerView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.046"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/MatchingQrsList" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
-        android:layout_width="258dp"
-        android:layout_height="29dp"
-        android:layout_marginStart="16dp"
-        android:hint="Add comment"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView2"
-        app:layout_constraintVertical_bias="0.485">
-
-    </com.google.android.material.textfield.TextInputLayout>
-
     <ImageButton
         android:id="@+id/imageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
+        android:layout_marginEnd="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textInputLayout"
         app:layout_constraintTop_toBottomOf="@+id/recyclerView2"
+        app:layout_constraintVertical_bias="0.642"
         app:srcCompat="@android:drawable/ic_input_add" />
 
     <ListView
@@ -144,6 +133,23 @@
         app:layout_constraintStart_toEndOf="@+id/QRCodeName"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="243dp"
+        android:layout_height="71dp"
+        android:layout_marginStart="16dp"
+        android:hint="Add a comment"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView2"
+        app:layout_constraintVertical_bias="0.673">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:hint="max 256 characters" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
