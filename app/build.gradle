@@ -73,4 +73,5 @@ dependencies {
 
     implementation 'com.github.javafaker:javafaker:1.0.2'
     implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.3'
+    implementation 'nl.dionsegijn:konfetti-xml:2.0.2'
 }
