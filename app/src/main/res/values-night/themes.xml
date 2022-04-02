@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.InQuiRy" parent="Theme.Material3.Dark">
         <!-- Primary brand color. -->
@@ -15,8 +15,22 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="ThemeOverlay.InQuiRy.FullscreenContainer" parent="">
-        <item name="fullscreenBackgroundColor">@color/light_blue_900</item>
-        <item name="fullscreenTextColor">@color/light_blue_A400</item>
+    <style name="Theme.InQuiRy.NoActionBar" parent="Theme.Material3.Dark">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">#2A2432</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
+
+    <style name="Theme.InQuiRy.AppBarOverlay" parent="ThemeOverlay.Material3.Dark" />
+
+    <style name="OverflowMenu" parent="Widget.Material3.PopupMenu.Overflow">
+        <!-- Required for pre-Lollipop. -->
+        <item name="overlapAnchor">false</item>
+
+        <!-- Required for Lollipop. -->
+        <item name="android:overlapAnchor">false</item>
+    </style>
+
+    <style name="Theme.InQuiRy.PopupOverlay" parent="ThemeOverlay.Material3.Dark" />
 </resources>
