@@ -1,13 +1,16 @@
 package com.cmput301w22t13.inquiry.activities;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +22,7 @@ import com.cmput301w22t13.inquiry.db.Database;
 import com.cmput301w22t13.inquiry.db.Storage;
 import com.github.javafaker.Faker;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
@@ -89,6 +93,26 @@ public class ScannerResultActivity extends AppCompatActivity {
         closeButton.setOnClickListener(view -> {
            // finish activity and go to MyQrs page
             finish();
+        });
+
+        EditText commentEditTest = findViewById(R.id.scanner_result_edit_comment);
+        Button saveCommentButton = findViewById(R.id.button_save_comment);
+        saveCommentButton.setOnClickListener(view -> {
+            String comment = commentEditTest.getText().toString();
+            if (comment.length() > 0 && comment.length() < 100) {
+                addCommentToQr(comment);
+
+                // dismiss keyboard
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(commentEditTest.getWindowToken(), 0);
+
+                saveCommentButton.setEnabled(false);
+                commentEditTest.setEnabled(false);
+                saveCommentButton.setText("Comment Added!");
+            }
+            else {
+                Toast.makeText(this, "Comment must be between 1 and 100 characters", Toast.LENGTH_LONG).show();
+            }
         });
     }
 
@@ -170,6 +194,22 @@ public class ScannerResultActivity extends AppCompatActivity {
 
                 Map<String, Object> data = new HashMap<>();
                 data.put("location_image", imageName);
+                db.update("qr_codes", qrId, data);
+            }
+        });
+    }
+
+    private void addCommentToQr(String comment) {
+        Database db = new Database();
+
+        db.query("qr_codes", "hash", qrHash).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult().getDocuments().get(0);
+                String qrId = document.getId();
+
+                // append comment to field array
+                Map<String, Object> data = new HashMap<>();
+                data.put("comments", FieldValue.arrayUnion(comment));
                 db.update("qr_codes", qrId, data);
             }
         });
