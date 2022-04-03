@@ -36,9 +36,9 @@ public class QRDetailsActivity extends AppCompatActivity {
         TextView qrName = findViewById(R.id.myqrs_qr_name);
         qrName.setText(code.getName());
 
-        TextView qrInitials = findViewById(R.id.myqrs_qr_initials);
-        String[] qrNameList = code.getName().split(" ");
-        qrInitials.setText(qrNameList[0].charAt(0) + qrNameList[1]);
+        TextView qrInitials = findViewById(R.id.qr_details_initials);
+        String[] qrNameSplit = code.getName().split(" ");
+        qrInitials.setText(qrName.getText().toString().substring(0,1) + qrNameSplit[1].substring(0,1));
 
         TextView qrScore = findViewById(R.id.myqrs_qr_score);
 
@@ -65,15 +65,6 @@ public class QRDetailsActivity extends AppCompatActivity {
             if (documents.size() == 1) {
                 String id = documents.get(0).getId();
                 findPlayers(id);
-            }
-        });
-
-        Task<QuerySnapshot> querySnapshotTask2 = db.query("qr_codes", "hash", code.getHash());
-        querySnapshotTask.addOnCompleteListener(task2 -> {
-            List<DocumentSnapshot> documents = task2.getResult().getDocuments();
-            Log.d("size", String.valueOf(documents.size()));
-            if (documents.size() == 1) {
-                String id = documents.get(0).getId();
                 findComments(id);
             }
         });
@@ -118,25 +109,26 @@ public class QRDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private void findComments(String commentId){
+    private void findComments(String qrDocumentId){
         ArrayList<String> commentsList = new ArrayList<>();
 
-        DocumentReference reference = db.getDocReference("comments"+ commentId);
-        db.arrayQuery("qr_codes","comments",reference).addOnCompleteListener(task ->{
+        db.getById("qr_codes",qrDocumentId).addOnCompleteListener(task ->{
             if (task.isSuccessful()){
-                List<DocumentSnapshot> documents = task.getResult().getDocuments();
-                int size = documents.size();
-                if (size!= 0) {
-                    for (DocumentSnapshot document: documents) {
-                        String username = (String) document.get("username");
-                        commentsList.add(username);
-                        Log.d("Before: ", (String) document.get("username"));
+                DocumentSnapshot qrDocument = task.getResult();
+                ArrayList<String> qrComments = (ArrayList<String>) qrDocument.get("comments");
+
+                if(qrComments != null) {
+                    int size = qrComments.size();
+                    if (size != 0) {
+                        Log.d("size", String.valueOf(size));
+                        Log.d("qrComments", String.valueOf(qrComments));
+                        commentsList.addAll(qrComments);
                     }
                 }
             }
 
             commentsList.remove(currentPlayer);
-            updateUI(commentsList);
+            updateCommentUI(commentsList);
 
         });
     }
