@@ -75,9 +75,11 @@ public class Auth {
                     DocumentSnapshot document2 = task.getResult();
                     if (document2 != null && document2.exists()) {
                         if (String.valueOf(document2.get("isOwner")).equals("true")) {
+                            Log.d("VERBS","OWNR");
                             player = new Owner((String) document2.get("username"), (String) document2.get("id"), true);
                         } else {
                             player = new Player((String) document2.get("username"), (String) document2.get("id"), true);
+                            Log.d("VERBS","USR");
                         }
 
                     }
