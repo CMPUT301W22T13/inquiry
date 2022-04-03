@@ -121,12 +121,16 @@ public class Player implements Serializable {
                         qrRefs.get(i).get().addOnCompleteListener(qrTask -> {
                             if (qrTask.isSuccessful()) {
                                 DocumentSnapshot qr = qrTask.getResult();
-                                QRCode qrCode = new QRCode(qr.getString("hash"), Objects.requireNonNull(qr.getLong("score")).intValue(), qr.getId());
-                                QrList.add(qrCode);
+                                if(qr.getLong("score") != null) {
+                                    int score = qr.getLong("score").intValue();
+//                                    Log.d("QRCode", "QRCode score" + finalI + ": " + qr.getLong("score").intValue());
+                                    QRCode qrCode = new QRCode(qr.getString("hash"), score, qr.getId());
+                                    QrList.add(qrCode);
 
-                                if (finalI == qrRefs.size() - 1) {
-                                    onSuccess.getQrData(QrList);
-                                    this.qrCodes = QrList;
+                                    if (finalI == qrRefs.size() - 1) {
+                                        onSuccess.getQrData(QrList);
+                                        this.qrCodes = QrList;
+                                    }
                                 }
                             }
                         });
