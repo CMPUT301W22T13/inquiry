@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.classes.Owner;
+import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.classes.QRCode;
 import com.cmput301w22t13.inquiry.databinding.FragmentMyqrsBinding;
 import com.cmput301w22t13.inquiry.db.onQrDataListener;

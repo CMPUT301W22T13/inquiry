@@ -2,22 +2,32 @@ package com.cmput301w22t13.inquiry.ui.map;
 
 import static android.content.ContentValues.TAG;
 
+import android.Manifest;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.cmput301w22t13.inquiry.R;
+import com.cmput301w22t13.inquiry.classes.QRCode;
 import com.cmput301w22t13.inquiry.databinding.FragmentMapsBinding;
+import com.firebase.geofire.GeoFireUtils;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQueryBounds;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
@@ -25,47 +35,165 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapFragment extends Fragment {
 
-    private FragmentMapsBinding binding;
+    private Location lastKnownLocation;
+    private Location defaultTarget;
+    private boolean locationPermissionGranted;
 
+    private GoogleMap map;
+    private static final int DEFAULT_ZOOM = 15;
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+
+    private interface NearbyPointHandler {
+        void handlePoint(QRCode qr);
+    }
+
+    private void getNearbyPoints(double lat, double lng, NearbyPointHandler l) {
+
+        final GeoLocation center = new GeoLocation(lat, lng);
+        final double radiusInM = 30 * 1000;
+
+        // Each item in 'bounds' represents a startAt/endAt pair. We have to issue
+        // a separate query for each pair. There can be up to 9 pairs of bounds
+        // depending on overlap, but in most cases there are 4.
+        List<GeoQueryBounds> bounds = GeoFireUtils.getGeoHashQueryBounds(center, radiusInM);
+        final List<Task<QuerySnapshot>> tasks = new ArrayList<>();
+        for (GeoQueryBounds b : bounds) {
+            Query q = FirebaseFirestore.getInstance().collection("qr_codes")
+                    .orderBy("geohash")
+                    .startAt(b.startHash)
+                    .endAt(b.endHash);
+
+            tasks.add(q.get());
+        }
+
+        // Collect all the query results together into a single list
+        Tasks.whenAllComplete(tasks)
+                .addOnCompleteListener(t -> {
+                    for (Task<QuerySnapshot> task : tasks) {
+                        QuerySnapshot snap = task.getResult();
+                        for (DocumentSnapshot doc : snap.getDocuments()) {
+                            try {
+                                double lat1 = doc.getDouble("lat");
+                                double lng1 = doc.getDouble("lng");
+                                String hash = doc.getString("hash");
+                                int score = doc.get("score", int.class);
+                                GeoLocation docLocation = new GeoLocation(lat1, lng1);
+
+                                // We have to filter out a few false positives due to GeoHash
+                                // accuracy, but most will match
+                                double distanceInM = GeoFireUtils.getDistanceBetween(docLocation, center);
+                                if (distanceInM <= radiusInM) {
+                                    l.handlePoint(new QRCode(hash, score, new LatLng(docLocation.latitude, docLocation.longitude)));
+                                }
+
+                            } catch (NullPointerException e) {
+                                Log.v("NO_LOCATION", e.getMessage());
+                            }
+
+                        }
+                    }
+                });
+    }
+
+
+    private void updateNearbyPoints(boolean firstRun) {
+
+        if (map == null) return;
+
+        LatLng target;
+
+        if (!firstRun) {
+            target = map.getCameraPosition().target;
+        } else {
+            target = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+        }
+
+        map.clear();
+        getNearbyPoints(target.latitude,
+                target.longitude,
+                qr -> map.addMarker(new MarkerOptions()
+                        .position(qr.getLocation()).title(qr.getName()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
+                ));
+
+    }
+    private void updateLocationUI() {
+        if (map == null) {
+            return;
+        }
+        try {
+            if (locationPermissionGranted) {
+                map.setMyLocationEnabled(true);
+                map.getUiSettings().setMyLocationButtonEnabled(true);
+
+                // Website: StackOverflow
+                // Answer: https://stackoverflow.com/a/16492921
+                // Author: https://stackoverflow.com/users/2296798/nick
+
+                if (lastKnownLocation != null) {
+                    CameraPosition cameraPosition = new CameraPosition.Builder()
+                            .target(new LatLng(lastKnownLocation.getLatitude(),
+                                    lastKnownLocation.getLongitude())).zoom(DEFAULT_ZOOM).build();
+                    CameraUpdate cameraUpdate = CameraUpdateFactory
+                            .newCameraPosition(cameraPosition);
+                    map.moveCamera(cameraUpdate);
+
+                    updateNearbyPoints(true);
+                }
+
+            } else {
+                map.setMyLocationEnabled(false);
+                map.getUiSettings().setMyLocationButtonEnabled(false);
+                lastKnownLocation = null;
+                getLocationPermission();
+            }
+        } catch (SecurityException e) {
+            Log.e("Exception: %s", e.getMessage());
+        }
+    }
+
+    private void getLocationPermission() {
+        /*
+         * Request location permission, so that we can get the location of the
+         * device. The result of the permission request is handled by a callback,
+         * onRequestPermissionsResult.
+         */
+        if (ContextCompat.checkSelfPermission(requireContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            locationPermissionGranted = true;
+        } else {
+            ActivityCompat.requestPermissions(requireActivity(),
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+    }
     private FusedLocationProviderClient fusedLocationProviderClient;
-    private OnMapReadyCallback callback = new OnMapReadyCallback() {
+    private final OnMapReadyCallback callback = new OnMapReadyCallback() {
 
         // Code taken from Google Maps example application:
         // https://github.com/googlemaps/android-samples/blob/3f6f0fff873263fa82da78bb45c11a4fd774b4ac/tutorials/java/CurrentPlaceDetailsOnMap/app/src/main/java/com/example/currentplacedetailsonmap/MapsActivityCurrentPlace.java
 
-        private static final int DEFAULT_ZOOM = 15;
-        private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-        private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085);
-        GoogleMap map;
-        Location lastKnownLocation;
-        private boolean locationPermissionGranted;
 
-        private void getLocationPermission() {
-            /*
-             * Request location permission, so that we can get the location of the
-             * device. The result of the permission request is handled by a callback,
-             * onRequestPermissionsResult.
-             */
-            if (ContextCompat.checkSelfPermission(getContext(),
-                    android.Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                locationPermissionGranted = true;
-            } else {
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                        PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-            }
-        }
+        private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085);
 
         private void getDeviceLocation() {
             /*
@@ -75,24 +203,24 @@ public class MapFragment extends Fragment {
             try {
                 if (locationPermissionGranted) {
                     Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
-                    locationResult.addOnCompleteListener(getActivity(), new OnCompleteListener<Location>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Location> task) {
-                            if (task.isSuccessful()) {
-                                // Set the map's camera position to the current location of the device.
-                                lastKnownLocation = task.getResult();
-                                if (lastKnownLocation != null) {
-                                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                            new LatLng(lastKnownLocation.getLatitude(),
-                                                    lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                                }
-                            } else {
-                                Log.d(TAG, "Current location is null. Using defaults.");
-                                Log.e(TAG, "Exception: %s", task.getException());
-                                map.moveCamera(CameraUpdateFactory
-                                        .newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
-                                map.getUiSettings().setMyLocationButtonEnabled(false);
+                    locationResult.addOnCompleteListener(requireActivity(), task -> {
+                        if (task.isSuccessful()) {
+                            // Set the map's camera position to the current location of the device.
+                            lastKnownLocation = task.getResult();
+                            if (lastKnownLocation != null) {
+                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                        new LatLng(lastKnownLocation.getLatitude(),
+                                                lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                map.setMyLocationEnabled(true);
+                                map.getUiSettings().setMyLocationButtonEnabled(true);
+
                             }
+                        } else {
+                            Log.d(TAG, "Current location is null. Using defaults.");
+                            Log.e(TAG, "Exception: %s", task.getException());
+                            map.moveCamera(CameraUpdateFactory
+                                    .newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
+                            map.getUiSettings().setMyLocationButtonEnabled(false);
                         }
                     });
                 }
@@ -101,38 +229,30 @@ public class MapFragment extends Fragment {
             }
         }
 
-        private void updateLocationUI() {
-            if (map == null) {
-                return;
-            }
+        private void styleMap() {
+
+            if (map == null) return;
+
+            map.getUiSettings().setAllGesturesEnabled(true);
+            map.getUiSettings().setZoomControlsEnabled(true);
+            map.getUiSettings().setMapToolbarEnabled(true);
+
             try {
-                if (locationPermissionGranted) {
-                    map.setMyLocationEnabled(true);
-                    map.getUiSettings().setMyLocationButtonEnabled(true);
+                // Customise the styling of the base map using a JSON object defined
+                // in a raw resource file.
+                boolean success = map.setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(
+                                requireContext(), R.raw.style_json));
 
-                    // Website: StackOverflow
-                    // Answer: https://stackoverflow.com/a/16492921
-                    // Author: https://stackoverflow.com/users/2296798/nick
-
-                    if (lastKnownLocation != null) {
-                        CameraPosition cameraPosition = new CameraPosition.Builder()
-                                .target(new LatLng(lastKnownLocation.getLatitude(),
-                                        lastKnownLocation.getLongitude())).zoom(DEFAULT_ZOOM).build();
-                        CameraUpdate cameraUpdate = CameraUpdateFactory
-                                .newCameraPosition(cameraPosition);
-                        map.moveCamera(cameraUpdate);
-                    }
-
-                } else {
-                    map.setMyLocationEnabled(false);
-                    map.getUiSettings().setMyLocationButtonEnabled(false);
-                    lastKnownLocation = null;
-                    getLocationPermission();
+                if (!success) {
+                    Log.e(TAG, "Style parsing failed.");
                 }
-            } catch (SecurityException e) {
-                Log.e("Exception: %s", e.getMessage());
+            } catch (Resources.NotFoundException e) {
+                Log.e(TAG, "Can't find style. Error: ", e);
             }
         }
+
+
 
 
         /**
@@ -145,20 +265,21 @@ public class MapFragment extends Fragment {
          * user has installed Google Play services and returned to the app.
          */
         @Override
-        public void onMapReady(GoogleMap googleMap) {
-            this.map = googleMap;
-            // Create a sample test point
-            // Turn on the My Location layer and the related control on the map.
-            updateLocationUI();
+        public void onMapReady(@NonNull GoogleMap googleMap) {
+            map = googleMap;
 
-            // Get the current location of the device and set the position of the map.
+            map.setOnInfoWindowClickListener(marker -> {
+                // TODO launch QR code activity
+            });
+
+            styleMap();
             getDeviceLocation();
-            LatLng sydney = new LatLng(-34, 151);
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            updateLocationUI();
         }
     };
 
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -166,22 +287,57 @@ public class MapFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
 
-        binding = FragmentMapsBinding.inflate(inflater, container, false);
+        FragmentMapsBinding binding = FragmentMapsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        FloatingActionButton refresh = root.findViewById(R.id.fragment_maps_refresh);
+//        refresh.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                new QRCode("This is a value", new LatLng(53.51964250893045, -113.49529419539762)).save();
+//            }
+//        });
+        refresh.setOnClickListener(view -> updateNearbyPoints(false));
 
         // Construct a PlacesClient
-        Places.initialize(getContext(), getString(R.string.google_maps_key));
-        PlacesClient placesClient = Places.createClient(getContext());
+        Places.initialize(requireContext(), getString(R.string.google_maps_key));
+        Places.createClient(requireContext());
 
         // Construct a FusedLocationProviderClient.
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext());
 
+        // Request location permission
+        requestPermission();
 
         return root;
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void requestPermission() {
+        ActivityResultLauncher<String[]> locationPermissionRequest =
+                registerForActivityResult(new ActivityResultContracts
+                                .RequestMultiplePermissions(), result -> {
+                            Boolean fineLocationGranted = result.getOrDefault(
+                                    Manifest.permission.ACCESS_FINE_LOCATION, false);
+                            Boolean coarseLocationGranted = result.getOrDefault(
+                                    Manifest.permission.ACCESS_COARSE_LOCATION,false);
+                            if (fineLocationGranted != null && fineLocationGranted) {
+                                locationPermissionGranted = true;
+                                updateLocationUI();
+                            } else if (coarseLocationGranted != null && coarseLocationGranted) {
+                                locationPermissionGranted = false;
+                            } else {
+                                locationPermissionGranted = false;
+                            }
+                        }
+                );
+
+        locationPermissionRequest.launch(new String[] {
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+        });
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -191,4 +347,5 @@ public class MapFragment extends Fragment {
             mapFragment.getMapAsync(callback);
         }
     }
+
 }
