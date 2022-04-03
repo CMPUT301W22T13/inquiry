@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ public class QRCode implements Serializable {
     private LatLng location;
     private String id;
     private String locationImage;
+    private ArrayList comments;
 
 
     /**
@@ -77,6 +79,16 @@ public class QRCode implements Serializable {
         this.locationImage = location_image;
     }
 
+    public QRCode(String hash, int score, String id, String location_image, ArrayList comment) {
+        this.hash = hash;
+        this.score = score;
+        this.id = id;
+        this.locationImage = location_image;
+        this.comments = comments;
+    }
+
+
+
     public int createScore(String str) {
         int currentScore = 0;
         char prevChar = 'z';
@@ -108,6 +120,8 @@ public class QRCode implements Serializable {
     public String getLocationImage() { return this.locationImage; }
 
     public void setLocation(LatLng location) { this.location = location; }
+
+    public ArrayList getComment(){ return this.comments = comments; }
 
     /**
      * Saves the given hash into a collection owned by user

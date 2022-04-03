@@ -34,16 +34,12 @@
         <entry key="app/src/main/res/drawable/ic_baseline_delete_24.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/rounded_textview.xml" value="0.2125" />
         <entry key="app/src/main/res/layout/activity_player_profile.xml" value="0.3296875" />
-<<<<<<< HEAD
-<<<<<<< HEAD
-        <entry key="app/src/main/res/layout/activity_qrcode_view.xml" value="0.1767983789260385" />
-=======
-        <entry key="app/src/main/res/layout/activity_qrdetails.xml" value="0.15307312011718752" />
->>>>>>> d8de3edbab6acdc622edad795a635844cb99df43
-=======
+        <entry key="app/src/main/res/layout/activity_qrdetails.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_qrlist.xml" value="0.20416666666666666" />
         <entry key="app/src/main/res/layout/activity_qrcode_view.xml" value="0.1767983789260385" />
         <entry key="app/src/main/res/layout/activity_qrdetails.xml" value="0.15307312011718752" />
->>>>>>> 4875df91a1c0bf7695ae48048a9b35abbde46da5
+        <entry key="app/src/main/res/layout/activity_qrcode_view.xml" value="0.1767983789260385" />
+        <entry key="app/src/main/res/layout/activity_qrdetails.xml" value="0.15307312011718752" />
         <entry key="app/src/main/res/layout/activity_scanner_result.xml" value="0.3932846069335937" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_edit_profile.xml" value="0.31712646484375" />
@@ -65,12 +61,5 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
-  </component>
-  <component name="VisualizationToolProject">
-    <option name="state">
-      <ProjectState>
-        <option name="scale" value="0.20416666666666666" />
-      </ProjectState>
-    </option>
   </component>
 </project>

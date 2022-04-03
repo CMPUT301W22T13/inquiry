@@ -36,9 +36,9 @@ public class QRDetailsActivity extends AppCompatActivity {
         TextView qrName = findViewById(R.id.myqrs_qr_name);
         qrName.setText(code.getName());
 
-        TextView qrInitials = findViewById(R.id.myqrs_qr_initials);
-        String[] qrNameList = code.getName().split(" ");
-        qrInitials.setText(qrNameList[0].charAt(0) + qrNameList[1]);
+        TextView qrInitials = findViewById(R.id.qr_details_initials);
+        String[] qrNameSplit = code.getName().split(" ");
+        qrInitials.setText(qrName.getText().toString().substring(0,1) + qrNameSplit[1].substring(0,1));
 
         TextView qrScore = findViewById(R.id.myqrs_qr_score);
 
@@ -65,6 +65,7 @@ public class QRDetailsActivity extends AppCompatActivity {
             if (documents.size() == 1) {
                 String id = documents.get(0).getId();
                 findPlayers(id);
+                findComments(id);
             }
         });
     }
@@ -75,6 +76,14 @@ public class QRDetailsActivity extends AppCompatActivity {
         ArrayAdapter<String> userList = new ArrayAdapter<String>(
                 this, R.layout.matching_qr_list_content, list);
         usernameList.setAdapter(userList);
+    }
+
+    private void updateCommentUI(ArrayList<String> list){
+        ListView usernameList = findViewById(R.id.comments_list);
+
+        ArrayAdapter<String> commentList = new ArrayAdapter<String>(
+                this, R.layout.comments_list_content, list);
+        usernameList.setAdapter(commentList);
     }
 
     private void findPlayers(String id){
@@ -96,6 +105,30 @@ public class QRDetailsActivity extends AppCompatActivity {
 
             namesList.remove(currentPlayer);
             updateUI(namesList);
+
+        });
+    }
+
+    private void findComments(String qrDocumentId){
+        ArrayList<String> commentsList = new ArrayList<>();
+
+        db.getById("qr_codes",qrDocumentId).addOnCompleteListener(task ->{
+            if (task.isSuccessful()){
+                DocumentSnapshot qrDocument = task.getResult();
+                ArrayList<String> qrComments = (ArrayList<String>) qrDocument.get("comments");
+
+                if(qrComments != null) {
+                    int size = qrComments.size();
+                    if (size != 0) {
+                        Log.d("size", String.valueOf(size));
+                        Log.d("qrComments", String.valueOf(qrComments));
+                        commentsList.addAll(qrComments);
+                    }
+                }
+            }
+
+            commentsList.remove(currentPlayer);
+            updateCommentUI(commentsList);
 
         });
     }
