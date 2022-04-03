@@ -110,7 +110,7 @@ public class MyQRsListAdapter extends RecyclerView.Adapter<MyQRsListAdapter.View
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.myqrs_qr_name);
-            initialsTextView = itemView.findViewById(R.id.qr_details_initials);
+            initialsTextView = itemView.findViewById(R.id.myqrs_qr_initials);
             scoreTextView = itemView.findViewById(R.id.myqrs_qr_score);
             locationImageView = itemView.findViewById(R.id.myqrs_qr_location_image);
         }
