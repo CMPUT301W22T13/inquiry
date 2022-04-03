@@ -33,7 +33,7 @@ public class QRListArrayAdapter extends ArrayAdapter<RelativeQRLocation> {
         }
 
         TextView nameTextView = convertView.findViewById(R.id.myqrs_qr_name);
-        TextView initialsTextView = convertView.findViewById(R.id.qr_details_initials);
+        TextView initialsTextView = convertView.findViewById(R.id.myqrs_qr_initials);
         TextView scoreTextView = convertView.findViewById(R.id.myqrs_qr_score);
 
         nameTextView.setText(rqr.getQr().getName());
