@@ -104,19 +104,19 @@ public class ProfileFragment extends Fragment {
                                     user.setRank(i + 1);
                             }
                             LeaderBoard.bubbleSort(players, 2);
-                            int highestRank = -1;
+                            int highestRank = 0;
                             for (int i = 0; i < players.size(); i++) {
                                 if (players.get(i).getUid().equals(user.getUid()))
                                     highestRank = i + 1;
                             }
                             LeaderBoard.bubbleSort(players, 3);
-                            int qrCodeCountRank = -1;
+                            int qrCodeCountRank = 0;
                             for (int i = 0; i < players.size(); i++) {
                                 if (players.get(i).getUid().equals(user.getUid()))
                                     qrCodeCountRank = i + 1;
                             }
                             LeaderBoard.bubbleSort(players, 4);
-                            int lowestRank = -1;
+                            int lowestRank = 0;
                             for (int i = 0; i < players.size(); i++) {
                                 if (players.get(i).getUid().equals(user.getUid()))
                                     lowestRank = i + 1;

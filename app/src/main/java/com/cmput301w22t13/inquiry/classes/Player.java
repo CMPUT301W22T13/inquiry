@@ -20,7 +20,7 @@ public class Player implements Serializable {
     private String userName;
     private String email;
     private ArrayList<QRCode> qrCodes = new ArrayList<QRCode>();
-    private int rank = -1;
+    private int rank = 0;
 
     private final boolean isOwner;
 

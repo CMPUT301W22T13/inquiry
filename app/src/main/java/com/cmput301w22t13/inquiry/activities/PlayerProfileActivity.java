@@ -104,17 +104,17 @@ public class PlayerProfileActivity extends AppCompatActivity {
 
         // sorts in different order for different needed
         LeaderBoard.bubbleSort(players,2);
-        int highestRank = -1;
+        int highestRank = 0;
         for (int i = 0; i < players.size(); i++){
             if (players.get(i).getUid().equals(player.getUid())) highestRank = i+1;
         }
         LeaderBoard.bubbleSort(players,3);
-        int qrCodeCountRank = -1;
+        int qrCodeCountRank = 0;
         for (int i = 0; i < players.size(); i++){
             if (players.get(i).getUid().equals(player.getUid())) qrCodeCountRank = i+1;
         }
         LeaderBoard.bubbleSort(players,4);
-        int lowestRank = -1;
+        int lowestRank = 0;
         for (int i = 0; i < players.size(); i++){
             if (players.get(i).getUid().equals(player.getUid())) lowestRank = i+1;
         }
