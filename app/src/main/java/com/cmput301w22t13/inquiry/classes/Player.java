@@ -249,4 +249,9 @@ public class Player implements Serializable {
     public void deletePlayer(Player id) {
 
     }
+
+    public boolean isOwner() {
+        Log.d("VERBS","I'm in trouble");
+        return false;
+    }
 }
