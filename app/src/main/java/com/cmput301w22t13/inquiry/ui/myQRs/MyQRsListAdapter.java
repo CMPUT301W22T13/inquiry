@@ -1,6 +1,7 @@
 package com.cmput301w22t13.inquiry.ui.myQRs;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.cmput301w22t13.inquiry.R;
+import com.cmput301w22t13.inquiry.activities.QRDetailsActivity;
+import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.classes.QRCode;
 import com.cmput301w22t13.inquiry.db.Storage;
 
@@ -22,10 +25,15 @@ public class MyQRsListAdapter extends RecyclerView.Adapter<MyQRsListAdapter.View
     private final ArrayList<QRCode> qrCodes;
     private final Context context;
     Storage storage = new Storage();
+    private final Auth auth = new Auth();
 
     public MyQRsListAdapter(Context context, ArrayList<QRCode> qrCodes) {
         this.qrCodes = qrCodes;
         this.context = context;
+        auth.init();
+
+
+
     }
 
     @NonNull
@@ -54,6 +62,7 @@ public class MyQRsListAdapter extends RecyclerView.Adapter<MyQRsListAdapter.View
         holder.initialsTextView.setText(initials);
         holder.scoreTextView.setText(String.valueOf(score) + " pts");
 
+
         if (locationImage != null) {
             Log.d("MyQRsListAdapter", "locationImage is not null");
             holder.locationImageView.setVisibility(View.VISIBLE);
@@ -64,6 +73,17 @@ public class MyQRsListAdapter extends RecyclerView.Adapter<MyQRsListAdapter.View
                 Glide.with(context).load(url).into(holder.locationImageView);
             });
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), QRDetailsActivity.class);
+                intent.putExtra("code", qrCodes.get(holder.getAdapterPosition()));
+                intent.putExtra("player", auth.getPlayer().getUsername());
+                view.getContext().startActivity(intent);
+
+            }
+        });
 
     }
 
@@ -81,7 +101,7 @@ public class MyQRsListAdapter extends RecyclerView.Adapter<MyQRsListAdapter.View
         notifyItemRemoved(position);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView nameTextView;
         TextView initialsTextView;
         TextView scoreTextView;
@@ -95,5 +115,9 @@ public class MyQRsListAdapter extends RecyclerView.Adapter<MyQRsListAdapter.View
             locationImageView = itemView.findViewById(R.id.myqrs_qr_location_image);
         }
 
+        @Override
+        public void onClick(View view) {
+            Log.d("HELLO", "HELLO");
+        }
     }
 }

@@ -91,6 +91,10 @@ public class PlayerProfileActivity extends AppCompatActivity {
             Log.d("VERBS",auth.getPlayer().getUsername());
             Log.d("VERBS", "notOWner");
         }
+
+
+
+
     }
 
     public void setTexts() {

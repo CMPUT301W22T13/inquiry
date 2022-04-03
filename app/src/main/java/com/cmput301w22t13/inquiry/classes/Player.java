@@ -119,19 +119,21 @@ public class Player implements Serializable {
                         qrRefs.get(i).get().addOnCompleteListener(qrTask -> {
                             if (qrTask.isSuccessful()) {
                                 DocumentSnapshot qr = qrTask.getResult();
-                                QRCode qrCode;
+                                if(qr.getLong("score") != null) {
+                                  QRCode qrCode;
 
-                                if (qr.get("location_image") != null) {
-                                    qrCode = new QRCode(qr.getString("hash"), Objects.requireNonNull(qr.getLong("score")).intValue(), qr.getId(), qr.getString("location_image"));
-                                } else {
-                                    qrCode = new QRCode(qr.getString("hash"), Objects.requireNonNull(qr.getLong("score")).intValue(), qr.getId());
-                                }
+                                  if (qr.get("location_image") != null) {
+                                      qrCode = new QRCode(qr.getString("hash"), Objects.requireNonNull(qr.getLong("score")).intValue(), qr.getId(), qr.getString("location_image"));
+                                  } else {
+                                      qrCode = new QRCode(qr.getString("hash"), Objects.requireNonNull(qr.getLong("score")).intValue(), qr.getId());
+                                  }
 
-                                QrList.add(qrCode);
+                                  QrList.add(qrCode);
 
-                                if (finalI == qrRefs.size() - 1) {
-                                    onSuccess.getQrData(QrList);
-                                    this.qrCodes = QrList;
+                                  if (finalI == qrRefs.size() - 1) {
+                                      onSuccess.getQrData(QrList);
+                                      this.qrCodes = QrList;
+                                  }
                                 }
                             }
                         });

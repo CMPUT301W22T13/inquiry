@@ -1,9 +1,9 @@
 package com.cmput301w22t13.inquiry.ui.myQRs;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,12 +42,7 @@ public class MyQRsFragment extends Fragment {
 
         TextView emptyStateText = root.findViewById(R.id.myqrs_text_empty_state);
         RecyclerView recyclerView = root.findViewById(R.id.myqrs_list);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(root.getContext());
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-//                layoutManager.getOrientation());
-//        recyclerView.addItemDecoration(dividerItemDecoration);
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
 
         Player player = myQRsViewModel.getPlayer();
         if (player != null) {
@@ -138,10 +133,7 @@ public class MyQRsFragment extends Fragment {
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
         }).attachToRecyclerView(recyclerView);
-
-
         return root;
-
     }
 
     @Override
