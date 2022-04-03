@@ -28,6 +28,7 @@ public class QRCode implements Serializable {
     private int score;
     private LatLng location;
     private String id;
+    private String locationImage;
 
 
     /**
@@ -68,6 +69,14 @@ public class QRCode implements Serializable {
         this.id = id;
         this.location = location;
     }
+
+    public QRCode(String hash, int score, String id, String location_image) {
+        this.hash = hash;
+        this.score = score;
+        this.id = id;
+        this.locationImage = location_image;
+    }
+
     public int createScore(String str) {
         int currentScore = 0;
         char prevChar = 'z';
@@ -95,6 +104,8 @@ public class QRCode implements Serializable {
     }
 
     public LatLng getLocation() { return this.location; }
+
+    public String getLocationImage() { return this.locationImage; }
 
     public void setLocation(LatLng location) { this.location = location; }
 

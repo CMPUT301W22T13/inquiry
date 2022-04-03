@@ -33,6 +33,7 @@ public class PlayerProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.Theme_InQuiRy_NoActionBar);
         setContentView(R.layout.activity_player_profile);
 
         // gets player data from database to be displayed

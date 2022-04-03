@@ -1,9 +1,7 @@
 package com.cmput301w22t13.inquiry.classes;
 
 import android.util.Log;
-import android.widget.Toast;
 
-import com.cmput301w22t13.inquiry.activities.MainActivity;
 import com.cmput301w22t13.inquiry.db.Database;
 import com.cmput301w22t13.inquiry.db.onQrDataListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -122,15 +120,20 @@ public class Player implements Serializable {
                             if (qrTask.isSuccessful()) {
                                 DocumentSnapshot qr = qrTask.getResult();
                                 if(qr.getLong("score") != null) {
-                                    int score = qr.getLong("score").intValue();
-//                                    Log.d("QRCode", "QRCode score" + finalI + ": " + qr.getLong("score").intValue());
-                                    QRCode qrCode = new QRCode(qr.getString("hash"), score, qr.getId());
-                                    QrList.add(qrCode);
+                                  QRCode qrCode;
 
-                                    if (finalI == qrRefs.size() - 1) {
-                                        onSuccess.getQrData(QrList);
-                                        this.qrCodes = QrList;
-                                    }
+                                  if (qr.get("location_image") != null) {
+                                      qrCode = new QRCode(qr.getString("hash"), Objects.requireNonNull(qr.getLong("score")).intValue(), qr.getId(), qr.getString("location_image"));
+                                  } else {
+                                      qrCode = new QRCode(qr.getString("hash"), Objects.requireNonNull(qr.getLong("score")).intValue(), qr.getId());
+                                  }
+
+                                  QrList.add(qrCode);
+
+                                  if (finalI == qrRefs.size() - 1) {
+                                      onSuccess.getQrData(QrList);
+                                      this.qrCodes = QrList;
+                                  }
                                 }
                             }
                         });

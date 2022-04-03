@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:theme="@style/ThemeOverlay.InQuiRy.FullscreenContainer"
+    android:theme="@style/Theme.InQuiRy.NoActionBar"
     tools:context=".activities.OnboardingActivity">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
