@@ -67,6 +67,16 @@ public class QRDetailsActivity extends AppCompatActivity {
                 findPlayers(id);
             }
         });
+
+        Task<QuerySnapshot> querySnapshotTask2 = db.query("qr_codes", "hash", code.getHash());
+        querySnapshotTask.addOnCompleteListener(task2 -> {
+            List<DocumentSnapshot> documents = task2.getResult().getDocuments();
+            Log.d("size", String.valueOf(documents.size()));
+            if (documents.size() == 1) {
+                String id = documents.get(0).getId();
+                findComments(id);
+            }
+        });
     }
 
     private void updateUI(ArrayList<String> list){
@@ -75,6 +85,14 @@ public class QRDetailsActivity extends AppCompatActivity {
         ArrayAdapter<String> userList = new ArrayAdapter<String>(
                 this, R.layout.matching_qr_list_content, list);
         usernameList.setAdapter(userList);
+    }
+
+    private void updateCommentUI(ArrayList<String> list){
+        ListView usernameList = findViewById(R.id.comments_list);
+
+        ArrayAdapter<String> commentList = new ArrayAdapter<String>(
+                this, R.layout.comments_list_content, list);
+        usernameList.setAdapter(commentList);
     }
 
     private void findPlayers(String id){
@@ -96,6 +114,29 @@ public class QRDetailsActivity extends AppCompatActivity {
 
             namesList.remove(currentPlayer);
             updateUI(namesList);
+
+        });
+    }
+
+    private void findComments(String commentId){
+        ArrayList<String> commentsList = new ArrayList<>();
+
+        DocumentReference reference = db.getDocReference("comments"+ commentId);
+        db.arrayQuery("qr_codes","comments",reference).addOnCompleteListener(task ->{
+            if (task.isSuccessful()){
+                List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                int size = documents.size();
+                if (size!= 0) {
+                    for (DocumentSnapshot document: documents) {
+                        String username = (String) document.get("username");
+                        commentsList.add(username);
+                        Log.d("Before: ", (String) document.get("username"));
+                    }
+                }
+            }
+
+            commentsList.remove(currentPlayer);
+            updateUI(commentsList);
 
         });
     }

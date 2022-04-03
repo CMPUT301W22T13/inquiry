@@ -96,7 +96,7 @@
             app:layout_constraintTop_toBottomOf="@+id/QRCodeName" />
 
         <ListView
-            android:id="@+id/recyclerView2"
+            android:id="@+id/comments_list"
             android:layout_width="349dp"
             android:layout_height="150dp"
             android:layout_marginBottom="120dp"
@@ -113,7 +113,7 @@
             android:text="Comments"
             android:textAllCaps="true"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/recyclerView2"
+            app:layout_constraintBottom_toTopOf="@+id/comments_list"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.046"
             app:layout_constraintStart_toStartOf="parent"
@@ -126,7 +126,7 @@
             android:layout_marginEnd="28dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerView2"
+            app:layout_constraintTop_toBottomOf="@+id/comments_list"
             app:layout_constraintVertical_bias="0.642"
             app:srcCompat="@android:drawable/ic_input_add" />
 
@@ -134,7 +134,7 @@
             android:id="@+id/MatchingQrsList"
             android:layout_width="355dp"
             android:layout_height="181dp"
-            app:layout_constraintBottom_toTopOf="@+id/recyclerView2"
+            app:layout_constraintBottom_toTopOf="@+id/comments_list"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.285"
             app:layout_constraintStart_toStartOf="parent"
@@ -149,7 +149,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageButton"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerView2"
+            app:layout_constraintTop_toBottomOf="@+id/comments_list"
             app:layout_constraintVertical_bias="0.673">
 
             <com.google.android.material.textfield.TextInputEditText
