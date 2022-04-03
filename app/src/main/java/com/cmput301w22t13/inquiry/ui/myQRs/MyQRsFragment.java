@@ -1,19 +1,15 @@
 package com.cmput301w22t13.inquiry.ui.myQRs;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.graphics.Canvas;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,11 +18,8 @@ import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.classes.QRCode;
 import com.cmput301w22t13.inquiry.databinding.FragmentMyqrsBinding;
 import com.cmput301w22t13.inquiry.db.onQrDataListener;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
-
-import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class MyQRsFragment extends Fragment {
 
@@ -42,12 +35,7 @@ public class MyQRsFragment extends Fragment {
 
         TextView emptyStateText = root.findViewById(R.id.myqrs_text_empty_state);
         RecyclerView recyclerView = root.findViewById(R.id.myqrs_list);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(root.getContext());
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-//                layoutManager.getOrientation());
-//        recyclerView.addItemDecoration(dividerItemDecoration);
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
 
         Player player = myQRsViewModel.getPlayer();
         if (player != null) {
@@ -138,10 +126,7 @@ public class MyQRsFragment extends Fragment {
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
         }).attachToRecyclerView(recyclerView);
-
-
         return root;
-
     }
 
     @Override
