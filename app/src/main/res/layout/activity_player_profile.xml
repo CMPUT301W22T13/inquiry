@@ -7,11 +7,14 @@
 
     <Button
         android:id="@+id/playerProfileBackButton"
+        style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="25dp"
         android:text="Back"
+        app:icon="@drawable/ic_baseline_chevron_left_24"
+        app:iconPadding="0dp"
+        app:iconSize="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

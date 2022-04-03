@@ -51,16 +51,12 @@ public class MyQRsFragment extends Fragment {
 
             binding = FragmentMyqrsBinding.inflate(inflater, container, false);
             View root = binding.getRoot();
+        TextView emptyStateText = root.findViewById(R.id.myqrs_text_empty_state);
+        RecyclerView recyclerView = root.findViewById(R.id.myqrs_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
 
-            TextView emptyStateText = root.findViewById(R.id.myqrs_text_empty_state);
-            RecyclerView recyclerView = root.findViewById(R.id.myqrs_list);
-
-            LinearLayoutManager layoutManager = new LinearLayoutManager(root.getContext());
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-//                layoutManager.getOrientation());
-//        recyclerView.addItemDecoration(dividerItemDecoration);
-            recyclerView.setLayoutManager(layoutManager);
-
+        Player player = myQRsViewModel.getPlayer();
+        if (player != null) {
             allQRsViewModel.getOwner().fetchQRCodes(new onQrDataListener() {
                 @Override
                 public void getQrData(ArrayList<QRCode> qrCodes) {
@@ -214,29 +210,16 @@ public class MyQRsFragment extends Fragment {
                         }
                     });
 
-                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialogInterface) {
-                            // cancel swipe
-                            qrCodeListAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
-
-                        }
-                    });
-
-                    dialog.show();
-                }
-
-                @Override
-                public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                    new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-                            .addActionIcon(R.drawable.ic_baseline_delete_24)
-                            .create()
-                            .decorate();
-                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-                }
-            }).attachToRecyclerView(recyclerView);
-            return root;
-        }
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                        .addActionIcon(R.drawable.ic_baseline_delete_24)
+                        .create()
+                        .decorate();
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+        }).attachToRecyclerView(recyclerView);
+        return root;
     }
 
     @Override

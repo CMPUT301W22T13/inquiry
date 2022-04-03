@@ -168,6 +168,19 @@ public class Database implements Serializable {
         return db.collection(collection).whereEqualTo(field, value).get();
     }
 
+
+    /**
+     * query a collection for documents matching a specified field array
+     *
+     * @param collection the name of the collection, e.g. "users"
+     * @param field      the name of the array field to query, e.g. "qr_codes"
+     * @param value      the query value, e.g. "Ada"
+     * @return a QuerySnapshot of the documents matching the query (usage: query(...).addOnSuccessListener(...))
+     */
+    public Task<QuerySnapshot> arrayQuery(String collection, String field, DocumentReference value){
+        return db.collection(collection).whereArrayContains(field,value).get();
+    }
+
     /**
      * update a document in a specified collection using its ID
      *
