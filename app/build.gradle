@@ -75,4 +75,7 @@ dependencies {
     implementation 'com.github.javafaker:javafaker:1.0.2'
     implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.3'
     implementation 'nl.dionsegijn:konfetti-xml:2.0.2'
+
+    implementation 'com.github.bumptech.glide:glide:4.13.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
 }

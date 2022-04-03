@@ -22,5 +22,9 @@ public class Storage {
         return fileRefStorage.putBytes(data);
     }
 
+    public StorageReference getStorageRef(String folderName, String fileName) {
+        return storageRef.child(folderName).child(fileName);
+    }
+
 
 }
