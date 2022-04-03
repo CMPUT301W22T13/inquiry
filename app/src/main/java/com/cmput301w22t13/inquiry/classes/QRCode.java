@@ -16,19 +16,20 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.android.gms.maps.model.LatLng;
 
-
+import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
-public class QRCode {
+public class QRCode implements Serializable {
     private final String hash;
     private int score;
     private LatLng location;
     private String id;
+    private String locationImage;
 
-    Database db = new Database();
 
     /**
      * Initalized the QRCode with a sha-256 hash using the input string
@@ -68,6 +69,14 @@ public class QRCode {
         this.id = id;
         this.location = location;
     }
+
+    public QRCode(String hash, int score, String id, String location_image) {
+        this.hash = hash;
+        this.score = score;
+        this.id = id;
+        this.locationImage = location_image;
+    }
+
     public int createScore(String str) {
         int currentScore = 0;
         char prevChar = 'z';
@@ -96,6 +105,8 @@ public class QRCode {
 
     public LatLng getLocation() { return this.location; }
 
+    public String getLocationImage() { return this.locationImage; }
+
     public void setLocation(LatLng location) { this.location = location; }
 
     /**
@@ -103,6 +114,9 @@ public class QRCode {
      * before saving, check if a qr code with the same hash already exists
      */
     public void save() {
+
+        Database db = new Database();
+
         // create a map of the data to be saved
         Map<String, Object> qrCode = new HashMap<>();
         qrCode.put("hash", this.hash);

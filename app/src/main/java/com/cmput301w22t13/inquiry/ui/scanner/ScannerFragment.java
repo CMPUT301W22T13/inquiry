@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -66,8 +67,11 @@ public class ScannerFragment extends Fragment {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
                                 if (document != null && document.exists()) {
-                                    Player player = new Player((String) document.get("username"), (String) document.get("id"), true);
+                                    String username = document.getString("username");
+                                    Player player = new Player(username, (String) document.get("id"), true);
                                     Intent intent = new Intent(getActivity(), PlayerProfileActivity.class);
+
+                                    Toast.makeText(requireActivity(), "You found " + username + "!", Toast.LENGTH_SHORT).show();
                                     intent.putExtra("Player", player);
                                     startActivity(intent);
 
@@ -78,9 +82,10 @@ public class ScannerFragment extends Fragment {
                         QRCode QR = new QRCode(result.getText());
                         QR.save();
 
-                        Intent intent = new Intent(getActivity(), ScannerResultActivity.class);
+                        Intent intent = new Intent(requireContext(), ScannerResultActivity.class);
                         intent.putExtra("name", QR.getName());
                         intent.putExtra("score", QR.getScore());
+                        intent.putExtra("qrHash", QR.getHash());
                         startActivity(intent);
                     }
 

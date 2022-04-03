@@ -35,6 +35,7 @@ public class PlayerStatusActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstances) {
         super.onCreate(savedInstances);
+        setTheme(R.style.Theme_InQuiRy_NoActionBar);
         setContentView(R.layout.activity_player_status);
 
         // gets player data from database to be displayed
@@ -70,8 +71,11 @@ public class PlayerStatusActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 QRCode clickedQR = qrCodeArrayList.get(i);
-                // move to qr code fragment or activity
-            }
+                Intent intent = new Intent(getApplicationContext(), QRDetailsActivity.class);
+                intent.putExtra("code", clickedQR);
+                intent.putExtra("player", player.getUsername());
+                startActivity(intent);
+                }
         });
 
 
@@ -89,7 +93,7 @@ public class PlayerStatusActivity extends AppCompatActivity {
 
         PlayerStatusQRCodeListAdapter qrCodeListAdapter = new PlayerStatusQRCodeListAdapter(this, qrCodeArrayList, player);
         qrCodeListView.setAdapter(qrCodeListAdapter);
-        //qrCodeListView.setClickable(true);
+        qrCodeListView.setClickable(true);
 
     }
 
