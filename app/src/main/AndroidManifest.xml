@@ -19,6 +19,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.InQuiRy">
         <activity
+            android:name=".activities.QRListActivity"
+            android:exported="false"
+            android:label="Nearby Codes"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+        <activity
             android:name=".activities.QRDetailsActivity"
             android:exported="false" />
         <activity

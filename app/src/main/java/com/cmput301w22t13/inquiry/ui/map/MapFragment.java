@@ -3,6 +3,7 @@ package com.cmput301w22t13.inquiry.ui.map;
 import static android.content.ContentValues.TAG;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
@@ -23,11 +24,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.cmput301w22t13.inquiry.R;
-import com.cmput301w22t13.inquiry.classes.QRCode;
+import com.cmput301w22t13.inquiry.activities.QRListActivity;
 import com.cmput301w22t13.inquiry.databinding.FragmentMapsBinding;
-import com.firebase.geofire.GeoFireUtils;
-import com.firebase.geofire.GeoLocation;
-import com.firebase.geofire.GeoQueryBounds;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
@@ -41,78 +39,19 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.android.libraries.places.api.Places;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MapFragment extends Fragment {
 
     private Location lastKnownLocation;
-    private Location defaultTarget;
     private boolean locationPermissionGranted;
+    private MapViewModel model;
 
     private GoogleMap map;
     private static final int DEFAULT_ZOOM = 15;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-
-    private interface NearbyPointHandler {
-        void handlePoint(QRCode qr);
-    }
-
-    private void getNearbyPoints(double lat, double lng, NearbyPointHandler l) {
-
-        final GeoLocation center = new GeoLocation(lat, lng);
-        final double radiusInM = 30 * 1000;
-
-        // Each item in 'bounds' represents a startAt/endAt pair. We have to issue
-        // a separate query for each pair. There can be up to 9 pairs of bounds
-        // depending on overlap, but in most cases there are 4.
-        List<GeoQueryBounds> bounds = GeoFireUtils.getGeoHashQueryBounds(center, radiusInM);
-        final List<Task<QuerySnapshot>> tasks = new ArrayList<>();
-        for (GeoQueryBounds b : bounds) {
-            Query q = FirebaseFirestore.getInstance().collection("qr_codes")
-                    .orderBy("geohash")
-                    .startAt(b.startHash)
-                    .endAt(b.endHash);
-
-            tasks.add(q.get());
-        }
-
-        // Collect all the query results together into a single list
-        Tasks.whenAllComplete(tasks)
-                .addOnCompleteListener(t -> {
-                    for (Task<QuerySnapshot> task : tasks) {
-                        QuerySnapshot snap = task.getResult();
-                        for (DocumentSnapshot doc : snap.getDocuments()) {
-                            try {
-                                double lat1 = doc.getDouble("lat");
-                                double lng1 = doc.getDouble("lng");
-                                String hash = doc.getString("hash");
-                                int score = doc.get("score", int.class);
-                                GeoLocation docLocation = new GeoLocation(lat1, lng1);
-
-                                // We have to filter out a few false positives due to GeoHash
-                                // accuracy, but most will match
-                                double distanceInM = GeoFireUtils.getDistanceBetween(docLocation, center);
-                                if (distanceInM <= radiusInM) {
-                                    l.handlePoint(new QRCode(hash, score, new LatLng(docLocation.latitude, docLocation.longitude)));
-                                }
-
-                            } catch (NullPointerException e) {
-                                Log.v("NO_LOCATION", e.getMessage());
-                            }
-
-                        }
-                    }
-                });
-    }
 
 
     private void updateNearbyPoints(boolean firstRun) {
@@ -128,7 +67,7 @@ public class MapFragment extends Fragment {
         }
 
         map.clear();
-        getNearbyPoints(target.latitude,
+        model.getNearbyPoints(target.latitude,
                 target.longitude,
                 qr -> map.addMarker(new MarkerOptions()
                         .position(qr.getLocation()).title(qr.getName()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
@@ -290,14 +229,21 @@ public class MapFragment extends Fragment {
         FragmentMapsBinding binding = FragmentMapsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        model = new MapViewModel();
+
         FloatingActionButton refresh = root.findViewById(R.id.fragment_maps_refresh);
-//        refresh.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                new QRCode("This is a value", new LatLng(53.51964250893045, -113.49529419539762)).save();
-//            }
-//        });
+
         refresh.setOnClickListener(view -> updateNearbyPoints(false));
+
+        ExtendedFloatingActionButton listButton = root.findViewById(R.id.fragment_maps_list);
+        listButton.setOnClickListener(view -> {
+            if (map != null) {
+                Intent intent = new Intent(requireContext(), QRListActivity.class);
+                intent.putExtra("LAT", map.getCameraPosition().target.latitude);
+                intent.putExtra("LNG", map.getCameraPosition().target.longitude);
+                startActivity(intent);
+            }
+        });
 
         // Construct a PlacesClient
         Places.initialize(requireContext(), getString(R.string.google_maps_key));
