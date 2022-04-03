@@ -70,7 +70,7 @@ public class MapFragment extends Fragment {
         model.getNearbyPoints(target.latitude,
                 target.longitude,
                 qr -> map.addMarker(new MarkerOptions()
-                        .position(qr.getLocation()).title(qr.getName()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
+                        .position(qr.getLocation()).title(qr.getName() + " - " + qr.getScore() + "pts").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
                 ));
 
     }
