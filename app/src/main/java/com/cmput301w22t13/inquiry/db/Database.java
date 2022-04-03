@@ -5,18 +5,23 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.cmput301w22t13.inquiry.auth.Auth;
+import com.cmput301w22t13.inquiry.classes.Owner;
+import com.cmput301w22t13.inquiry.classes.QRCode;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.firestore.Source;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Database implements Serializable {
@@ -191,6 +196,11 @@ public class Database implements Serializable {
                 });
     }
 
+    /**
+     * remove an item from a collection based on id
+     * @param collection collection to be specified
+     * @param id id of the item from the collection
+     */
     public void remove(String collection,String id){
        this.db.collection(collection).document(id).delete()
        .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -207,4 +217,15 @@ public class Database implements Serializable {
         });
 
     }
+
+    /**
+     * returns a Task Query Snapshot from a collection
+     * @param collection collection to get items frmo
+     * @return returns a collection of the collections elements
+     */
+    public Task<QuerySnapshot> getCollection(String collection){
+        return this.db.collection(collection).get();
+
+    }
+
 }
