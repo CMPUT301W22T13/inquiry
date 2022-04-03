@@ -85,6 +85,7 @@ public class ScannerFragment extends Fragment {
                         Intent intent = new Intent(requireContext(), ScannerResultActivity.class);
                         intent.putExtra("name", QR.getName());
                         intent.putExtra("score", QR.getScore());
+                        intent.putExtra("qrHash", QR.getHash());
                         startActivity(intent);
                     }
 

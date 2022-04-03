@@ -33,7 +33,8 @@
         <entry key="app/src/main/res/layout/activity_player_profile.xml" value="0.3296875" />
         <entry key="app/src/main/res/layout/activity_player_status.xml" value="0.20833333333333334" />
         <entry key="app/src/main/res/layout/activity_qrdetails.xml" value="0.3296875" />
-        <entry key="app/src/main/res/layout/activity_scanner_result.xml" value="0.2679809570312499" />
+        <entry key="app/src/main/res/layout/activity_scanner_result.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_scanner_result_camera.xml" value="0.3296875" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_edit_profile.xml" value="0.31712646484375" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.23154387297453702" />
@@ -43,7 +44,7 @@
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1660561644000771" />
         <entry key="app/src/main/res/layout/myqrs_list_item.xml" value="0.36845397949218767" />
         <entry key="app/src/main/res/layout/profile_view_list_item.xml" value="0.3296875" />
-        <entry key="app/src/main/res/layout/scanner_fragment.xml" value="0.21556243896484378" />
+        <entry key="app/src/main/res/layout/scanner_fragment.xml" value="0.1" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.32222222222222224" />
       </map>
     </option>
@@ -57,7 +58,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.3003082275390624" />
+        <option name="scale" value="0.2741744995117188" />
       </ProjectState>
     </option>
   </component>
