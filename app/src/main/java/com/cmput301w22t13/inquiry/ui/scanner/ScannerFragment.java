@@ -61,23 +61,29 @@ public class ScannerFragment extends Fragment {
                     // if qr code string starts with "INQUIRY_USER_", don't save to database
                     // TODO: error handling
                     if (resultString.startsWith("INQUIRY_USER_")) {
-                        String uid = resultString.substring(13);
+                        String username = resultString.substring(13);
                         Database db = new Database();
-                        db.getById("users", (String) uid).addOnCompleteListener(task -> {
+                        db.getById("user_accounts", username).addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
                                 if (document != null && document.exists()) {
-                                    String username = document.getString("username");
-                                    Player player = new Player(username, (String) document.get("id"), true);
+                                    Player player = new Player(username, username, true);
                                     Intent intent = new Intent(getActivity(), PlayerProfileActivity.class);
 
-                                    Toast.makeText(requireActivity(), "You found " + username + "!", Toast.LENGTH_SHORT).show();
+                                    requireActivity().runOnUiThread(()-> {
+                                        Toast.makeText(requireActivity(), "You found " + username + "!", Toast.LENGTH_SHORT).show();
+                                    });
                                     intent.putExtra("Player", player);
                                     startActivity(intent);
 
                                 }
                             }
                         });
+                    } else if (resultString.startsWith("INQUIRY_LOGIN_")) {
+                        requireActivity().runOnUiThread(() ->
+                                Toast.makeText(getActivity(),
+                                        "To login to another account, navigate to the Profile tab.",
+                                        Toast.LENGTH_SHORT).show());
                     } else {
                         QRCode QR = new QRCode(result.getText());
                         QR.save();
