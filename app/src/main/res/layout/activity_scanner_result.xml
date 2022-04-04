@@ -16,14 +16,14 @@
         android:id="@+id/scanner_result_add_image_success"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="162dp"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/save_qr_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_save_location"
+        app:layout_constraintTop_toBottomOf="@+id/scanner_result_qr_score"
         app:layout_constraintVertical_bias="0.0"
         tools:visibility="gone">
 
@@ -74,12 +74,12 @@
         android:id="@+id/scanner_result_add_image"
         android:layout_width="fill_parent"
         android:layout_height="96dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="162dp"
         android:orientation="vertical"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_save_location"
+        app:layout_constraintTop_toBottomOf="@+id/scanner_result_qr_score"
         tools:visibility="visible">
 
         <TextView
@@ -148,6 +148,73 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scanner_result_qr_name" />
 
+    <LinearLayout
+        android:id="@+id/scanner_result_add_location"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="190dp"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scanner_result_qr_score"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/location_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="32dp"
+            android:text="Save Location"
+            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/location_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="4dp"
+            android:text="Let others know where this QR Code is" />
+
+        <Button
+            android:id="@+id/button_save_location"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="24dp"
+            android:text="Save Location" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/scanner_result_saved_location"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="190dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scanner_result_qr_score"
+        tools:visibility="gone">
+
+        <TextView
+            android:id="@+id/saved_location_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="32dp"
+            android:text="Location saved"
+            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+            android:textSize="16sp" />
+
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/save_qr_button"
         android:layout_width="fill_parent"
@@ -162,48 +229,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.94" />
 
-    <TextView
-        android:id="@+id/location_heading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:text="Save Location"
-        android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scanner_result_qr_score" />
-
-    <TextView
-        android:id="@+id/location_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="4dp"
-        android:text="Let others know where this QR Code is"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/location_heading" />
-
-    <Button
-        android:id="@+id/button_save_location"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="24dp"
-        android:text="Save Location"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/location_description" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/scanner_result_comments"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="280dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_save_location">
+        app:layout_constraintTop_toBottomOf="@+id/scanner_result_qr_score">
 
         <TextView
             android:id="@+id/photo_heading2"

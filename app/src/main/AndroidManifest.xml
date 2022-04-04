@@ -21,12 +21,17 @@
         <activity
             android:name=".activities.QRListActivity"
             android:exported="false"
-            android:label="Nearby Codes"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/Theme.InQuiRy.NoActionBar"
             >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
         </activity>
+        <activity
+            android:name=".activities.QRLoginActivity"
+            android:theme="@style/Theme.InQuiRy.NoActionBar"
+            android:exported="false" />
         <activity
             android:name=".activities.QRDetailsActivity"
             android:exported="false"

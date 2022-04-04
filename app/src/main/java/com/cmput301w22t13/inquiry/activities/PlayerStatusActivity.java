@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -18,12 +17,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cmput301w22t13.inquiry.R;
-import com.cmput301w22t13.inquiry.classes.LeaderBoard;
 import com.cmput301w22t13.inquiry.classes.Player;
 import com.cmput301w22t13.inquiry.classes.PlayerStatusQRCodeListAdapter;
 import com.cmput301w22t13.inquiry.classes.QRCode;
-import com.cmput301w22t13.inquiry.db.Database;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 

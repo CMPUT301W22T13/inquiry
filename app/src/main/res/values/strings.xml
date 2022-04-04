@@ -29,4 +29,5 @@
     <string name="privacy_message">Privacy\n\nYour scanned QR codes will not be stored. Only a representation (SHA256 hash) that cannot be used to recreate QR code data will be recorded.\n\nYour location will be requested in order to view your QR codes on a map. The location will only be saved if requested by you.\n\nImages uploaded through the app will be shared with others.</string>
     <string name="refresh">Refresh</string>
     <string name="view_nearby_codes">View Nearby Codes</string>
+    <string name="existing_user">Log in as an existing user</string>
 </resources>

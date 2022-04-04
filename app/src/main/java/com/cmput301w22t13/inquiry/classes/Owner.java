@@ -55,8 +55,7 @@ public class Owner extends Player{
      */
     public void deletePlayer(Player player){
         Database db = new Database();
-        String newId = player.getID();
-        db.remove("users", newId);
+        db.remove("user_accounts", player.getUsername());
 
     }
 
@@ -110,16 +109,13 @@ public class Owner extends Player{
         final Map<String, Object> qrCodesFieldArray = new HashMap<>();
         qrCodesFieldArray.put("qr_codes", FieldValue.arrayRemove(qrRef));
 
-        db.getCollection("users").addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        db.update("users", (String) document.getData().get("id"), qrCodesFieldArray);
-                    }
-                } else {
-                    Log.d("VERBS","had issues");
+        db.getCollection("user_accounts").addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    db.update("user_accounts", document.getId(), qrCodesFieldArray);
                 }
+            } else {
+                Log.d("VERBS","had issues");
             }
         });
 
