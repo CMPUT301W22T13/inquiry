@@ -44,7 +44,6 @@ android {
     }
 
 
-
 dependencies {
     implementation 'com.budiyev.android:code-scanner:2.1.0'
     implementation platform('com.google.firebase:firebase-bom:29.1.0')
@@ -71,6 +70,8 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.0.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.0.1'
+    testImplementation "org.mockito:mockito-core:4.4.0"
+
 
     implementation 'com.github.javafaker:javafaker:1.0.2'
     implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.3'

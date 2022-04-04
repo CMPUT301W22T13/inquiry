@@ -89,7 +89,9 @@ public class Owner extends Player{
                 });
 
     }
-
+    public ArrayList<QRCode> getQrCodes(){
+       return this.qrCodes;
+    }
     public void setQrCodes(ArrayList<QRCode> qrcodes){
         this.qrCodes = qrcodes;
     }
