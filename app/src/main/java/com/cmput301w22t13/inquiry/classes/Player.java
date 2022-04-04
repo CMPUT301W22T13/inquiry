@@ -106,7 +106,6 @@ public class Player implements Serializable {
 
 
     public void fetchQRCodes(onQrDataListener onSuccess) {
-        ArrayList<QRCode> QrList = new ArrayList<>();
 
         Database db = new Database();
         Auth.getUsername((player) -> {
@@ -115,6 +114,7 @@ public class Player implements Serializable {
                 if (userTask.isSuccessful()) {
                     // loop through qr_codes field array and add to QrList ArrayList
                     DocumentSnapshot user = userTask.getResult();
+                    ArrayList<QRCode> QrList = new ArrayList<>();
                     ArrayList<DocumentReference> qrRefs = (ArrayList<DocumentReference>) user.get("qr_codes");
                     if (qrRefs != null && qrRefs.size() > 0) {
                         for (int i = 0; i < qrRefs.size(); i++) {
@@ -134,8 +134,8 @@ public class Player implements Serializable {
                                         QrList.add(qrCode);
 
                                         if (finalI == qrRefs.size() - 1) {
-                                            onSuccess.getQrData(QrList);
                                             this.qrCodes = QrList;
+                                            onSuccess.getQrData(QrList);
                                         }
                                     }
                                 }
@@ -143,7 +143,7 @@ public class Player implements Serializable {
                         }
                     } else {
                         // TODO: error handling
-                        onSuccess.getQrData(new ArrayList<QRCode>());
+                        onSuccess.getQrData(new ArrayList<>());
                     }
                 }
             });
