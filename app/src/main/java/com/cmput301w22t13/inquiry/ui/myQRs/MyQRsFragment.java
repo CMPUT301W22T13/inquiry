@@ -61,7 +61,7 @@ public class MyQRsFragment extends Fragment {
 
             recyclerView.setLayoutManager(layoutManager);
 
-            allQRsViewModel.getOwner().fetchQRCodes(new onQrDataListener() {
+            myQRsViewModel.getPlayer().fetchQRCodes(new onQrDataListener() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void getQrData(ArrayList<QRCode> qrCodes) {
