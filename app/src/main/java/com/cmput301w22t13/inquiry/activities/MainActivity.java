@@ -35,6 +35,27 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void checkForHelp() {
+        // start on-boarding screen if never done before
+        // uses SharedPreferences to store this value
+
+        // Taken from StackOverflow.com
+        // Answer: https://stackoverflow.com/a/7238549
+        // Author: https://stackoverflow.com/users/691688/femi
+
+
+        // NOTE: FOR TESTING ONLY, THIS CLEARS ALL PREFERENCES BEFORE RUNNING
+//        prefs.edit().clear().apply();
+        boolean previouslyStarted = prefs.getBoolean(PREV_STARTED, false);
+        if (!previouslyStarted) {
+            prefs
+                    .edit()
+                    .putBoolean(PREV_STARTED, Boolean.TRUE)
+                    .apply();
+            showHelp();
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -77,26 +98,11 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        Auth.init();
+        Auth.init((player) -> {});
+
+        checkForHelp();
 
 
-        // start on-boarding screen if never done before
-        // uses SharedPreferences to store this value
 
-        // Taken from StackOverflow.com
-        // Answer: https://stackoverflow.com/a/7238549
-        // Author: https://stackoverflow.com/users/691688/femi
-
-
-        // NOTE: FOR TESTING ONLY, THIS CLEARS ALL PREFERENCES BEFORE RUNNING
-//        prefs.edit().clear().commit();
-        boolean previouslyStarted = prefs.getBoolean(PREV_STARTED, false);
-        if (!previouslyStarted) {
-            prefs
-                    .edit()
-                    .putBoolean(PREV_STARTED, Boolean.TRUE)
-                    .apply();
-            showHelp();
-        }
     }
 }

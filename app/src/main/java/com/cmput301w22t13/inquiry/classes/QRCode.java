@@ -27,7 +27,8 @@ import java.util.Map;
 public class QRCode implements Serializable {
     private final String hash;
     private int score;
-    private LatLng location;
+    private Double lat;
+    private Double lng;
     private String id;
     private String locationImage;
     private ArrayList comments;
@@ -46,7 +47,8 @@ public class QRCode implements Serializable {
     public QRCode(String text, LatLng location) {
         this.hash = QRName.getHash(text);
         this.score = createScore(this.hash);
-        this.location = location;
+        this.lat = location.latitude;
+        this.lng = location.longitude;
     }
     public QRCode(String hash, int score) {
         this.hash = hash;
@@ -56,7 +58,8 @@ public class QRCode implements Serializable {
     public QRCode(String hash, int score, LatLng location) {
         this.hash = hash;
         this.score = score;
-        this.location = location;
+        this.lat = location.latitude;
+        this.lng = location.longitude;
     }
 
     public QRCode(String hash, int score, String id) {
@@ -69,7 +72,8 @@ public class QRCode implements Serializable {
         this.hash = hash;
         this.score = score;
         this.id = id;
-        this.location = location;
+        this.lat = location.latitude;
+        this.lng = location.longitude;
     }
 
     public QRCode(String hash, int score, String id, String location_image) {
@@ -115,11 +119,9 @@ public class QRCode implements Serializable {
         return this.hash;
     }
 
-    public LatLng getLocation() { return this.location; }
+    public LatLng getLocation() { return new LatLng(lat, lng); }
 
     public String getLocationImage() { return this.locationImage; }
-
-    public void setLocation(LatLng location) { this.location = location; }
 
     public ArrayList getComment(){ return this.comments = comments; }
 
@@ -137,10 +139,10 @@ public class QRCode implements Serializable {
         qrCode.put("score", this.score);
 
         // For location, we need to add a "geohash" -- added by Rajan
-        if (location != null) {
-            qrCode.put("lat", location.latitude);
-            qrCode.put("lng", location.longitude);
-            GeoLocation loc = new GeoLocation(location.latitude, location.longitude);
+        if (lat != null && lng != null) {
+            qrCode.put("lat", lat);
+            qrCode.put("lng", lng);
+            GeoLocation loc = new GeoLocation(lat, lng);
             qrCode.put("geohash", GeoFireUtils.getGeoHashForLocation(loc));
         }
 
