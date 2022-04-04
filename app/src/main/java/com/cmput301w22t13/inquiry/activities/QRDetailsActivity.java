@@ -23,6 +23,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,8 @@ public class QRDetailsActivity extends AppCompatActivity {
     String qrHash;
     Database db = new Database();
     String currentPlayer;
+
+    ArrayList<String> commentsList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class QRDetailsActivity extends AppCompatActivity {
 
         TextView qrName = findViewById(R.id.myqrs_qr_name);
         qrName.setText(code.getName());
+        qrHash = code.getHash();
 
         TextView qrInitials = findViewById(R.id.qr_details_initials);
         String[] qrNameSplit = code.getName().split(" ");
@@ -61,10 +65,6 @@ public class QRDetailsActivity extends AppCompatActivity {
         // ends activity
         Button backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(view -> finish());
-
-
-
-
 
         Task<QuerySnapshot> querySnapshotTask = db.query("qr_codes", "hash", code.getHash());
         querySnapshotTask.addOnCompleteListener(task -> {
@@ -87,10 +87,8 @@ public class QRDetailsActivity extends AppCompatActivity {
                 // dismiss keyboard
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(leaveCommentText.getWindowToken(), 0);
-
-                /*leaveCommentButton.setEnabled(false);
-                leaveCommentText.setEnabled(false);
-                leaveCommentButton.setText("Comment Added!");*/
+                leaveCommentText.setText("");
+                leaveCommentText.clearFocus();
 
                 Toast.makeText(this, "Comment added", Toast.LENGTH_LONG).show();
             }
@@ -101,8 +99,6 @@ public class QRDetailsActivity extends AppCompatActivity {
     }
 
     private void addCommentToQr(String comment) {
-        Database db = new Database();
-
         db.query("qr_codes", "hash", qrHash).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult().getDocuments().get(0);
@@ -112,6 +108,9 @@ public class QRDetailsActivity extends AppCompatActivity {
                 Map<String, Object> data = new HashMap<>();
                 data.put("comments", FieldValue.arrayUnion(comment));
                 db.update("qr_codes", qrId, data);
+
+                commentsList.add(comment);
+                updateCommentUI(commentsList);
             }
         });
     }
@@ -130,6 +129,8 @@ public class QRDetailsActivity extends AppCompatActivity {
 
         ArrayAdapter<String> commentList = new ArrayAdapter<String>(
                 this, R.layout.comments_list_content, list);
+        // reverse comments so newest is first
+        Collections.reverse(list);
         usernameList.setAdapter(commentList);
     }
 
@@ -157,7 +158,7 @@ public class QRDetailsActivity extends AppCompatActivity {
     }
 
     private void findComments(String qrDocumentId){
-        ArrayList<String> commentsList = new ArrayList<>();
+
 
         db.getById("qr_codes",qrDocumentId).addOnCompleteListener(task ->{
             if (task.isSuccessful()){
@@ -174,7 +175,6 @@ public class QRDetailsActivity extends AppCompatActivity {
                 }
             }
 
-            commentsList.remove(currentPlayer);
             updateCommentUI(commentsList);
 
         });

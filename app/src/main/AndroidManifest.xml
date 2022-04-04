@@ -29,7 +29,8 @@
         </activity>
         <activity
             android:name=".activities.QRDetailsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".activities.ScannerResultActivity"
             android:exported="false"

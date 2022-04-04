@@ -39,7 +39,7 @@ public class MyQRsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         Log.d("VERBS","hi there");
-        if(auth.getPlayer().getIsOwner()){
+        if(auth.getPlayer() != null && auth.getPlayer().getIsOwner()){
             //user swipes right to delete QR code
         /*
         //from youtube.com
