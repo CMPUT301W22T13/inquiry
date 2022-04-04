@@ -68,6 +68,10 @@ public class MapFragment extends Fragment {
     private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085);
 
 
+    /**
+     * search for nearby points and populate map
+     * @param firstRun if first run, target is around location, otherwise it is around the map center
+     */
     private void updateNearbyPoints(boolean firstRun) {
 
         if (map == null) return;
@@ -89,6 +93,9 @@ public class MapFragment extends Fragment {
 
     }
 
+    /**
+     * Move map camera to the current location if possible
+     */
     private void moveCameraToCurrentLocation() {
 
         // Website: StackOverflow
@@ -109,6 +116,9 @@ public class MapFragment extends Fragment {
 
     }
 
+    /**
+     * Update UI of maps
+     */
     @SuppressLint("MissingPermission")
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void updateLocationUI() {
@@ -120,12 +130,12 @@ public class MapFragment extends Fragment {
         }
     }
 
+    /*
+     * Get the best and most recent location of the device, which may be null in rare
+     * cases when a location is not available.
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void getDeviceLocation() {
-        /*
-         * Get the best and most recent location of the device, which may be null in rare
-         * cases when a location is not available.
-         */
         try {
             @SuppressLint("MissingPermission") Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
             locationResult.addOnCompleteListener(requireActivity(), task -> {
@@ -151,6 +161,9 @@ public class MapFragment extends Fragment {
         // Code taken from Google Maps example application:
         // https://github.com/googlemaps/android-samples/blob/3f6f0fff873263fa82da78bb45c11a4fd774b4ac/tutorials/java/CurrentPlaceDetailsOnMap/app/src/main/java/com/example/currentplacedetailsonmap/MapsActivityCurrentPlace.java
 
+        /**
+         * Style map
+         */
         private void styleMap() {
 
             if (map == null) return;

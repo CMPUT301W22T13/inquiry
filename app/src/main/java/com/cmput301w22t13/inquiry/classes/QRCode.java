@@ -23,7 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * A class to represent a QR code
+ */
 public class QRCode implements Serializable {
     private final String hash;
     private int score;
@@ -92,7 +94,11 @@ public class QRCode implements Serializable {
     }
 
 
-
+    /**
+     * Generate score from a string
+     * @param str input hash
+     * @return score
+     */
     public int createScore(String str) {
         int currentScore = 0;
         char prevChar = 'z';
@@ -115,14 +121,30 @@ public class QRCode implements Serializable {
 
     }
 
+    /**
+     * Get hash
+     * @return hash
+     */
     public String getHash() {
         return this.hash;
     }
 
+    /**
+     * Get location
+     * @return location
+     */
     public LatLng getLocation() { return new LatLng(lat, lng); }
 
+    /**
+     * Get location image
+     * @return location image as a string
+     * */
     public String getLocationImage() { return this.locationImage; }
 
+    /**
+     * Get comments
+     * @return comments
+     */
     public ArrayList getComment(){ return this.comments = comments; }
 
     /**

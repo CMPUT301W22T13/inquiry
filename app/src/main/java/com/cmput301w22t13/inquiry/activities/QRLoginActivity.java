@@ -44,23 +44,24 @@ public class QRLoginActivity extends AppCompatActivity {
             mCodeScanner.setDecodeCallback(result -> {
                 String resultString = result.getText();
 
-                // if qr code string starts with "INQUIRY_USER_", don't save to database
-                // TODO: error handling
+                // if qr code string starts with "INQUIRY_LOGIN_", try to sign in
                 if (resultString.startsWith("INQUIRY_LOGIN_")) {
                     String uid = resultString.substring(14);
 
                     Auth.login(uid, isSuccessful -> {
                         if (isSuccessful) {
+
+                            // display message if successful
                             runOnUiThread(() -> Toast.makeText(getBaseContext(), "Found user account", Toast.LENGTH_SHORT).show());
                             finish();
                         } else {
+                            // display error message
                             runOnUiThread(() -> Toast.makeText(getBaseContext(), "Unable to login", Toast.LENGTH_SHORT).show());
                         }
                     });
 
-
-
                 } else {
+                    // display error message
                     runOnUiThread(() -> Toast.makeText(this, "Incorrect code found", Toast.LENGTH_SHORT).show());
                 }
 
@@ -73,14 +74,15 @@ public class QRLoginActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         if (mCodeScanner != null) {
+            // restart scanner on resume
             mCodeScanner.startPreview();
-
         }
     }
 
     @Override
     public void onPause() {
         if (mCodeScanner != null) {
+            // pause scanner onn activity pause
             mCodeScanner.releaseResources();
         }
         super.onPause();

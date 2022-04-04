@@ -15,6 +15,9 @@ import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.util.stream.IntStream;
 
+/**
+ * A class for generating QR code bitmaps
+ */
 public class QRBitmap {
 
     String code;
@@ -26,6 +29,12 @@ public class QRBitmap {
 
     }
 
+    /**
+     * Generate a bitmap
+     * @param r Android resources file
+     * @return Bitmap QR code
+     * @throws WriterException if cannot create a QR code
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public Bitmap getBitmap(Resources r) throws WriterException {
         BitMatrix bm = new QRCodeWriter().encode(code, BarcodeFormat.QR_CODE, size, size);

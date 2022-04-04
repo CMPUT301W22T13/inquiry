@@ -23,14 +23,22 @@ import com.cmput301w22t13.inquiry.classes.QRCode;
 
 import java.util.ArrayList;
 
+/**
+ * An activity to represent player status.
+ */
 public class PlayerStatusActivity extends AppCompatActivity {
 
     private ArrayList<QRCode> qrCodeArrayList = new ArrayList<>();
 
-
+    /**
+     * Setup player status activity.
+     * @param savedInstances
+     */
     @Override
     protected void onCreate(Bundle savedInstances) {
         super.onCreate(savedInstances);
+
+        // setup theme
         setTheme(R.style.Theme_InQuiRy_NoActionBar);
         setContentView(R.layout.activity_player_status);
 
@@ -39,16 +47,17 @@ public class PlayerStatusActivity extends AppCompatActivity {
         TextView playerName = findViewById(R.id.playerDetailsTextView);
         playerName.setText(player.getUsername());
 
-
-
+        // fetch all QR codes and put them in array
         ListView qrCodeListView = findViewById(R.id.playerQrCodesListView);
         player.fetchQRCodes(Task -> {});
         qrCodeArrayList.addAll(player.getQRCodes());
 
+        // link QRCodeList to array
         PlayerStatusQRCodeListAdapter qrCodeListAdapter = new PlayerStatusQRCodeListAdapter(this, qrCodeArrayList, player);
         qrCodeListView.setAdapter(qrCodeListAdapter);
         qrCodeListView.setClickable(true);
 
+        // setup time handler
         final Handler timerHandler = new Handler();
         Runnable timerRunnable = new Runnable() {
             @Override
@@ -66,6 +75,7 @@ public class PlayerStatusActivity extends AppCompatActivity {
         qrCodeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // go to details page on click
                 QRCode clickedQR = qrCodeArrayList.get(i);
                 Intent intent = new Intent(getApplicationContext(), QRDetailsActivity.class);
                 intent.putExtra("code", clickedQR);
@@ -74,13 +84,15 @@ public class PlayerStatusActivity extends AppCompatActivity {
                 }
         });
 
-
-
         // back button ends the activity and returns to caller
         Button backButton = findViewById(R.id.profileViewBackButton);
         backButton.setOnClickListener(view -> finish());
     }
 
+    /**
+     * Update list for player
+     * @param player Player
+     */
     private void updateList(Player player){
         ListView qrCodeListView = findViewById(R.id.playerQrCodesListView);
         qrCodeArrayList = player.getQRCodes();
@@ -93,6 +105,10 @@ public class PlayerStatusActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Sort list of QR codes.
+     * @param a list of QR codes.
+     */
     public static void bubbleSortQRCodes(ArrayList<QRCode> a){
         boolean sorted = false;
         QRCode temp;

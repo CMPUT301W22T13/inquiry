@@ -27,10 +27,17 @@ public class MapViewModel extends ViewModel {
         void handlePoint(QRCode qr);
     }
 
+ 
     public interface NearbyPointCompleteHandler {
         void onComplete();
     }
 
+   /**
+     * Find nearby points
+     * @param lat latitude
+     * @param lng longitude
+     * @param l callback when done
+     */
     public void getNearbyPoints(double lat, double lng, NearbyPointHandler l, NearbyPointCompleteHandler lc) {
 
         final GeoLocation center = new GeoLocation(lat, lng);

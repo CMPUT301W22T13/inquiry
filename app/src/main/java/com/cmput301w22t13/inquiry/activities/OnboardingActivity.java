@@ -27,12 +27,18 @@ public class OnboardingActivity extends AppCompatActivity {
     private View mContentView;
     public static final String PROF_NAV = "profNav";
 
+    /**
+     * Setup onboarding activity.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // ensure profile is logged in
         Auth.init((player)->{});
 
+        // setup theme
         ActivityOnboardingBinding binding = ActivityOnboardingBinding.inflate(getLayoutInflater());
         setTheme(R.style.Theme_InQuiRy_NoActionBar);
         setContentView(binding.getRoot());
@@ -82,6 +88,9 @@ public class OnboardingActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Hide UI elements and make the screen fullscreen.
+     */
     private void hide() {
         // Hide UI first
         ActionBar actionBar = getSupportActionBar();

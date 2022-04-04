@@ -47,6 +47,9 @@ public class EditProfileFragment extends Fragment {
         this.user = user;
     }
 
+    /**
+     * Close fragment
+     */
     private void closeFragment() {
         this.getParentFragmentManager().popBackStack();
     }
