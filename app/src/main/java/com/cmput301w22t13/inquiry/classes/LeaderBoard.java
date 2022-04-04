@@ -19,14 +19,14 @@ public class LeaderBoard {
      * @param playersArrayList an array list to be populated
      */
     public static void getPlayers(ArrayList<Player> playersArrayList){
-        Task<QuerySnapshot> playersQuery = FirebaseFirestore.getInstance().collection("users").get();
+        Task<QuerySnapshot> playersQuery = FirebaseFirestore.getInstance().collection("user_accounts").get();
         playersQuery.addOnCompleteListener(task -> {
             if (playersQuery.isSuccessful()) {
                 QuerySnapshot queryResults = playersQuery.getResult();
                 List<DocumentSnapshot> documents = queryResults.getDocuments();
                 if (documents.size() != 0) {
                     for (DocumentSnapshot document : documents) {
-                        Player newPlayer = new Player((String) document.get("username"),(String) document.get("id"),true);
+                        Player newPlayer = new Player(document.getId(), document.getId(),true);
                         playersArrayList.add(newPlayer);
                     }
                 } else Log.i("LeaderboardFragment", "documents empty");

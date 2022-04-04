@@ -81,6 +81,17 @@
             app:layout_constraintStart_toStartOf="@+id/onboarding_message"
             app:layout_constraintTop_toBottomOf="@+id/onboarding_message2" />
 
+        <Button
+            android:id="@+id/onboarding_login_button"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/existing_user"
+            app:layout_constraintEnd_toEndOf="@+id/onboarding_message"
+            app:layout_constraintStart_toStartOf="@+id/onboarding_message"
+            app:layout_constraintTop_toBottomOf="@+id/onboarding_message3" />
+
         <TextView
             android:id="@+id/onboarding_message3"
             android:layout_width="wrap_content"

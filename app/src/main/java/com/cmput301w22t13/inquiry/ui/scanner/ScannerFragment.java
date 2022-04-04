@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,25 +60,36 @@ public class ScannerFragment extends Fragment {
                     String resultString = result.getText();
 
                     // if qr code string starts with "INQUIRY_USER_", don't save to database
-                    // TODO: error handling
                     if (resultString.startsWith("INQUIRY_USER_")) {
                         String uid = resultString.substring(13);
                         Database db = new Database();
-                        db.getById("users", (String) uid).addOnCompleteListener(task -> {
+                        db.getById("users", uid).addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
+//                                Log.d("ScannerFragment", "Successfully queried database + " + uid);
                                 DocumentSnapshot document = task.getResult();
+
                                 if (document != null && document.exists()) {
+                                    Log.d("ScannerFragment", "DocumentSnapshot data: " + document.getData());
                                     String username = document.getString("username");
-                                    Player player = new Player(username, (String) document.get("id"), true);
+                                    Player player = new Player(username, document.getId(), true);
                                     Intent intent = new Intent(getActivity(), PlayerProfileActivity.class);
 
-                                    Toast.makeText(requireActivity(), "You found " + username + "!", Toast.LENGTH_SHORT).show();
+                                    requireActivity().runOnUiThread(() -> {
+                                        Toast.makeText(requireActivity(), "You found " + username + "!", Toast.LENGTH_SHORT).show();
+                                    });
                                     intent.putExtra("Player", player);
                                     startActivity(intent);
 
                                 }
+
                             }
                         });
+                    } else if (resultString.startsWith("INQUIRY_LOGIN_")) {
+                        requireActivity().runOnUiThread(() ->
+                                Toast.makeText(getActivity(),
+                                        "To login to another account, navigate to the Profile tab.",
+                                        Toast.LENGTH_LONG).show()
+                        );
                     } else {
                         QRCode QR = new QRCode(result.getText());
                         QR.save();

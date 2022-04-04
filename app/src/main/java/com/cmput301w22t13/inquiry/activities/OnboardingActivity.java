@@ -1,5 +1,6 @@
 package com.cmput301w22t13.inquiry.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,7 +31,7 @@ public class OnboardingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Auth.init();
+        Auth.init((player)->{});
 
         ActivityOnboardingBinding binding = ActivityOnboardingBinding.inflate(getLayoutInflater());
         setTheme(R.style.Theme_InQuiRy_NoActionBar);
@@ -40,6 +41,7 @@ public class OnboardingActivity extends AppCompatActivity {
         TextView message = findViewById(R.id.onboarding_message);
         Button scanning = findViewById(R.id.onboarding_start_button);
         Button profileButton = findViewById(R.id.onboarding_profile_button);
+        Button loginButton = findViewById(R.id.onboarding_login_button);
 
         // get the username and set the message to include the username
         // use the string "user" if the user cannot be found.
@@ -66,6 +68,12 @@ public class OnboardingActivity extends AppCompatActivity {
                     .edit()
                     .putBoolean(PROF_NAV, Boolean.TRUE)
                     .apply();
+            finish();
+        });
+
+        loginButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, QRLoginActivity.class);
+            startActivity(intent);
             finish();
         });
 
