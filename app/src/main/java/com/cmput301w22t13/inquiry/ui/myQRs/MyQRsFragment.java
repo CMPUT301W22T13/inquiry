@@ -30,6 +30,9 @@ import java.util.ArrayList;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
+/**
+ * see QRCodes that either has been scanned for Owner or QRCodes they have scanned for player
+ */
 public class MyQRsFragment extends Fragment {
 
     private FragmentMyqrsBinding binding;
