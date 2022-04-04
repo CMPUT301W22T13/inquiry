@@ -40,12 +40,9 @@ public class MyQRsFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         Log.d("VERBS","hi there");
         if(auth.getPlayer() != null && auth.getPlayer().getIsOwner()){
-            //user swipes right to delete QR code
-        /*
-        //from youtube.com
-        //url : https://youtu.be/QJUCD32dzHE
-        //author : Florian Walther https://www.youtube.com/channel/UC_Fh8kvtkVPkeihBs42jGcA
-        */
+
+
+
             Log.d("VERBS","is a Owner");
             AllQRsViewModel allQRsViewModel = new ViewModelProvider(this).get(AllQRsViewModel.class);
 
@@ -56,9 +53,7 @@ public class MyQRsFragment extends Fragment {
             RecyclerView recyclerView = root.findViewById(R.id.myqrs_list);
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(root.getContext());
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-//                layoutManager.getOrientation());
-//        recyclerView.addItemDecoration(dividerItemDecoration);
+
             recyclerView.setLayoutManager(layoutManager);
 
             allQRsViewModel.getOwner().fetchQRCodes(new onQrDataListener() {
@@ -73,6 +68,12 @@ public class MyQRsFragment extends Fragment {
                     }
                 }
             });
+
+            /**user swipes right to delete QR code
+             * from youtube.com
+             * url : https://youtu.be/QJUCD32dzHE
+             * author : Florian Walther https://www.youtube.com/channel/UC_Fh8kvtkVPkeihBs42jGcA
+            */
             new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                     ItemTouchHelper.LEFT) {
                 @Override
@@ -152,9 +153,7 @@ public class MyQRsFragment extends Fragment {
             RecyclerView recyclerView = root.findViewById(R.id.myqrs_list);
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(root.getContext());
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-//                layoutManager.getOrientation());
-//        recyclerView.addItemDecoration(dividerItemDecoration);
+
             recyclerView.setLayoutManager(layoutManager);
 
             myQRsViewModel.getPlayer().fetchQRCodes(new onQrDataListener() {
