@@ -1,5 +1,10 @@
 package com.cmput301w22t13.inquiry.ui.leaderboard;
 
+/** populates leaderboard fragment with the rankings of all players and their score
+ * can be swapped between 4 different display types (total Score, highest Score, lowest Score, QRCode Count)
+ * also gives users the ability to search for a player by username and go to their profile,
+ * you can also get to their profile by clicking their name in the leaderboard
+ */
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;

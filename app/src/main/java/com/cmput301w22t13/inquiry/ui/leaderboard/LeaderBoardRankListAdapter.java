@@ -1,4 +1,8 @@
 package com.cmput301w22t13.inquiry.ui.leaderboard;
+/**
+ * an adapter for the ListView in the leaderboard fragment
+ * displays rank player name and the contextual score
+ */
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -48,6 +52,7 @@ public class LeaderBoardRankListAdapter extends ArrayAdapter {
         TextView scoreTextView = view.findViewById(R.id.leaderBoardScoreTextView);
         playerTextView.setText(player.getUsername()); // player class not complete may need to change
         rankTextView.setText(Integer.toString(position+1));
+        // depending on the type of score chosen it displays a different score for each user
         if (type == 1) scoreTextView.setText(Integer.toString(player.getTotalScore()));
         if (type == 2) scoreTextView.setText(Integer.toString(player.getHighestScore()));
         if (type == 3) scoreTextView.setText(Integer.toString(player.getQRCodeCount()));

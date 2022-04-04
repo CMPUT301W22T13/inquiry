@@ -1,5 +1,7 @@
 package com.cmput301w22t13.inquiry.classes;
 
+/** adds some useful function for the rankings and leaderboard system
+ */
 import android.util.Log;
 
 import com.google.android.gms.tasks.Task;
@@ -11,7 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LeaderBoard {
-    //gets the players from a database and adds them to the ArrayList given in the argument
+
+    /**
+     * populate an ArrayList with the users from the database
+     * @param playersArrayList an array list to be populated
+     */
     public static void getPlayers(ArrayList<Player> playersArrayList){
         Task<QuerySnapshot> playersQuery = FirebaseFirestore.getInstance().collection("users").get();
         playersQuery.addOnCompleteListener(task -> {
@@ -28,6 +34,11 @@ public class LeaderBoard {
         });
     }
     // sort an ArrayList of PLayers 4 different ways depending on what is wanted
+    /**
+     * sort an arrayList of players using a bubbleSort algorithm with 4 different modes
+     * @param a an ArrayList of players to be sorted
+     * @param b the type of sorting you want(total,highest,lowest,count)
+     */
     public static void bubbleSort(ArrayList<Player> a, int b){
         boolean sorted = false;
         Player temp;
