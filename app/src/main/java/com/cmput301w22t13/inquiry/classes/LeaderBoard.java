@@ -4,6 +4,7 @@ package com.cmput301w22t13.inquiry.classes;
  */
 import android.util.Log;
 
+import com.cmput301w22t13.inquiry.db.Database;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -13,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LeaderBoard {
+
+    Database db = new Database();
 
     /**
      * populate an ArrayList with the users from the database

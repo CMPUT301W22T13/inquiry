@@ -68,6 +68,8 @@ public class LeaderboardFragment extends Fragment {
                         if (document != null && document.exists()) {
                             Log.i("LeaderboardFragment", "Found users");
                             Log.i("LeaderboardFragment", document.toString());
+
+
                             Player player = new Player(document.getId(), document.getId(), true);
                             Intent intent = new Intent(getActivity(), PlayerProfileActivity.class);
                             intent.putExtra("Player", player);

@@ -114,9 +114,8 @@ public class Player implements Serializable {
     public void fetchQRCodes(onQrDataListener onSuccess) {
 
         Database db = new Database();
-        Auth.getUsername((player) -> {
 
-            db.getById("user_accounts", player).addOnCompleteListener(userTask -> {
+            db.getById("user_accounts", userName).addOnCompleteListener(userTask -> {
                 if (userTask.isSuccessful()) {
                     // loop through qr_codes field array and add to QrList ArrayList
                     DocumentSnapshot user = userTask.getResult();
@@ -153,7 +152,7 @@ public class Player implements Serializable {
                     }
                 }
             });
-        });
+
     }
 
     /**
