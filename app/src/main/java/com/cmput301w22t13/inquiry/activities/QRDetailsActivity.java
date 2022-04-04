@@ -2,12 +2,16 @@ package com.cmput301w22t13.inquiry.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.classes.QRCode;
@@ -15,12 +19,16 @@ import com.cmput301w22t13.inquiry.db.Database;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class QRDetailsActivity extends AppCompatActivity {
+    String qrHash;
     Database db = new Database();
     String currentPlayer;
 
@@ -68,7 +76,46 @@ public class QRDetailsActivity extends AppCompatActivity {
                 findComments(id);
             }
         });
+
+        Button leaveCommentButton = findViewById(R.id.qr_details_add_comment_button);
+        EditText leaveCommentText = findViewById(R.id.leave_comment);
+        leaveCommentButton.setOnClickListener(view -> {
+            String comment = leaveCommentText.getText().toString();
+            if (comment.length() > 0 && comment.length() < 100) {
+                addCommentToQr(comment);
+
+                // dismiss keyboard
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(leaveCommentText.getWindowToken(), 0);
+
+                /*leaveCommentButton.setEnabled(false);
+                leaveCommentText.setEnabled(false);
+                leaveCommentButton.setText("Comment Added!");*/
+
+                Toast.makeText(this, "Comment added", Toast.LENGTH_LONG).show();
+            }
+            else {
+                Toast.makeText(this, "Comment must be between 1 and 100 characters", Toast.LENGTH_LONG).show();
+            }
+        });
     }
+
+    private void addCommentToQr(String comment) {
+        Database db = new Database();
+
+        db.query("qr_codes", "hash", qrHash).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult().getDocuments().get(0);
+                String qrId = document.getId();
+
+                // append comment to field array
+                Map<String, Object> data = new HashMap<>();
+                data.put("comments", FieldValue.arrayUnion(comment));
+                db.update("qr_codes", qrId, data);
+            }
+        });
+    }
+
 
     private void updateUI(ArrayList<String> list){
         ListView usernameList = findViewById(R.id.MatchingQrsList);
