@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ import com.cmput301w22t13.inquiry.db.Database;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.zxing.Result;
 
+import java.util.List;
 import java.util.Objects;
 
 public class ScannerFragment extends Fragment {
@@ -59,23 +61,28 @@ public class ScannerFragment extends Fragment {
                     String resultString = result.getText();
 
                     // if qr code string starts with "INQUIRY_USER_", don't save to database
-                    // TODO: error handling
                     if (resultString.startsWith("INQUIRY_USER_")) {
-                        String username = resultString.substring(13);
+                        String uid = resultString.substring(13);
                         Database db = new Database();
-                        db.getById("user_accounts", username).addOnCompleteListener(task -> {
+                        db.query("users", "id", uid).addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document != null && document.exists()) {
-                                    Player player = new Player(username, username, true);
-                                    Intent intent = new Intent(getActivity(), PlayerProfileActivity.class);
+                                Log.d("ScannerFragment", "Successfully queried database + " + uid);
+                                List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                                if (documents.size() != 0) {
+                                    DocumentSnapshot document = documents.get(0);
+                                    if (document != null && document.exists()) {
+                                        Log.d("ScannerFragment", "DocumentSnapshot data: " + document.getData());
+                                        String username = document.getString("username");
+                                        Player player = new Player(username, document.getId(), true);
+                                        Intent intent = new Intent(getActivity(), PlayerProfileActivity.class);
 
-                                    requireActivity().runOnUiThread(()-> {
-                                        Toast.makeText(requireActivity(), "You found " + username + "!", Toast.LENGTH_SHORT).show();
-                                    });
-                                    intent.putExtra("Player", player);
-                                    startActivity(intent);
+                                        requireActivity().runOnUiThread(() -> {
+                                            Toast.makeText(requireActivity(), "You found " + username + "!", Toast.LENGTH_SHORT).show();
+                                        });
+                                        intent.putExtra("Player", player);
+                                        startActivity(intent);
 
+                                    }
                                 }
                             }
                         });
@@ -83,7 +90,8 @@ public class ScannerFragment extends Fragment {
                         requireActivity().runOnUiThread(() ->
                                 Toast.makeText(getActivity(),
                                         "To login to another account, navigate to the Profile tab.",
-                                        Toast.LENGTH_SHORT).show());
+                                        Toast.LENGTH_LONG).show()
+                        );
                     } else {
                         QRCode QR = new QRCode(result.getText());
                         QR.save();
