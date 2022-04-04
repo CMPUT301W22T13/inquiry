@@ -31,9 +31,6 @@ public class MyQRsListAdapter extends RecyclerView.Adapter<MyQRsListAdapter.View
         this.qrCodes = qrCodes;
         this.context = context;
         Auth.init((player) -> {});
-
-
-
     }
 
     @NonNull

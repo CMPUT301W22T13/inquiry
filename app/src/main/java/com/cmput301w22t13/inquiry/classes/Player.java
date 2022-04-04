@@ -131,6 +131,15 @@ public class Player implements Serializable {
                                             qrCode = new QRCode(qr.getString("hash"), Objects.requireNonNull(qr.getLong("score")).intValue(), qr.getId());
                                         }
 
+                                        if(qr.getDouble("lat") != null && qr.getDouble("lng") != null) {
+                                            double latitude = (double) qr.getDouble("lat");
+                                            double longitude = (double) qr.getDouble("lng");
+
+                                            if (latitude != 0 && longitude != 0) {
+                                                qrCode.setLocation(latitude, longitude);
+                                            }
+                                        }
+
                                         QrList.add(qrCode);
 
                                         if (finalI == qrRefs.size() - 1) {
