@@ -2,12 +2,16 @@ package com.cmput301w22t13.inquiry.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.classes.QRCode;
@@ -15,14 +19,21 @@ import com.cmput301w22t13.inquiry.db.Database;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class QRDetailsActivity extends AppCompatActivity {
+    String qrHash;
     Database db = new Database();
     String currentPlayer;
+
+    ArrayList<String> commentsList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +46,7 @@ public class QRDetailsActivity extends AppCompatActivity {
 
         TextView qrName = findViewById(R.id.myqrs_qr_name);
         qrName.setText(code.getName());
+        qrHash = code.getHash();
 
         TextView qrInitials = findViewById(R.id.qr_details_initials);
         String[] qrNameSplit = code.getName().split(" ");
@@ -54,10 +66,6 @@ public class QRDetailsActivity extends AppCompatActivity {
         Button backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(view -> finish());
 
-
-
-
-
         Task<QuerySnapshot> querySnapshotTask = db.query("qr_codes", "hash", code.getHash());
         querySnapshotTask.addOnCompleteListener(task -> {
             List<DocumentSnapshot> documents = task.getResult().getDocuments();
@@ -68,7 +76,45 @@ public class QRDetailsActivity extends AppCompatActivity {
                 findComments(id);
             }
         });
+
+        Button leaveCommentButton = findViewById(R.id.qr_details_add_comment_button);
+        EditText leaveCommentText = findViewById(R.id.leave_comment);
+        leaveCommentButton.setOnClickListener(view -> {
+            String comment = leaveCommentText.getText().toString();
+            if (comment.length() > 0 && comment.length() < 100) {
+                addCommentToQr(comment);
+
+                // dismiss keyboard
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(leaveCommentText.getWindowToken(), 0);
+                leaveCommentText.setText("");
+                leaveCommentText.clearFocus();
+
+                Toast.makeText(this, "Comment added", Toast.LENGTH_LONG).show();
+            }
+            else {
+                Toast.makeText(this, "Comment must be between 1 and 100 characters", Toast.LENGTH_LONG).show();
+            }
+        });
     }
+
+    private void addCommentToQr(String comment) {
+        db.query("qr_codes", "hash", qrHash).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult().getDocuments().get(0);
+                String qrId = document.getId();
+
+                // append comment to field array
+                Map<String, Object> data = new HashMap<>();
+                data.put("comments", FieldValue.arrayUnion(comment));
+                db.update("qr_codes", qrId, data);
+
+                commentsList.add(comment);
+                updateCommentUI(commentsList);
+            }
+        });
+    }
+
 
     private void updateUI(ArrayList<String> list){
         ListView usernameList = findViewById(R.id.MatchingQrsList);
@@ -83,6 +129,8 @@ public class QRDetailsActivity extends AppCompatActivity {
 
         ArrayAdapter<String> commentList = new ArrayAdapter<String>(
                 this, R.layout.comments_list_content, list);
+        // reverse comments so newest is first
+        Collections.reverse(list);
         usernameList.setAdapter(commentList);
     }
 
@@ -110,7 +158,7 @@ public class QRDetailsActivity extends AppCompatActivity {
     }
 
     private void findComments(String qrDocumentId){
-        ArrayList<String> commentsList = new ArrayList<>();
+
 
         db.getById("qr_codes",qrDocumentId).addOnCompleteListener(task ->{
             if (task.isSuccessful()){
@@ -127,7 +175,6 @@ public class QRDetailsActivity extends AppCompatActivity {
                 }
             }
 
-            commentsList.remove(currentPlayer);
             updateCommentUI(commentsList);
 
         });
