@@ -28,6 +28,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * shows details about a QRCode when the user clicks on it
+ */
+
 public class QRDetailsActivity extends AppCompatActivity {
     String qrHash;
     Database db = new Database();
@@ -98,6 +102,10 @@ public class QRDetailsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * adds a comment to a QRCode
+     * @param comment String to be added as a comment
+     */
     private void addCommentToQr(String comment) {
         db.query("qr_codes", "hash", qrHash).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -115,7 +123,10 @@ public class QRDetailsActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * updates a list of other users who have scanned the QR Code
+     * @param list list of users names to update the listview with
+     */
     private void updateUI(ArrayList<String> list){
         ListView usernameList = findViewById(R.id.MatchingQrsList);
 
@@ -124,6 +135,10 @@ public class QRDetailsActivity extends AppCompatActivity {
         usernameList.setAdapter(userList);
     }
 
+    /**
+     * updates a list of comments having been posted about the QR Code
+     * @param list list of QR Codes to update the listview with
+     */
     private void updateCommentUI(ArrayList<String> list){
         ListView usernameList = findViewById(R.id.comments_list);
 
@@ -134,19 +149,23 @@ public class QRDetailsActivity extends AppCompatActivity {
         usernameList.setAdapter(commentList);
     }
 
+    /**
+     * get all players who have scanned the qr code
+     * @param id id of the qr code that should be found
+     */
     private void findPlayers(String id){
         ArrayList<String> namesList = new ArrayList<>();
 
         DocumentReference reference = db.getDocReference("qr_codes/"+id);
-        db.arrayQuery("users","qr_codes",reference).addOnCompleteListener(task ->{
+        db.arrayQuery("user_accounts","qr_codes",reference).addOnCompleteListener(task ->{
             if (task.isSuccessful()){
                 List<DocumentSnapshot> documents = task.getResult().getDocuments();
                 int size = documents.size();
                 if (size!= 0) {
                     for (DocumentSnapshot document: documents) {
-                        String username = (String) document.get("username");
+                        String username = document.getId();
                         namesList.add(username);
-                        Log.d("Before: ", (String) document.get("username"));
+                        Log.d("Before: ", document.getId());
                     }
                 }
             }
@@ -157,6 +176,10 @@ public class QRDetailsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * get comments that has been made about the QRCode
+     * @param qrDocumentId qrcodes id to be searched for
+     */
     private void findComments(String qrDocumentId){
 
 

@@ -24,6 +24,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Owner class with elevated privileges and modified methods
+ */
 public class Owner extends Player{
 
     private ArrayList<QRCode> qrCodes;
@@ -38,23 +41,28 @@ public class Owner extends Player{
         super(userName,uid,getQrCodes);
     }
 
+    /**
+     * returns a boolean check if it is Owner
+     * @return returns true as it is a Owner
+     */
     public boolean getIsOwner(){
         return true;
     }
-    public void deleteQR(QRCode qr){
-        Database db = new Database();
-        String hash = qr.getHash();
-        db.remove("qr_codes", hash);
-        // need to add delete from players list
 
-    }
+    /**
+     * delete a player
+     * @param player player object to be deleted
+     */
     public void deletePlayer(Player player){
         Database db = new Database();
-        String newId = player.getID();
-        db.remove("users", newId);
+        db.remove("user_accounts", player.getUsername());
 
     }
 
+    /**
+     * fetch all qr codes in the game
+     * @param onSuccess checks for when QRCode has been returned
+     */
     public void fetchQRCodes(onQrDataListener onSuccess) {
         Log.d("VERBS","Fetching");
         ArrayList<QRCode> QrList = new ArrayList<>();
@@ -80,10 +88,15 @@ public class Owner extends Player{
                 });
 
     }
+
     public void setQrCodes(ArrayList<QRCode> qrcodes){
         this.qrCodes = qrcodes;
     }
 
+    /**
+     * delete a given QRCode from both the collection and all qrcode lists
+     * @param qrCode QRCode object to be deleted
+     */
     public void deleteQRCode(QRCode qrCode){
         Database db = new Database();
         Log.d("VERBS",qrCode.getHash());
@@ -94,16 +107,13 @@ public class Owner extends Player{
         final Map<String, Object> qrCodesFieldArray = new HashMap<>();
         qrCodesFieldArray.put("qr_codes", FieldValue.arrayRemove(qrRef));
 
-        db.getCollection("users").addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        db.update("users", (String) document.getData().get("id"), qrCodesFieldArray);
-                    }
-                } else {
-                    Log.d("VERBS","had issues");
+        db.getCollection("user_accounts").addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    db.update("user_accounts", document.getId(), qrCodesFieldArray);
                 }
+            } else {
+                Log.d("VERBS","had issues");
             }
         });
 

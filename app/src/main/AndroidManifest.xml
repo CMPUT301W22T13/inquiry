@@ -29,6 +29,10 @@
                 android:value=".activities.MainActivity" />
         </activity>
         <activity
+            android:name=".activities.QRLoginActivity"
+            android:theme="@style/Theme.InQuiRy.NoActionBar"
+            android:exported="false" />
+        <activity
             android:name=".activities.QRDetailsActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan"/>

@@ -30,7 +30,7 @@ public class MyQRsListAdapter extends RecyclerView.Adapter<MyQRsListAdapter.View
     public MyQRsListAdapter(Context context, ArrayList<QRCode> qrCodes) {
         this.qrCodes = qrCodes;
         this.context = context;
-        auth.init();
+        Auth.init((player) -> {});
 
 
 
