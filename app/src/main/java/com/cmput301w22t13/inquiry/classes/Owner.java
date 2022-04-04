@@ -75,6 +75,16 @@ public class Owner extends Player{
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 QRCode qrcode = new QRCode((String) document.getData().get("hash"), ((Long)document.getData().get("score")).intValue(),document.getId());
+
+                                if(document.getDouble("lat") != null && document.getDouble("lng") != null) {
+                                    double latitude = (double) document.getData().get("lat");
+                                    double longitude = (double) document.getData().get("lng");
+
+                                    if (latitude != 0 && longitude != 0) {
+                                        qrcode.setLocation(latitude, longitude);
+                                    }
+                                }
+
                                 QrList.add(qrcode);
                             }
                             onSuccess.getQrData(QrList);

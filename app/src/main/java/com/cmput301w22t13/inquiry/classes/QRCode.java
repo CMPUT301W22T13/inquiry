@@ -129,11 +129,17 @@ public class QRCode implements Serializable {
         return this.hash;
     }
 
-    /**
-     * Get location
-     * @return location
-     */
-    public LatLng getLocation() { return new LatLng(lat, lng); }
+    public LatLng getLocation() {
+        if (this.lat == null || this.lng == null) {
+            return null;
+        }
+        return new LatLng(lat, lng);
+    }
+
+    public void setLocation(double lat, double lng) {
+        this.lat = lat;
+        this.lng = lng;
+    }
 
     /**
      * Get location image

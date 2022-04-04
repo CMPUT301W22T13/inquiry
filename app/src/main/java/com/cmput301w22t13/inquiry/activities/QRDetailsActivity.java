@@ -3,6 +3,7 @@ package com.cmput301w22t13.inquiry.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.classes.QRCode;
 import com.cmput301w22t13.inquiry.db.Database;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -38,6 +41,9 @@ public class QRDetailsActivity extends AppCompatActivity {
     String currentPlayer;
 
     ArrayList<String> commentsList = new ArrayList<>();
+
+
+    Geocoder geocoder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +69,24 @@ public class QRDetailsActivity extends AppCompatActivity {
         }
         else {
             qrScore.setText(String.valueOf(code.getScore()) + " points");
+        }
+
+        LatLng coordinates = code.getLocation();
+        TextView qrLocation = findViewById(R.id.qr_details_location_text);
+
+        if (coordinates != null) {
+            Log.d("QRDetailsActivity", "coordinates not null" + coordinates.toString());
+            // convert coordinates to readable format (address)
+            geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+
+            try {
+                List<android.location.Address> addresses = geocoder.getFromLocation(coordinates.latitude, coordinates.longitude, 1);
+                String address = addresses.get(0).getAddressLine(0);
+                qrLocation.setText(address);
+                qrLocation.setVisibility(TextView.VISIBLE);
+            } catch (Exception e) {
+//            qrLocation.setText("Location not found");
+            }
         }
 
 

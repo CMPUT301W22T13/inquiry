@@ -2,6 +2,7 @@ package com.cmput301w22t13.inquiry.ui.myQRs;
 
 import android.content.DialogInterface;
 import android.graphics.Canvas;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -59,10 +61,13 @@ public class MyQRsFragment extends Fragment {
 
             recyclerView.setLayoutManager(layoutManager);
 
-            myQRsViewModel.getPlayer().fetchQRCodes(new onQrDataListener() {
+            allQRsViewModel.getOwner().fetchQRCodes(new onQrDataListener() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void getQrData(ArrayList<QRCode> qrCodes) {
                     if (qrCodes != null && qrCodes.size() > 0) {
+                        // sort QR Codes by score
+                        qrCodes.sort((o1, o2) -> o2.getScore() - o1.getScore());
                         qrCodeListAdapter = new MyQRsListAdapter(root.getContext(), qrCodes);
                         recyclerView.setAdapter(qrCodeListAdapter);
 

@@ -26,7 +26,7 @@
 
     <LinearLayout
         android:id="@+id/QRCodeName"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="36dp"
@@ -72,12 +72,26 @@
                 android:id="@+id/myqrs_qr_score"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="2dp"
+                android:drawableLeft="@drawable/ic_outline_trophy_20"
+                android:drawablePadding="6dp"
                 android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/myqrs_qr_name"
-                tools:text="Score: 20pts" />
+                tools:text="20pts" />
+
+            <TextView
+                android:id="@+id/qr_details_location_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:drawableLeft="@drawable/ic_baseline_location_pin_24"
+                android:drawablePadding="6dp"
+                android:text="Location"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
         </LinearLayout>
     </LinearLayout>
