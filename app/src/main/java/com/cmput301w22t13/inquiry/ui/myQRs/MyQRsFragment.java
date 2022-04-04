@@ -163,19 +163,19 @@ public class MyQRsFragment extends Fragment {
 
             if (player != null) {
                 player.fetchQRCodes(new onQrDataListener() {
-                @Override
-                public void getQrData(ArrayList<QRCode> qrCodes) {
-                    if (qrCodes != null && qrCodes.size() > 0) {
-                        qrCodeListAdapter = new MyQRsListAdapter(root.getContext(), qrCodes);
-                        recyclerView.setAdapter(qrCodeListAdapter);
+                    @Override
+                    public void getQrData(ArrayList<QRCode> qrCodes) {
+                        if (qrCodes != null && qrCodes.size() > 0) {
+                            qrCodeListAdapter = new MyQRsListAdapter(root.getContext(), qrCodes);
+                            recyclerView.setAdapter(qrCodeListAdapter);
 
-                        recyclerView.setVisibility(View.VISIBLE);
-                        emptyStateText.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                            emptyStateText.setVisibility(View.GONE);
+                        }
                     }
-                }
-            });
+                });
             }
-
+          
             new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                     ItemTouchHelper.LEFT) {
                 @Override
