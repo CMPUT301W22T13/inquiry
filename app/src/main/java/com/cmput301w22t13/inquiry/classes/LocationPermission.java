@@ -11,6 +11,9 @@ import androidx.annotation.RequiresApi;
 
 import java.util.Map;
 
+/**
+ * Class to manage locatin permission
+ */
 public class LocationPermission {
 
     ActivityResultLauncher<Object> locationPermissionRequest;
@@ -52,6 +55,9 @@ public class LocationPermission {
 
     }
 
+    /**
+     * Request permission
+     */
     public void request() {
         locationPermissionRequest.launch(new String[] {
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -59,23 +65,13 @@ public class LocationPermission {
         });
     }
 
+    /**
+     * Check if permission is complete
+     * @return true if permission granted
+     */
     public boolean getPermission() {
         return locationPermissionGranted;
     }
 
-//    public static boolean getLocationPermission(Context context, Activity activity) {
-//
-//        if (ContextCompat.checkSelfPermission(context,
-//                android.Manifest.permission.ACCESS_FINE_LOCATION)
-//                == PackageManager.PERMISSION_GRANTED) {
-//            return true;
-//        } else {
-//            ActivityCompat.requestPermissions(activity,
-//                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-//                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-//        }
-//    }
-//
-//    priv
 
 }

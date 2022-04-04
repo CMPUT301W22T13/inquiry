@@ -49,7 +49,7 @@ public class MyQRsFragment extends Fragment {
 
 
             Log.d("VERBS","is a Owner");
-            AllQRsViewModel allQRsViewModel = new ViewModelProvider(this).get(AllQRsViewModel.class);
+            MyQRsViewModel myQRsViewModel = new ViewModelProvider(this).get(MyQRsViewModel.class);
 
             binding = FragmentMyqrsBinding.inflate(inflater, container, false);
             View root = binding.getRoot();
@@ -108,9 +108,9 @@ public class MyQRsFragment extends Fragment {
                         public void onClick(DialogInterface dialogInterface, int p) {
 
                             Log.d("VERBS",qrCode.getId());
-                            allQRsViewModel.deleteQRCode(qrCode);
+                            myQRsViewModel.deleteQRCode(qrCode);
                             Toast.makeText(getActivity(), "QR Code Deleted", Toast.LENGTH_SHORT).show();
-                            allQRsViewModel.getOwner().fetchQRCodes(task -> {
+                            myQRsViewModel.getPlayer().fetchQRCodes(task -> {
                                 qrCodeListAdapter.removeQrAt(position);
                                 if(task.size() == 0) {
                                     recyclerView.setVisibility(View.GONE);

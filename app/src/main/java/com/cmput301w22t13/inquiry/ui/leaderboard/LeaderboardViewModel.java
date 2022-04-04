@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+/**
+ * View model for the leaderboard tab
+ */
 public class LeaderboardViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
@@ -14,6 +17,10 @@ public class LeaderboardViewModel extends ViewModel {
 
     }
 
+    /**
+     * Get text
+     * @return text
+     */
     public LiveData<String> getText() {
         return mText;
     }

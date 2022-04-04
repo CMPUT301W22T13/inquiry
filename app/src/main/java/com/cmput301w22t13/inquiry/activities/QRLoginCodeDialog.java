@@ -16,6 +16,9 @@ import com.cmput301w22t13.inquiry.classes.QRBitmap;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.zxing.WriterException;
 
+/**
+ * Display a bottom sheet dialog with a QR login code.
+ */
 public class QRLoginCodeDialog extends BottomSheetDialogFragment {
 
     String uid;
@@ -32,6 +35,7 @@ public class QRLoginCodeDialog extends BottomSheetDialogFragment {
 
         View view = inflater.inflate(R.layout.fragment_login_qr, container, false);
 
+        // find qr code view
         ImageView shareProfileQrCode = view.findViewById(R.id.login_profile_qr);
         int size = 200;
         try {

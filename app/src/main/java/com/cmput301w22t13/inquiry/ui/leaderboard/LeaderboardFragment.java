@@ -122,6 +122,8 @@ public class LeaderboardFragment extends Fragment {
         Button countButton = root.findViewById(R.id.qrcode_count_button);
         Button lowestButton = root.findViewById(R.id.lowest_score_button);
         TextView scoreType = root.findViewById(R.id.leaderboard_score_type_textview);
+
+        // total button
         totalButton.setOnClickListener(view -> {
             mode = 1;
             scoreType.setText("Total Score");
@@ -129,6 +131,8 @@ public class LeaderboardFragment extends Fragment {
             LeaderBoard.bubbleSort(playersArrayList, mode);
             playerListAdapter.notifyDataSetChanged();
         });
+
+        // highest button
         highestButton.setOnClickListener(view -> {
             mode = 2;
             scoreType.setText("Highest Score");
@@ -137,6 +141,8 @@ public class LeaderboardFragment extends Fragment {
             playerListAdapter.notifyDataSetChanged();
 
         });
+
+        // count button
         countButton.setOnClickListener(view -> {
             mode = 3;
             scoreType.setText("QR Codes");
@@ -144,6 +150,8 @@ public class LeaderboardFragment extends Fragment {
             LeaderBoard.bubbleSort(playersArrayList, mode);
             playerListAdapter.notifyDataSetChanged();
         });
+
+        // lowest button
         lowestButton.setOnClickListener(view -> {
             mode = 4;
             scoreType.setText("Lowest Score");
@@ -151,8 +159,6 @@ public class LeaderboardFragment extends Fragment {
             LeaderBoard.bubbleSort(playersArrayList, mode);
             playerListAdapter.notifyDataSetChanged();
         });
-
-
 
         return root;
     }

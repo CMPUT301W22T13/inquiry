@@ -35,18 +35,31 @@ public class Auth {
     private static Player player;
     private static Database db;
 
+    /**
+     * Interface for getUsername callback.
+     */
     public interface UsernameCallback {
         void onComplete(String username);
     }
 
+    /**
+     * Interface for withPlayer callback.
+     */
     public interface PlayerCallback {
         void onComplete(Player player);
     }
 
+    /**
+     * Interface for login callback.
+     */
     public interface LoginCallback {
         void onComplete(Boolean isSuccessful);
     }
 
+    /**
+     * Create a new account from a username in the database.
+     * @param username Username
+     */
     private static void createNewAccount(String username) {
         // create a new user account
         Map<String, Object> newUser = new HashMap<>();
@@ -54,6 +67,11 @@ public class Auth {
         db.set("user_accounts", username, newUser);
     }
 
+    /**
+     * Link an anonymous uid to an account.
+     * @param uid uid from Firebase
+     * @param username username
+     */
     private static void linkAnontoAccount(String uid, String username) {
 
         Map<String, Object> newLink = new HashMap<>();
@@ -68,6 +86,11 @@ public class Auth {
 
     }
 
+    /**
+     * Execution for a new user to the app.
+     * @param uid Firebase uid
+     * @return Player object
+     */
     private static Player newUserFlow(String uid) {
 
         Faker faker = new Faker();
@@ -83,6 +106,11 @@ public class Auth {
         return player;
     }
 
+    /**
+     * Login a user to a new account
+     * @param uid user id from Firebase
+     * @param l callback when done
+     */
     public static void login(String uid, LoginCallback l) {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
@@ -106,6 +134,10 @@ public class Auth {
 
     }
 
+    /**
+     * Initialize authentication interfaces
+     * @param p callback when done with player information
+     */
     public static void init(PlayerCallback p) {
         // initialize Firebase Auth instance
         firebaseAuth = FirebaseAuth.getInstance();
@@ -148,16 +180,27 @@ public class Auth {
     }
 
 
-    // gets the current user as a Player object
+    /**
+     * Get the current player
+     * @return player
+     */
     public static Player getPlayer() {
         return player;
     }
 
+    /**
+     * Run a function with a player
+     * @param p callback
+     */
     public static void withPlayer(PlayerCallback p) {
         if (player != null) p.onComplete(player);
         init(p);
     }
 
+    /**
+     * Get username.
+     * @param u callback
+     */
     public static void getUsername(UsernameCallback u) {
 
         if (player != null) u.onComplete(player.getUsername());
@@ -183,6 +226,10 @@ public class Auth {
         });
     }
 
+    /**
+     * Get current Firebase user
+     * @return FirebaseUser
+     */
     public static FirebaseUser getCurrentUser() {
         if (firebaseAuth != null) {
             return Auth.firebaseAuth.getCurrentUser();

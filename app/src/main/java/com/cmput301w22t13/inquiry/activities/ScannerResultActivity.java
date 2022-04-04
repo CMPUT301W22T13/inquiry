@@ -65,6 +65,8 @@ public class ScannerResultActivity extends AppCompatActivity {
         setTheme(R.style.Theme_InQuiRy_NoActionBar);
         setContentView(R.layout.activity_scanner_result);
 
+
+        // setup confetti on submit
         KonfettiView konfettiView = findViewById(R.id.scanner_result_confetti_view);
 
         EmitterConfig emitterConfig = new Emitter(100L, TimeUnit.MILLISECONDS).max(100);
@@ -78,15 +80,18 @@ public class ScannerResultActivity extends AppCompatActivity {
 
         konfettiView.start(party);
 
+        // get data from intent
         String name = getIntent().getStringExtra("name");
         int score = getIntent().getIntExtra("score", 0);
         qrHash = getIntent().getStringExtra("qrHash");
 
+        // set views
         TextView nameTextView = findViewById(R.id.scanner_result_qr_name);
         TextView scoreTextView = findViewById(R.id.scanner_result_qr_score);
 
         nameTextView.setText(name);
         scoreTextView.setText(score + " pts");
+
         // ends activity
         Button backButton = findViewById(R.id.scannerResultBackButton);
         backButton.setOnClickListener(view -> {
@@ -94,8 +99,10 @@ public class ScannerResultActivity extends AppCompatActivity {
         });
 
 
+        // add picture button
         Button addPictureButton = findViewById(R.id.button_add_image);
         addPictureButton.setOnClickListener(view -> {
+
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             try {
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -122,12 +129,14 @@ public class ScannerResultActivity extends AppCompatActivity {
         Button addLocationButton = findViewById(R.id.button_save_location);
         addLocationButton.setOnClickListener(view -> lp.request());
 
+        // close button
         Button closeButton = findViewById(R.id.save_qr_button);
         closeButton.setOnClickListener(view -> {
            // finish activity and go to MyQrs page
             finish();
         });
 
+        // comment area
         EditText commentEditTest = findViewById(R.id.scanner_result_edit_comment);
         Button saveCommentButton = findViewById(R.id.button_save_comment);
         saveCommentButton.setOnClickListener(view -> {
@@ -154,6 +163,8 @@ public class ScannerResultActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+
+            // upload image on image request
             TextView imageUploadStatusText = findViewById(R.id.scanner_result_image_upload_status);
             imageUploadStatusText.setText("Uploading image...");
 
@@ -170,26 +181,31 @@ public class ScannerResultActivity extends AppCompatActivity {
         }
     }
 
-    // image upload to storage
-    // reference: https://firebase.google.com/docs/storage/android/upload-files
+    /**
+     * Upload image to store.
+     * @param imageBitmap bitmap representation of image
+     * @param filename filename
+     */
     private void uploadImage(Bitmap imageBitmap, String filename) {
         if (imageBitmap != null) {
             Storage storage = new Storage();
 
-//            ProgressBar progressBar = findViewById(R.id.scanner_result_image_progress);
+            // reference: https://firebase.google.com/docs/storage/android/upload-files
+            // edit view information
             TextView imageUploadStatusText = findViewById(R.id.scanner_result_image_upload_status);
             View addImageContainer = findViewById(R.id.scanner_result_add_image);
             View imageAddedContainer = findViewById(R.id.scanner_result_add_image_success);
 
-//            progressBar.setVisibility(View.VISIBLE);
+            // change view
             addImageContainer.setVisibility(View.GONE);
             imageAddedContainer.setVisibility(View.VISIBLE);
 
+            // turn into byte stream
             ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
             imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteStream);
             byte[] data = byteStream.toByteArray();
 
-
+            // call storage bucket
             storage
                 .storeFileBytes("location_images/" + filename + ".jpg", data)
                 .addOnSuccessListener(taskSnapshot -> {
@@ -217,7 +233,11 @@ public class ScannerResultActivity extends AppCompatActivity {
         }
     }
 
-    // from the hash, find the qr_code document and update it to include the newly added image
+
+    /**
+     * From the hash, find the qr_code document and update it to include the newly added image
+     * @param imageName Image name
+     */
     private void addImageToQr(String imageName) {
         Database db = new Database();
 
@@ -226,6 +246,7 @@ public class ScannerResultActivity extends AppCompatActivity {
                 DocumentSnapshot document = task.getResult().getDocuments().get(0);
                 String qrId = document.getId();
 
+                // append image link to qr data
                 Map<String, Object> data = new HashMap<>();
                 data.put("location_image", imageName);
                 db.update("qr_codes", qrId, data);
@@ -233,6 +254,10 @@ public class ScannerResultActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Upload location to database
+     * @param location location
+     */
     private void uploadLocation(Location loc) {
 
         Database db = new Database();
@@ -262,6 +287,11 @@ public class ScannerResultActivity extends AppCompatActivity {
 
     }
 
+
+    /**
+     * Add a comment to the current QR
+     * @param comment comment body
+     */
     private void addCommentToQr(String comment) {
         Database db = new Database();
 
