@@ -54,6 +54,10 @@ public class MapFragment extends Fragment {
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
 
+    /**
+     * search for nearby points and populate map
+     * @param firstRun if first run, target is around location, otherwise it is around the map center
+     */
     private void updateNearbyPoints(boolean firstRun) {
 
         if (map == null) return;
@@ -74,6 +78,10 @@ public class MapFragment extends Fragment {
                 ));
 
     }
+
+    /**
+     * Update UI elements to display proper buttons
+     */
     private void updateLocationUI() {
         if (map == null) {
             return;
@@ -109,6 +117,9 @@ public class MapFragment extends Fragment {
         }
     }
 
+    /**
+     * Get permissions
+     */
     private void getLocationPermission() {
         /*
          * Request location permission, so that we can get the location of the
@@ -134,6 +145,9 @@ public class MapFragment extends Fragment {
 
         private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085);
 
+        /**
+         * Get location of device
+         */
         private void getDeviceLocation() {
             /*
              * Get the best and most recent location of the device, which may be null in rare
@@ -168,6 +182,9 @@ public class MapFragment extends Fragment {
             }
         }
 
+        /**
+         * Style map
+         */
         private void styleMap() {
 
             if (map == null) return;
@@ -259,6 +276,10 @@ public class MapFragment extends Fragment {
 
     }
 
+
+    /**
+     * Request permission
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void requestPermission() {
         ActivityResultLauncher<String[]> locationPermissionRequest =

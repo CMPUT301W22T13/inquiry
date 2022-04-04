@@ -89,8 +89,11 @@ public class Player implements Serializable {
         });
     }
 
+    /**
+     * Delete QR code reference from qr_code array
+     * @param id QR id
+     */
     public void deleteQRCode(String id) {
-        // delete the qr code's reference from the user's qr_codes array
         // see: stackoverflow.com/a/51983589/12955797
 
         Database db = new Database();
@@ -104,7 +107,10 @@ public class Player implements Serializable {
 
     }
 
-
+    /**
+     * Get all QR codes for the user
+     * @param onSuccess callback
+     */
     public void fetchQRCodes(onQrDataListener onSuccess) {
 
         Database db = new Database();
@@ -150,53 +156,99 @@ public class Player implements Serializable {
         });
     }
 
+    /**
+     * Get QR codes
+     * @return QR codes
+     */
     public ArrayList<QRCode> getQRCodes() {
         return this.qrCodes;
     }
 
+    /**
+     * Get username
+     * @return username
+     */
     public String getUsername() {
         return userName;
     }
 
+    /**
+     * Get UID
+     * @return UID
+     */
     public String getUid() {
         return uid;
     }
 
+    /**
+     * Check if user is an owner
+     * @return true if owner, false otherwise
+     */
     public boolean getIsOwner() {
         return this.isOwner;
     }
 
+    /**
+     * Get email
+     * @return email
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Set uid
+     * @param uid uid
+     */
     public void setUid(String uid) {
         this.uid = uid;
     }
 
+    /**
+     * Set username
+     * @param userName username
+     */
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
+    /**
+     * Set email
+     * @param email email
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     * Set rank
+     * @param rank rank
+     */
     public void setRank(int rank) {
         this.rank = rank;
     }
 
+    /**
+     * Set qr codes
+     * @param qrCodes qr codes
+     */
     public void setQrCodes(ArrayList<QRCode> qrCodes) {
         this.qrCodes = (ArrayList<QRCode>) qrCodes.clone();
     }
 
+    /**
+     * Get rank of player
+     * @return rank
+     */
     public int getRank() {
-        // returns Rank of player
         return this.rank;
     }
 
+    /**
+     * Get total score of QR codes
+     * @return total score
+     */
     public int getTotalScore() {
-        // returns total score of QRCodes from database
         if (this.qrCodes.size() != 0) {
             int totalScore = 0;
             for (int i = 0; i < this.qrCodes.size(); i++) {
@@ -207,8 +259,11 @@ public class Player implements Serializable {
         } else return 0;
     }
 
+    /**
+     * Get highest score QR code from database
+     * @return highest score
+     */
     public int getHighestScore() {
-        // returns highest score QRCode from database
         if (this.qrCodes.size() != 0) {
             int maxScore = 0;
             for (int i = 0; i < this.qrCodes.size(); i++) {
@@ -222,8 +277,11 @@ public class Player implements Serializable {
         } else return 0;
     }
 
+    /**
+     * Get lowest score QR code from database
+     * @return lowest score
+     */
     public int getLowestScore() {
-        // returns highest score QRCode from database
 
         if (this.qrCodes.size() != 0) {
             int minScore = this.qrCodes.get(0).getScore();
@@ -238,22 +296,36 @@ public class Player implements Serializable {
         } else return 0;
     }
 
+    /**
+     * Get amount of QR codes scanned by player
+     * @return qr code count
+     */
     public Integer getQRCodeCount() {
-        // returns amount of QRCodes scanned by player from database
         if (this.qrCodes.size() != 0) return this.qrCodes.size();
         else return 0;
     }
 
-    // updates user data in database
+    /**
+     * Update user data in database
+     * @param userData user data
+     */
     public void updateUser(Map<String, Object> userData) {
         Database db = new Database();
         db.update("user_accounts", this.userName, userData);
     }
 
+    /**
+     * Delete player
+     * @param id player id
+     */
     public void deletePlayer(Player id) {
 
     }
 
+    /**
+     * Check if owner, deprecated
+     * @return true if owner, false otherwise
+     */
     public boolean isOwner() {
         Log.d("VERBS","I'm in trouble");
         return false;

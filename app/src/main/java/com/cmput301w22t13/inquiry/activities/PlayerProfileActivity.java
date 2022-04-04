@@ -25,20 +25,31 @@ import com.cmput301w22t13.inquiry.ui.leaderboard.LeaderboardFragment;
 
 import java.util.ArrayList;
 
+/**
+ * A class to represent a profile information screen.
+ */
 public class PlayerProfileActivity extends AppCompatActivity {
 
     private Player player;
     private final Auth auth = new Auth();
     private ArrayList<Player> players = new ArrayList<>();
+
+    /**
+     * Setup player profile activity.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // setup theme
         setTheme(R.style.Theme_InQuiRy_NoActionBar);
         setContentView(R.layout.activity_player_profile);
 
         // gets player data from database to be displayed
         player = (Player) getIntent().getSerializableExtra("Player");
         player.fetchQRCodes(Task -> {});
+
         //refreshes textViews every 2 seconds so if userdata changes it updates
         LeaderBoard.getPlayers(players);
         LeaderBoard.bubbleSort(players,1);
@@ -46,6 +57,7 @@ public class PlayerProfileActivity extends AppCompatActivity {
             if (players.get(i).getUid().equals(player.getUid())) player.setRank(i+1);
         }
         setTexts();
+
         //refreshes textViews after 1/2 of a second to give qr codes time to fetch
         final Handler timerHandler = new Handler();
         Runnable timerRunnable = new Runnable() {
@@ -92,11 +104,12 @@ public class PlayerProfileActivity extends AppCompatActivity {
             Log.d("VERBS", "notOWner");
         }
 
-
-
-
     }
 
+
+    /**
+     * Setup text on page to display properly
+     */
     public void setTexts() {
         // sets the player data TextViews to show the proper data
         TextView userNameView = findViewById(R.id.playerProfileUserNameTextView);

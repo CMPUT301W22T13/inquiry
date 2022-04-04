@@ -30,11 +30,18 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences prefs;
     BottomNavigationView navView;
 
+    /**
+     * Start activity to display onboarding screen.
+     */
     private void showHelp() {
         Intent intent = new Intent(this, OnboardingActivity.class);
         startActivity(intent);
     }
 
+
+    /**
+     * Check if onboarding has been run already. If not, run it.
+     */
     private void checkForHelp() {
         // start on-boarding screen if never done before
         // uses SharedPreferences to store this value
@@ -56,31 +63,46 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * On resume, check if we need to move to another tab.
+     */
+
     @Override
     protected void onResume() {
         super.onResume();
+
+        // check if we need to navigate to the profile tab
         boolean profile = prefs.getBoolean(PROF_NAV, false);
         if (profile) {
             prefs
                     .edit()
                     .putBoolean(PROF_NAV, true)
                     .apply();
+
+            // change tab
             if (navView != null) navView.setSelectedItemId(R.id.navigation_myqrs);
         }
     }
 
+    /**
+     * Setup main activity.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // inflate layout
         com.cmput301w22t13.inquiry.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         DynamicColors.applyToActivitiesIfAvailable(this.getApplication());
 
+        // get settings
         prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-
         navView = findViewById(R.id.nav_view);
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -92,17 +114,16 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
 
+        // setup navigation UI
         final NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
         assert navHostFragment != null;
         final NavController navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(binding.navView, navController);
-
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+
         Auth.init((player) -> {});
 
         checkForHelp();
-
-
 
     }
 }

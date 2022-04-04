@@ -15,6 +15,9 @@ import com.cmput301w22t13.inquiry.ui.map.MapViewModel;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Screen to show nearby QR Codes
+ */
 public class QRListActivity extends AppCompatActivity {
     Double lat;
     Double lng;
@@ -22,6 +25,11 @@ public class QRListActivity extends AppCompatActivity {
     MapViewModel model;
     QRListArrayAdapter adapter;
 
+    /**
+     * Calculate the distance in metres in between a given QR code and the current location.
+     * @param qr QR code
+     * @return distance in metres
+     */
     private double calculateDist(QRCode qr) {
 
         // Taken from: https://stackoverflow.com/a/20296966
@@ -39,6 +47,9 @@ public class QRListActivity extends AppCompatActivity {
         return start.distanceTo(end);
     }
 
+    /**
+     * Find all nearby QR codes and put them into a list, sorted.
+     */
     private void obtainQRCodes() {
         model.getNearbyPoints(lat, lng, qr -> {
             adapter.add(new RelativeQRLocation(qr, calculateDist(qr)));
@@ -52,18 +63,20 @@ public class QRListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrlist);
 
+        // get data model
         model = new MapViewModel();
 
+        // get current location from intent
         lat = getIntent().getDoubleExtra("LAT", 0);
         lng = getIntent().getDoubleExtra("LNG", 0);
 
+        // setup list adapter
         adapter = new QRListArrayAdapter(this, qrlist);
         ListView listView = findViewById(R.id.activity_qrlist_list);
         listView.setAdapter(adapter);
 
+        // obtain closest points
         obtainQRCodes();
-
-
 
     }
 }

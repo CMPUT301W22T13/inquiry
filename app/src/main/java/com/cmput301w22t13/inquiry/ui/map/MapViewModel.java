@@ -27,6 +27,12 @@ public class MapViewModel extends ViewModel {
         void handlePoint(QRCode qr);
     }
 
+    /**
+     * Find nearby points
+     * @param lat latitude
+     * @param lng longitude
+     * @param l callback when done
+     */
     public void getNearbyPoints(double lat, double lng, NearbyPointHandler l) {
 
         final GeoLocation center = new GeoLocation(lat, lng);

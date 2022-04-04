@@ -29,16 +29,19 @@ public class QRListArrayAdapter extends ArrayAdapter<RelativeQRLocation> {
                          View convertView,
                          ViewGroup parent) {
 
+        // get the relevant location
         RelativeQRLocation rqr = list.get(position);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.myqrs_list_item, parent, false);
         }
 
+        // get views
         TextView nameTextView = convertView.findViewById(R.id.myqrs_qr_name);
         TextView initialsTextView = convertView.findViewById(R.id.myqrs_qr_initials);
         TextView scoreTextView = convertView.findViewById(R.id.myqrs_qr_score);
 
+        // update views
         nameTextView.setText(rqr.getQr().getName());
         initialsTextView.setText(rqr.getQr().getName().substring(0, 1));
         scoreTextView.setText(String.format("%.2f m", rqr.getDist()));

@@ -19,7 +19,9 @@ import com.cmput301w22t13.inquiry.R;
 import java.util.ArrayList;
 
 
-
+/**
+ * Adapter for QR codes in player status
+ */
 public class PlayerStatusQRCodeListAdapter extends ArrayAdapter {
     private ArrayList<QRCode> qrCodes;
     private Context context;
@@ -40,10 +42,13 @@ public class PlayerStatusQRCodeListAdapter extends ArrayAdapter {
         if(view == null){
             view = LayoutInflater.from(context).inflate(R.layout.profile_view_list_item, parent,false);
         }
+        // get views
         QRCode qrCode = qrCodes.get(position);
         TextView playerTextView = view.findViewById(R.id.QRCodePlayerTextView);
         TextView numberTextView = view.findViewById(R.id.QRCodeNumberTextView);
         TextView scoreTextView = view.findViewById(R.id.QRCodeScoreTextView);
+
+        // set views
         playerTextView.setText(String.valueOf(position + 1)); // player class not complete may need to change
         numberTextView.setText(qrCode.getName());
         scoreTextView.setText(qrCode.getScore().toString());

@@ -34,6 +34,10 @@ public class LeaderBoardRankListAdapter extends ArrayAdapter {
 
     }
 
+    /**
+     * Set type
+     * @param type type
+     */
     public void setType(int type){
         this.type = type;
     }
@@ -46,12 +50,17 @@ public class LeaderBoardRankListAdapter extends ArrayAdapter {
         if(view == null){
             view = LayoutInflater.from(context).inflate(R.layout.leaderboard_view_list_item, parent,false);
         }
+
+        // get player
         Player player = players.get(position);
+
+        // get views
         TextView playerTextView = view.findViewById(R.id.leaderBoardPlayerTextView);
         TextView rankTextView = view.findViewById(R.id.leaderBoardRankTextView);
         TextView scoreTextView = view.findViewById(R.id.leaderBoardScoreTextView);
         playerTextView.setText(player.getUsername()); // player class not complete may need to change
         rankTextView.setText(Integer.toString(position+1));
+
         // depending on the type of score chosen it displays a different score for each user
         if (type == 1) scoreTextView.setText(Integer.toString(player.getTotalScore()));
         if (type == 2) scoreTextView.setText(Integer.toString(player.getHighestScore()));

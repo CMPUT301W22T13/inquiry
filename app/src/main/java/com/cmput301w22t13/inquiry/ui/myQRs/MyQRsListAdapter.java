@@ -20,7 +20,9 @@ import com.cmput301w22t13.inquiry.db.Storage;
 
 import java.util.ArrayList;
 
-
+/**
+ * List adapter to view my QRs in a recycler view
+ */
 public class MyQRsListAdapter extends RecyclerView.Adapter<MyQRsListAdapter.ViewHolder> {
     private final ArrayList<QRCode> qrCodes;
     private final Context context;
