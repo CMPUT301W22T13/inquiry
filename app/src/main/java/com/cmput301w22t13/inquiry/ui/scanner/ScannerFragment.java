@@ -34,7 +34,6 @@ import com.cmput301w22t13.inquiry.db.Database;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.zxing.Result;
 
-import java.util.List;
 import java.util.Objects;
 
 public class ScannerFragment extends Fragment {
@@ -64,26 +63,25 @@ public class ScannerFragment extends Fragment {
                     if (resultString.startsWith("INQUIRY_USER_")) {
                         String uid = resultString.substring(13);
                         Database db = new Database();
-                        db.query("users", "id", uid).addOnCompleteListener(task -> {
+                        db.getById("users", uid).addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                Log.d("ScannerFragment", "Successfully queried database + " + uid);
-                                List<DocumentSnapshot> documents = task.getResult().getDocuments();
-                                if (documents.size() != 0) {
-                                    DocumentSnapshot document = documents.get(0);
-                                    if (document != null && document.exists()) {
-                                        Log.d("ScannerFragment", "DocumentSnapshot data: " + document.getData());
-                                        String username = document.getString("username");
-                                        Player player = new Player(username, document.getId(), true);
-                                        Intent intent = new Intent(getActivity(), PlayerProfileActivity.class);
+//                                Log.d("ScannerFragment", "Successfully queried database + " + uid);
+                                DocumentSnapshot document = task.getResult();
 
-                                        requireActivity().runOnUiThread(() -> {
-                                            Toast.makeText(requireActivity(), "You found " + username + "!", Toast.LENGTH_SHORT).show();
-                                        });
-                                        intent.putExtra("Player", player);
-                                        startActivity(intent);
+                                if (document != null && document.exists()) {
+                                    Log.d("ScannerFragment", "DocumentSnapshot data: " + document.getData());
+                                    String username = document.getString("username");
+                                    Player player = new Player(username, document.getId(), true);
+                                    Intent intent = new Intent(getActivity(), PlayerProfileActivity.class);
 
-                                    }
+                                    requireActivity().runOnUiThread(() -> {
+                                        Toast.makeText(requireActivity(), "You found " + username + "!", Toast.LENGTH_SHORT).show();
+                                    });
+                                    intent.putExtra("Player", player);
+                                    startActivity(intent);
+
                                 }
+
                             }
                         });
                     } else if (resultString.startsWith("INQUIRY_LOGIN_")) {
