@@ -79,7 +79,7 @@ public class MyQRsListAdapter extends RecyclerView.Adapter<MyQRsListAdapter.View
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), QRDetailsActivity.class);
                 intent.putExtra("code", qrCodes.get(holder.getAdapterPosition()));
-                intent.putExtra("player", auth.getPlayer().getUsername());
+                intent.putExtra("player", Auth.getPlayer().getUsername());
                 view.getContext().startActivity(intent);
 
             }
