@@ -70,6 +70,7 @@ public class QRDetailsActivity extends AppCompatActivity {
         Button backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(view -> finish());
 
+        //gets the ID of the qrcode from the database
         Task<QuerySnapshot> querySnapshotTask = db.query("qr_codes", "hash", code.getHash());
         querySnapshotTask.addOnCompleteListener(task -> {
             List<DocumentSnapshot> documents = task.getResult().getDocuments();
@@ -170,7 +171,7 @@ public class QRDetailsActivity extends AppCompatActivity {
                 }
             }
 
-            namesList.remove(currentPlayer);
+            namesList.remove(currentPlayer); //removes the current player from the list, as it is clear that they have scanned already
             updateUI(namesList);
 
         });

@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.cmput301w22t13.inquiry.auth.Auth;
+import com.cmput301w22t13.inquiry.classes.Owner;
 import com.cmput301w22t13.inquiry.classes.Player;
+import com.cmput301w22t13.inquiry.classes.QRCode;
 
 public class MyQRsViewModel extends ViewModel {
 
@@ -28,5 +30,10 @@ public class MyQRsViewModel extends ViewModel {
 
     public void deleteQRFromPlayer(String id) {
         player.deleteQRCode(id);
+    }
+
+    public void deleteQRCode(QRCode qrCode){
+        Owner owner = (Owner) Auth.getPlayer();
+        owner.deleteQRCode(qrCode);
     }
 }

@@ -1,9 +1,12 @@
 package com.cmput301w22t13.inquiry.activities;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -15,12 +18,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cmput301w22t13.inquiry.R;
+import com.cmput301w22t13.inquiry.classes.LocationPermission;
 import com.cmput301w22t13.inquiry.db.Database;
 import com.cmput301w22t13.inquiry.db.Storage;
+import com.firebase.geofire.GeoFireUtils;
+import com.firebase.geofire.GeoLocation;
 import com.github.javafaker.Faker;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 
@@ -38,12 +50,15 @@ import nl.dionsegijn.konfetti.core.emitter.Emitter;
 import nl.dionsegijn.konfetti.core.emitter.EmitterConfig;
 import nl.dionsegijn.konfetti.xml.KonfettiView;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class ScannerResultActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     Faker faker = new Faker();
+    LocationPermission lp;
 
     String qrHash;
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +111,24 @@ public class ScannerResultActivity extends AppCompatActivity {
             }
         });
 
+
+        // add location button
+        lp = new LocationPermission(this::registerForActivityResult, () -> {
+            // what to run when permission has been successfully requested
+            FusedLocationProviderClient flp = LocationServices.getFusedLocationProviderClient(this);
+            flp.getLastLocation().addOnCompleteListener(this, task -> {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    uploadLocation(task.getResult());
+                } else {
+                    Toast.makeText(this, "Error determining location", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }, () -> Toast.makeText(this, "Location permissions must be provided", Toast.LENGTH_SHORT).show());
+
+        Button addLocationButton = findViewById(R.id.button_save_location);
+        addLocationButton.setOnClickListener(view -> lp.request());
+
         // close button
         Button closeButton = findViewById(R.id.save_qr_button);
         closeButton.setOnClickListener(view -> {
@@ -124,6 +157,7 @@ public class ScannerResultActivity extends AppCompatActivity {
             }
         });
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -219,6 +253,40 @@ public class ScannerResultActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Upload location to database
+     * @param location location
+     */
+    private void uploadLocation(Location loc) {
+
+        Database db = new Database();
+
+        db.query("qr_codes", "hash", qrHash).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult().getDocuments().get(0);
+                String qrId = document.getId();
+
+                // append location to document
+                Map<String, Object> data = new HashMap<>();
+                data.put("lat", loc.getLatitude());
+                data.put("lng", loc.getLongitude());
+                GeoLocation l = new GeoLocation(loc.getLatitude(), loc.getLongitude());
+                data.put("geohash", GeoFireUtils.getGeoHashForLocation(l));
+                db.update("qr_codes", qrId, data);
+
+                View locationContainer = findViewById(R.id.scanner_result_add_location);
+                View savedContainer = findViewById(R.id.scanner_result_saved_location);
+
+                locationContainer.setVisibility(View.INVISIBLE);
+                savedContainer.setVisibility(View.VISIBLE);
+            } else {
+                Toast.makeText(this, "Error uploading location", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
 
     /**
      * Add a comment to the current QR
