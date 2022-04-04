@@ -24,6 +24,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Owner class with elevated privileges and modified methods
+ */
 public class Owner extends Player{
 
     private ArrayList<QRCode> qrCodes;
@@ -38,16 +41,18 @@ public class Owner extends Player{
         super(userName,uid,getQrCodes);
     }
 
+    /**
+     * returns a boolean check if it is Owner
+     * @return returns true as it is a Owner
+     */
     public boolean getIsOwner(){
         return true;
     }
-    public void deleteQR(QRCode qr){
-        Database db = new Database();
-        String hash = qr.getHash();
-        db.remove("qr_codes", hash);
-        // need to add delete from players list
 
-    }
+    /**
+     * delete a player
+     * @param player player object to be deleted
+     */
     public void deletePlayer(Player player){
         Database db = new Database();
         String newId = player.getID();
@@ -55,6 +60,10 @@ public class Owner extends Player{
 
     }
 
+    /**
+     * fetch all qr codes in the game
+     * @param onSuccess checks for when QRCode has been returned
+     */
     public void fetchQRCodes(onQrDataListener onSuccess) {
         Log.d("VERBS","Fetching");
         ArrayList<QRCode> QrList = new ArrayList<>();
@@ -80,10 +89,15 @@ public class Owner extends Player{
                 });
 
     }
+
     public void setQrCodes(ArrayList<QRCode> qrcodes){
         this.qrCodes = qrcodes;
     }
 
+    /**
+     * delete a given QRCode from both the collection and all qrcode lists
+     * @param qrCode QRCode object to be deleted
+     */
     public void deleteQRCode(QRCode qrCode){
         Database db = new Database();
         Log.d("VERBS",qrCode.getHash());
