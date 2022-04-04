@@ -12,6 +12,9 @@ import com.cmput301w22t13.inquiry.R;
 
 import java.util.ArrayList;
 
+/**
+ * List adapter to show QR Codes
+ */
 public class QRListArrayAdapter extends ArrayAdapter<RelativeQRLocation> {
     private final ArrayList<RelativeQRLocation> list;
 
