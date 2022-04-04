@@ -7,6 +7,7 @@ package com.cmput301w22t13.inquiry.ui.profile;
  */
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
@@ -18,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -30,9 +32,12 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.cmput301w22t13.inquiry.R;
+import com.cmput301w22t13.inquiry.activities.QRLoginActivity;
+import com.cmput301w22t13.inquiry.activities.QRLoginCodeDialog;
 import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.classes.LeaderBoard;
 import com.cmput301w22t13.inquiry.classes.Player;
+import com.cmput301w22t13.inquiry.classes.QRBitmap;
 import com.cmput301w22t13.inquiry.databinding.FragmentProfileBinding;
 import com.cmput301w22t13.inquiry.db.onProfileDataListener;
 import com.google.zxing.BarcodeFormat;
@@ -42,6 +47,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class ProfileFragment extends Fragment {
@@ -67,6 +73,15 @@ public class ProfileFragment extends Fragment {
         final TextView totalQrsText = root.findViewById(R.id.total_qrs);
         final TextView lowestScoreText = root.findViewById(R.id.lowest_score);
         final TextView highestScoreText = root.findViewById(R.id.highest_score);
+        final Button loginCodeButton = root.findViewById(R.id.profile_access_login);
+        final Button loginButton = root.findViewById(R.id.profile_access_login_new);
+
+        loginCodeButton.setOnClickListener(view -> new QRLoginCodeDialog(Objects.requireNonNull(Auth.getCurrentUser()).getUid()).show(getParentFragmentManager(), "QRLoginCodeDialog"));
+        loginButton.setOnClickListener(view -> {
+            Intent intent = new Intent(getContext(), QRLoginActivity.class);
+            startActivity(intent);
+        });
+
 
         profileViewModel.getData(new onProfileDataListener() {
             // get data from success listener and display it
@@ -142,16 +157,12 @@ public class ProfileFragment extends Fragment {
 
                 usernameText.setText(usernameString);
 
-                if (uidString != null) {
-                    ImageView shareProfileQrCode = (ImageView) root.findViewById(R.id.share_profile_qr);
+                if (usernameString != null) {
+                    ImageView shareProfileQrCode = root.findViewById(R.id.share_profile_qr);
                     int size = 200;
                     try {
                         // generate a 200x200 QR code encoded with the user's id
-                        BitMatrix bm = new QRCodeWriter().encode("INQUIRY_USER_" + uidString, BarcodeFormat.QR_CODE, size, size);
-                        int qrColor = getResources().getString(R.string.theme_mode).equals("dark") ? Color.argb(255, 176, 116,255) : Color.argb(200, 140, 60,255);
-                        Bitmap bitmap = Bitmap.createBitmap(IntStream.range(0, size).flatMap(h -> IntStream.range(0, size).map(w -> bm.get(w, h) ? qrColor : Color.argb(0, 0, 0, 0))).toArray(),
-                                size, size, Bitmap.Config.ARGB_8888);
-                        shareProfileQrCode.setImageBitmap(bitmap);
+                        shareProfileQrCode.setImageBitmap(new QRBitmap("INQUIRY_USER_" + usernameString, size).getBitmap(getResources()));
                     } catch (WriterException e) {
                     }
                 }

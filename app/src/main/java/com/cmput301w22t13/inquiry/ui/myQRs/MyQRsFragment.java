@@ -156,7 +156,10 @@ public class MyQRsFragment extends Fragment {
 
             recyclerView.setLayoutManager(layoutManager);
 
-            myQRsViewModel.getPlayer().fetchQRCodes(new onQrDataListener() {
+            Player player = myQRsViewModel.getPlayer();
+
+            if (player != null) {
+                player.fetchQRCodes(new onQrDataListener() {
                 @Override
                 public void getQrData(ArrayList<QRCode> qrCodes) {
                     if (qrCodes != null && qrCodes.size() > 0) {
@@ -168,6 +171,8 @@ public class MyQRsFragment extends Fragment {
                     }
                 }
             });
+            }
+
             new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                     ItemTouchHelper.LEFT) {
                 @Override

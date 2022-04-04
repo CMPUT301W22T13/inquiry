@@ -40,17 +40,16 @@ public class ProfileViewModel extends ViewModel {
      * @param  onSuccess callback function that gets called when the username is available
      */
     public void getData(onProfileDataListener onSuccess) {
-        if(currentUser!= null) {
-            String id = currentUser.getUid();
 
+        Auth.withPlayer((player) -> {
             // get the user's data from firestore
-            db.getById("users", id).addOnCompleteListener(task -> {
+            db.getById("user_accounts", player.getUsername()).addOnCompleteListener(task -> {
                 if(task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document != null && document.exists()) {
-                        String username = (String) document.get("username");
+                        String username = document.getId();
                         String email = (String) document.get("email");
-                        String uid = (String) document.get("id");
+                        String uid = document.getId();
 
                         // create a map of the user's data to pass to the success callback
                         Map<String, Object> userData = new HashMap<>();
@@ -59,13 +58,11 @@ public class ProfileViewModel extends ViewModel {
                         userData.put("email", email);
                         userData.put("uid", uid);
 
-                        if(username != null && uid != null) {
-                            onSuccess.getProfileData(userData);
-                        }
+                        onSuccess.getProfileData(userData);
                     }
                 }
             });
-        }
+        });
     }
 
     /**

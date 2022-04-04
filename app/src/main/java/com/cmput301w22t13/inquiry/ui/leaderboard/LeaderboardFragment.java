@@ -61,31 +61,17 @@ public class LeaderboardFragment extends Fragment {
             if (searchString.isEmpty()) {
                 searchEditText.setError("Please enter a username");
             } else {
-                Task<QuerySnapshot> queryTask = db.query("users", "username", searchString.trim());
+                Task<DocumentSnapshot> queryTask = db.getById("user_accounts", searchString.trim());
                 queryTask.addOnCompleteListener(task -> {
                     if (queryTask.isSuccessful()) {
-                        QuerySnapshot queryResults = queryTask.getResult();
-                        List<DocumentSnapshot> documents = queryResults.getDocuments();
-                        if (documents.size() != 0) {
+                        DocumentSnapshot document = queryTask.getResult();
+                        if (document != null && document.exists()) {
                             Log.i("LeaderboardFragment", "Found users");
-                            Log.i("LeaderboardFragment", documents.toString());
-                            DocumentSnapshot document = documents.get(0);
-                            db.getById("users", (String) document.get("id")).addOnCompleteListener(diffTask -> {
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot document2 = diffTask.getResult();
-                                    if (document2 != null && document2.exists()) {
-                                        Player player = new Player((String) document2.get("username"), (String) document2.get("id"), true);
-                                        Intent intent = new Intent(getActivity(), PlayerProfileActivity.class);
-                                        intent.putExtra("Player", player);
-                                        startActivity(intent);
-
-                                    }
-                                } else{
-                                    Log.i("LeaderboardFragment", "No users found");
-                                    errorTextView.setText("no users found with username: " + searchString);
-                                }
-                            });
-
+                            Log.i("LeaderboardFragment", document.toString());
+                            Player player = new Player(document.getId(), document.getId(), true);
+                            Intent intent = new Intent(getActivity(), PlayerProfileActivity.class);
+                            intent.putExtra("Player", player);
+                            startActivity(intent);
                         } else {
                             Log.i("LeaderboardFragment", "No users found");
                             errorTextView.setText("no users found with username: " + searchString);

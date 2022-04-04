@@ -138,15 +138,15 @@ public class QRDetailsActivity extends AppCompatActivity {
         ArrayList<String> namesList = new ArrayList<>();
 
         DocumentReference reference = db.getDocReference("qr_codes/"+id);
-        db.arrayQuery("users","qr_codes",reference).addOnCompleteListener(task ->{
+        db.arrayQuery("user_accounts","qr_codes",reference).addOnCompleteListener(task ->{
             if (task.isSuccessful()){
                 List<DocumentSnapshot> documents = task.getResult().getDocuments();
                 int size = documents.size();
                 if (size!= 0) {
                     for (DocumentSnapshot document: documents) {
-                        String username = (String) document.get("username");
+                        String username = document.getId();
                         namesList.add(username);
-                        Log.d("Before: ", (String) document.get("username"));
+                        Log.d("Before: ", document.getId());
                     }
                 }
             }

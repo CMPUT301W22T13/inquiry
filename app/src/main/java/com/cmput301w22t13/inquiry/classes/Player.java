@@ -2,6 +2,7 @@ package com.cmput301w22t13.inquiry.classes;
 
 import android.util.Log;
 
+import com.cmput301w22t13.inquiry.auth.Auth;
 import com.cmput301w22t13.inquiry.db.Database;
 import com.cmput301w22t13.inquiry.db.onQrDataListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -19,7 +20,7 @@ public class Player implements Serializable {
     private String uid;
     private String userName;
     private String email;
-    private ArrayList<QRCode> qrCodes = new ArrayList<QRCode>();
+    private ArrayList<QRCode> qrCodes = new ArrayList<>();
     private int rank = 0;
 
     private final boolean isOwner;
@@ -77,13 +78,13 @@ public class Player implements Serializable {
                     if (qr.getHash().equals(hash)) {
                         Log.d("QRCode", "QRCode already exists in user");
                     } else {
-                        db.update("users", this.uid, userMap);
+                        db.update("user_accounts", this.userName, userMap);
                         Log.d("QRCode", "QRCode added to user");
                     }
                 }
             } else {
                 Log.d("QRCode", "QRCodes is null");
-                db.update("users", this.uid, userMap);
+                db.update("user_accounts", this.userName, userMap);
             }
         });
     }
@@ -99,7 +100,8 @@ public class Player implements Serializable {
         final Map<String, Object> qrCodesFieldArray = new HashMap<>();
         qrCodesFieldArray.put("qr_codes", FieldValue.arrayRemove(qrRef));
 
-        db.update("users", this.uid, qrCodesFieldArray);
+        db.update("user_accounts", this.userName, qrCodesFieldArray);
+
     }
 
 
@@ -107,42 +109,44 @@ public class Player implements Serializable {
         ArrayList<QRCode> QrList = new ArrayList<>();
 
         Database db = new Database();
+        Auth.getUsername((player) -> {
 
-        db.getById("users", this.uid).addOnCompleteListener(userTask -> {
-            if (userTask.isSuccessful()) {
-                // loop through qr_codes field array and add to QrList ArrayList
-                DocumentSnapshot user = userTask.getResult();
-                ArrayList<DocumentReference> qrRefs = (ArrayList<DocumentReference>) user.get("qr_codes");
-                if (qrRefs != null && qrRefs.size() > 0) {
-                    for (int i = 0; i < qrRefs.size(); i++) {
-                        int finalI = i;
-                        qrRefs.get(i).get().addOnCompleteListener(qrTask -> {
-                            if (qrTask.isSuccessful()) {
-                                DocumentSnapshot qr = qrTask.getResult();
-                                if(qr.getLong("score") != null) {
-                                  QRCode qrCode;
+            db.getById("user_accounts", player).addOnCompleteListener(userTask -> {
+                if (userTask.isSuccessful()) {
+                    // loop through qr_codes field array and add to QrList ArrayList
+                    DocumentSnapshot user = userTask.getResult();
+                    ArrayList<DocumentReference> qrRefs = (ArrayList<DocumentReference>) user.get("qr_codes");
+                    if (qrRefs != null && qrRefs.size() > 0) {
+                        for (int i = 0; i < qrRefs.size(); i++) {
+                            int finalI = i;
+                            qrRefs.get(i).get().addOnCompleteListener(qrTask -> {
+                                if (qrTask.isSuccessful()) {
+                                    DocumentSnapshot qr = qrTask.getResult();
+                                    if(qr.getLong("score") != null) {
+                                        QRCode qrCode;
 
-                                  if (qr.get("location_image") != null) {
-                                      qrCode = new QRCode(qr.getString("hash"), Objects.requireNonNull(qr.getLong("score")).intValue(), qr.getId(), qr.getString("location_image"));
-                                  } else {
-                                      qrCode = new QRCode(qr.getString("hash"), Objects.requireNonNull(qr.getLong("score")).intValue(), qr.getId());
-                                  }
+                                        if (qr.get("location_image") != null) {
+                                            qrCode = new QRCode(qr.getString("hash"), Objects.requireNonNull(qr.getLong("score")).intValue(), qr.getId(), qr.getString("location_image"));
+                                        } else {
+                                            qrCode = new QRCode(qr.getString("hash"), Objects.requireNonNull(qr.getLong("score")).intValue(), qr.getId());
+                                        }
 
-                                  QrList.add(qrCode);
+                                        QrList.add(qrCode);
 
-                                  if (finalI == qrRefs.size() - 1) {
-                                      onSuccess.getQrData(QrList);
-                                      this.qrCodes = QrList;
-                                  }
+                                        if (finalI == qrRefs.size() - 1) {
+                                            onSuccess.getQrData(QrList);
+                                            this.qrCodes = QrList;
+                                        }
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
+                    } else {
+                        // TODO: error handling
+                        onSuccess.getQrData(new ArrayList<QRCode>());
                     }
-                } else {
-                    // TODO: error handling
-                    onSuccess.getQrData(new ArrayList<QRCode>());
                 }
-            }
+            });
         });
     }
 
@@ -243,7 +247,7 @@ public class Player implements Serializable {
     // updates user data in database
     public void updateUser(Map<String, Object> userData) {
         Database db = new Database();
-        db.update("users", this.uid, userData);
+        db.update("user_accounts", this.userName, userData);
     }
 
     public void deletePlayer(Player id) {
