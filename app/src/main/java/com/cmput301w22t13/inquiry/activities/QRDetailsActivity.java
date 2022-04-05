@@ -1,7 +1,5 @@
 package com.cmput301w22t13.inquiry.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -13,6 +11,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cmput301w22t13.inquiry.R;
 import com.cmput301w22t13.inquiry.classes.QRCode;
@@ -60,14 +60,13 @@ public class QRDetailsActivity extends AppCompatActivity {
 
         TextView qrInitials = findViewById(R.id.qr_details_initials);
         String[] qrNameSplit = code.getName().split(" ");
-        qrInitials.setText(qrName.getText().toString().substring(0,1) + qrNameSplit[1].substring(0,1));
+        qrInitials.setText(qrName.getText().toString().substring(0, 1) + qrNameSplit[1].substring(0, 1));
 
         TextView qrScore = findViewById(R.id.myqrs_qr_score);
 
-        if (code.getScore() ==1){
+        if (code.getScore() == 1) {
             qrScore.setText("1 point");
-        }
-        else {
+        } else {
             qrScore.setText(String.valueOf(code.getScore()) + " points");
         }
 
@@ -120,8 +119,7 @@ public class QRDetailsActivity extends AppCompatActivity {
                 leaveCommentText.clearFocus();
 
                 Toast.makeText(this, "Comment added", Toast.LENGTH_LONG).show();
-            }
-            else {
+            } else {
                 Toast.makeText(this, "Comment must be between 1 and 100 characters", Toast.LENGTH_LONG).show();
             }
         });
@@ -129,6 +127,7 @@ public class QRDetailsActivity extends AppCompatActivity {
 
     /**
      * adds a comment to a QRCode
+     *
      * @param comment String to be added as a comment
      */
     private void addCommentToQr(String comment) {
@@ -150,9 +149,10 @@ public class QRDetailsActivity extends AppCompatActivity {
 
     /**
      * updates a list of other users who have scanned the QR Code
+     *
      * @param list list of users names to update the listview with
      */
-    private void updateUI(ArrayList<String> list){
+    private void updateUI(ArrayList<String> list) {
         ListView usernameList = findViewById(R.id.MatchingQrsList);
 
         ArrayAdapter<String> userList = new ArrayAdapter<String>(
@@ -162,9 +162,10 @@ public class QRDetailsActivity extends AppCompatActivity {
 
     /**
      * updates a list of comments having been posted about the QR Code
+     *
      * @param list list of QR Codes to update the listview with
      */
-    private void updateCommentUI(ArrayList<String> list){
+    private void updateCommentUI(ArrayList<String> list) {
         ListView usernameList = findViewById(R.id.comments_list);
 
         ArrayAdapter<String> commentList = new ArrayAdapter<String>(
@@ -176,20 +177,28 @@ public class QRDetailsActivity extends AppCompatActivity {
 
     /**
      * get all players who have scanned the qr code
+     *
      * @param id id of the qr code that should be found
      */
-    private void findPlayers(String id){
+    private void findPlayers(String id) {
         ArrayList<String> namesList = new ArrayList<>();
 
-        DocumentReference reference = db.getDocReference("qr_codes/"+id);
-        db.arrayQuery("user_accounts","qr_codes",reference).addOnCompleteListener(task ->{
-            if (task.isSuccessful()){
+        DocumentReference reference = db.getDocReference("qr_codes/" + id);
+        db.arrayQuery("user_accounts", "qr_codes", reference).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
                 List<DocumentSnapshot> documents = task.getResult().getDocuments();
                 int size = documents.size();
-                if (size!= 0) {
-                    for (DocumentSnapshot document: documents) {
-                        String username = document.getId();
-                        namesList.add(username);
+                if (size != 0) {
+                    for (DocumentSnapshot document : documents) {
+                        String idUsername = document.getId();
+                        String documentUsername = document.getString("username");
+                        // use the document's username field if the user has set it (by editing their profile)
+                        if (documentUsername != null && !documentUsername.toString().equals(idUsername)) {
+                            namesList.add(documentUsername);
+                        } else {
+                            namesList.add(idUsername);
+                        }
+
                         Log.d("Before: ", document.getId());
                     }
                 }
@@ -203,17 +212,18 @@ public class QRDetailsActivity extends AppCompatActivity {
 
     /**
      * get comments that has been made about the QRCode
+     *
      * @param qrDocumentId qrcodes id to be searched for
      */
-    private void findComments(String qrDocumentId){
+    private void findComments(String qrDocumentId) {
 
 
-        db.getById("qr_codes",qrDocumentId).addOnCompleteListener(task ->{
-            if (task.isSuccessful()){
+        db.getById("qr_codes", qrDocumentId).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
                 DocumentSnapshot qrDocument = task.getResult();
                 ArrayList<String> qrComments = (ArrayList<String>) qrDocument.get("comments");
 
-                if(qrComments != null) {
+                if (qrComments != null) {
                     int size = qrComments.size();
                     if (size != 0) {
                         Log.d("size", String.valueOf(size));
