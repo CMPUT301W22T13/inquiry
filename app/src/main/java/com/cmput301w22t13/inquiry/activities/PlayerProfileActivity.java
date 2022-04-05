@@ -78,7 +78,7 @@ public class PlayerProfileActivity extends AppCompatActivity {
         Button gameStatusButton = findViewById(R.id.playerProfileGameStatusButton);
         gameStatusButton.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), PlayerStatusActivity.class);
-            Player newPlayer = new Player(player.getUsername(), player.getUid(),true);
+            Player newPlayer = new Player(player.getUid(), player.getUsername(),true);
             intent.putExtra("Player", newPlayer);
             startActivity(intent);
             setTexts();

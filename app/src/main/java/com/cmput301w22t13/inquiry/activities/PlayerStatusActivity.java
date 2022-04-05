@@ -45,7 +45,14 @@ public class PlayerStatusActivity extends AppCompatActivity {
         // gets player data from database to be displayed
         Player player = (Player) getIntent().getSerializableExtra("Player");
         TextView playerName = findViewById(R.id.playerDetailsTextView);
-        playerName.setText(player.getUsername());
+
+
+        if(!player.getUsername().toString().equals(player.getUid())) {
+            playerName.setText(player.getUid() + "'s QR Codes");
+        }
+        else {
+            playerName.setText(player.getUsername() + "'s QR Codes");
+        }
 
         // fetch all QR codes and put them in array
         ListView qrCodeListView = findViewById(R.id.playerQrCodesListView);
@@ -97,7 +104,6 @@ public class PlayerStatusActivity extends AppCompatActivity {
         ListView qrCodeListView = findViewById(R.id.playerQrCodesListView);
         qrCodeArrayList = player.getQRCodes();
         TextView playerName = findViewById(R.id.playerDetailsTextView);
-        playerName.setText(player.getUsername() + "'s QR Codes");
 
         PlayerStatusQRCodeListAdapter qrCodeListAdapter = new PlayerStatusQRCodeListAdapter(this, qrCodeArrayList, player);
         qrCodeListView.setAdapter(qrCodeListAdapter);
