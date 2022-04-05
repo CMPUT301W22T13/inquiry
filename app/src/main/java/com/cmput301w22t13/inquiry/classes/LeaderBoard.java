@@ -30,6 +30,14 @@ public class LeaderBoard {
                 if (documents.size() != 0) {
                     for (DocumentSnapshot document : documents) {
                         Player newPlayer = new Player(document.getId(), document.getId(),true);
+
+                        String displayUsername = document.getString("username");
+
+                        // use the document's username field if the user has set it (by editing their profile)
+                        if (displayUsername != null && !displayUsername.toString().equals(document.getId())) {
+                            newPlayer.setUserName(displayUsername);
+                        }
+
                         playersArrayList.add(newPlayer);
                     }
                 } else Log.i("LeaderboardFragment", "documents empty");

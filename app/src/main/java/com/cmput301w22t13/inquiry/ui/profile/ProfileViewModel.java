@@ -1,9 +1,9 @@
 package com.cmput301w22t13.inquiry.ui.profile;
 /**
- *  Class that is responsible for preparing and managing the data for ProfileFragment.
- *  It also handles the communication of the  Fragment with the rest of the application
- *  This class fetches the user data and uses the onProfileDataListener
- *  callback to send it to the ProfileFragment
+ * Class that is responsible for preparing and managing the data for ProfileFragment.
+ * It also handles the communication of the  Fragment with the rest of the application
+ * This class fetches the user data and uses the onProfileDataListener
+ * callback to send it to the ProfileFragment
  */
 
 
@@ -31,7 +31,7 @@ public class ProfileViewModel extends ViewModel {
 
     public ProfileViewModel() {
         mText = new MutableLiveData<>();
-            mText.setValue("This is profile fragment");
+        mText.setValue("This is profile fragment");
     }
 
     /**
@@ -44,17 +44,24 @@ public class ProfileViewModel extends ViewModel {
         Auth.withPlayer((player) -> {
             // get the user's data from firestore
             db.getById("user_accounts", player.getUsername()).addOnCompleteListener(task -> {
-                if(task.isSuccessful()) {
+                if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document != null && document.exists()) {
-                        String username = document.getId();
+                        String idUsername = document.getId();
+                        String documentUsername = document.getString("username");
                         String email = (String) document.get("email");
                         String uid = document.getId();
 
                         // create a map of the user's data to pass to the success callback
                         Map<String, Object> userData = new HashMap<>();
 
-                        userData.put("username", username);
+                        // use the document's username field if the user has set it (by editing their profile)
+                        if (documentUsername != null && !documentUsername.toString().equals(idUsername)) {
+                            userData.put("username", documentUsername);
+                        } else {
+
+                            userData.put("username", idUsername);
+                        }
                         userData.put("email", email);
                         userData.put("uid", uid);
 
