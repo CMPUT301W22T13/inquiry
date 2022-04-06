@@ -95,7 +95,7 @@ public class ProfileFragment extends Fragment {
 
                 if (usernameString != null) {
                     // sets the initial look of the textviews
-                    user = new Player(usernameString, uidString, true);
+                    user = new Player(uidString, uidString, true);
                     String lowestScoreString = "Lowest Score: " + user.getLowestScore();
                     lowestScoreText.setText(lowestScoreString);
                     String highestScoreString = "Highest Score: " + user.getHighestScore();
