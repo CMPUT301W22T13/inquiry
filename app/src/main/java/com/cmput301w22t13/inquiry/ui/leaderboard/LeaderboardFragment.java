@@ -61,27 +61,45 @@ public class LeaderboardFragment extends Fragment {
             if (searchString.isEmpty()) {
                 searchEditText.setError("Please enter a username");
             } else {
-                Task<DocumentSnapshot> queryTask = db.getById("user_accounts", searchString.trim());
-                queryTask.addOnCompleteListener(task -> {
-                    if (queryTask.isSuccessful()) {
-                        DocumentSnapshot document = queryTask.getResult();
-                        if (document != null && document.exists()) {
-                            Log.i("LeaderboardFragment", "Found users");
-                            Log.i("LeaderboardFragment", document.toString());
-
-
-                            Player player = new Player(document.getId(), document.getId(), true);
+                Task<QuerySnapshot> usernameQueryTask = db.query("user_accounts", "username", searchString.trim());
+                usernameQueryTask.addOnCompleteListener(task2 ->{
+                    if (usernameQueryTask.isSuccessful()){
+                        QuerySnapshot queryResult = usernameQueryTask.getResult();
+                        List<DocumentSnapshot> documents = queryResult.getDocuments();
+                        if (documents.size() > 0){
+                            DocumentSnapshot document2 = documents.get(0);
+                            Player player = new Player((String) document2.get("username"), document2.getId(), true);
                             Intent intent = new Intent(getActivity(), PlayerProfileActivity.class);
                             intent.putExtra("Player", player);
                             startActivity(intent);
-                        } else {
-                            Log.i("LeaderboardFragment", "No users found");
-                            errorTextView.setText("no users found with username: " + searchString);
+                        }else{
+                            Task<DocumentSnapshot> queryTask = db.getById("user_accounts", searchString.trim());
+                            queryTask.addOnCompleteListener(task -> {
+                                if (queryTask.isSuccessful()) {
+                                    DocumentSnapshot document = queryTask.getResult();
+                                    if (document != null && document.exists()) {
+                                        Log.i("LeaderboardFragment", "Found users");
+                                        Log.i("LeaderboardFragment", document.toString());
+
+
+                                        Player player = new Player(document.getId(), document.getId(), true);
+                                        Intent intent = new Intent(getActivity(), PlayerProfileActivity.class);
+                                        intent.putExtra("Player", player);
+                                        startActivity(intent);
+                                    } else {
+
+                                        Log.i("LeaderboardFragment", "No users found");
+                                        errorTextView.setText("no users found with username: " + searchString);
+                                    }
+                                } else {
+                                    Log.i("LeaderboardFragment", "Query failed");
+                                }
+                            });
                         }
-                    } else {
-                        Log.i("LeaderboardFragment", "Query failed");
+
                     }
                 });
+
 
             }
 

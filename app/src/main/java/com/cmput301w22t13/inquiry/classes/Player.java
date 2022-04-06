@@ -115,7 +115,7 @@ public class Player implements Serializable {
 
         Database db = new Database();
 
-            db.getById("user_accounts", userName).addOnCompleteListener(userTask -> {
+            db.getById("user_accounts", uid).addOnCompleteListener(userTask -> {
                 if (userTask.isSuccessful()) {
                     // loop through qr_codes field array and add to QrList ArrayList
                     DocumentSnapshot user = userTask.getResult();
