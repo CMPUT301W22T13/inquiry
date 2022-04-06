@@ -8,6 +8,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -55,35 +57,47 @@ public class ScannerFragment extends Fragment {
 
             mCodeScanner = new CodeScanner(Objects.requireNonNull(activity), scannerView);
             mCodeScanner.setDecodeCallback(new DecodeCallback() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onDecoded(@NonNull final Result result) {
                     String resultString = result.getText();
 
                     // if qr code string starts with "INQUIRY_USER_", don't save to database
                     if (resultString.startsWith("INQUIRY_USER_")) {
-                        String uid = resultString.substring(13);
-                        Database db = new Database();
-                        db.getById("users", uid).addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
+                        requireActivity().runOnUiThread(() -> {
+                            String uid = resultString.substring(13);
+                            Database db = new Database();
+                            db.getById("user_accounts", uid).addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
 //                                Log.d("ScannerFragment", "Successfully queried database + " + uid);
-                                DocumentSnapshot document = task.getResult();
+                                    DocumentSnapshot document = task.getResult();
 
-                                if (document != null && document.exists()) {
-                                    Log.d("ScannerFragment", "DocumentSnapshot data: " + document.getData());
-                                    String username = document.getString("username");
-                                    Player player = new Player(username, document.getId(), true);
-                                    Intent intent = new Intent(getActivity(), PlayerProfileActivity.class);
+                                    if (document != null && document.exists()) {
+                                        Log.d("ScannerFragment", "DocumentSnapshot data: " + document.getData());
+                                        String documentUsername = document.getString("username");
+                                        Player player;
+                                        if (documentUsername != null && !documentUsername.toString().equals(document.getId())) {
+                                            player = new Player(document.getId(), document.getId(), true);
+                                            Toast.makeText(requireActivity(), "You found " + documentUsername + "!", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            player = new Player(document.getId(), document.getId(), true);
+                                            Toast.makeText(requireActivity(), "You found " + document.getId() + "!", Toast.LENGTH_SHORT).show();
+                                        }
 
-                                    requireActivity().runOnUiThread(() -> {
-                                        Toast.makeText(requireActivity(), "You found " + username + "!", Toast.LENGTH_SHORT).show();
-                                    });
-                                    intent.putExtra("Player", player);
-                                    startActivity(intent);
+                                        Intent intent = new Intent(getActivity(), PlayerProfileActivity.class);
+
+//                                        requireActivity().runOnUiThread(() -> {
+
+//                                        });
+                                        intent.putExtra("Player", player);
+                                        startActivity(intent);
+
+                                    }
 
                                 }
-
-                            }
+                            });
                         });
+
                     } else if (resultString.startsWith("INQUIRY_LOGIN_")) {
                         requireActivity().runOnUiThread(() ->
                                 Toast.makeText(getActivity(),

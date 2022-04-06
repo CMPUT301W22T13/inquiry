@@ -162,7 +162,7 @@ public class ProfileFragment extends Fragment {
                     int size = 200;
                     try {
                         // generate a 200x200 QR code encoded with the user's id
-                        shareProfileQrCode.setImageBitmap(new QRBitmap("INQUIRY_USER_" + usernameString, size).getBitmap(getResources()));
+                        shareProfileQrCode.setImageBitmap(new QRBitmap("INQUIRY_USER_" + uidString, size).getBitmap(getResources()));
                     } catch (WriterException e) {
                     }
                 }
